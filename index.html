@@ -7,10 +7,11 @@
 <meta name="description" content="Nadi is an adaptive notch for Windows, bringing music, focus, reminders, and everyday essentials together.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
 <meta property="og:description" content="Meet Nadi, the adaptive notch for Windows.">
-<meta property="og:image" content="https://nadilabs.github.io/nadi-notch/assets/nadi-icon.png">
+<meta property="og:image" content="https://nadilabs.github.io/nadi-notch/assets/nadi-mascot-neutral.png">
 <meta property="og:url" content="https://nadilabs.github.io/nadi-notch/">
 <meta name="twitter:card" content="summary">
-<link rel="icon" type="image/png" href="./assets/nadi-icon.png">
+<link rel="icon" type="image/png" href="./assets/nadi-mascot-neutral.png">
+<link rel="apple-touch-icon" href="./assets/nadi-mascot-neutral.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
@@ -51,7 +52,7 @@ a { color: inherit; }
   padding: calc(12px + env(safe-area-inset-top, 0px)) 24px 0; font-size: 15px;
 }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; }
-.brand img { width: 26px; height: 26px; }
+.brand img { width: 32px; height: 32px; object-fit: contain; }
 .bar nav { display: flex; gap: 22px; }
 .bar nav a { text-decoration: none; color: var(--mist); }
 .bar nav a:hover { color: var(--ink); }
@@ -505,7 +506,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
   box-shadow: 0 30px 70px -24px rgba(0,0,0,.8); opacity: 0; pointer-events: none; transform: translate(-50%, 24px) scale(.98);
   transition: opacity .35s ease, transform .55s var(--spring); }
 .ty.show { opacity: 1; pointer-events: auto; transform: translate(-50%, 0) scale(1); }
-.ty img { width: 42px; height: 42px; flex: none; }
+.ty img { width: 42px; height: 42px; object-fit: contain; flex: none; }
 .ty .ty-t { flex: 1; min-width: 0; }
 .ty .ty-t b { display: block; font-size: 15px; }
 .ty .ty-t span { display: block; font-size: 13.5px; color: var(--mist); margin-top: 2px; }
@@ -622,7 +623,7 @@ section { padding: 110px 0 0; }
 
 /* ===== Download, FAQ, footer ============================================================= */
 .download { text-align: center; padding-top: 140px; }
-.download .icon { width: 132px; height: 132px; filter: drop-shadow(0 24px 40px rgba(45,91,255,.45)); }
+.download .icon { width: 132px; height: 132px; object-fit: contain; filter: drop-shadow(0 24px 40px rgba(45,91,255,.45)); }
 .download h2 { font-size: clamp(36px, 5vw, 60px); line-height: 1.02; letter-spacing: -.03em; margin: 28px 0 10px; font-weight: 800; }
 .download > p { color: var(--mist); margin: 0 auto; max-width: 30em; }
 .steps { text-align: left; max-width: 620px; margin: 70px auto 0; padding: 30px 34px; border: 1px solid var(--line); border-radius: 22px; background: var(--panel); }
@@ -695,7 +696,7 @@ footer a:hover { color: var(--ink); }
 .m-wall{position:absolute;left:-200px;right:-200px;top:0;bottom:0}
 .dl-tip>svg{flex:none;width:22px;height:22px;color:var(--cyan);margin-top:1px}.dl-tip b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
 .dl-tip span{display:block;color:var(--mist);font-size:15px;line-height:1.45}.dl-tip ol{margin:10px 0 0;padding-left:20px;color:var(--ink);font-size:15px;line-height:1.6}
-.m-nadi{background:url("./assets/nadi-icon.png") center/contain no-repeat!important;box-shadow:none!important}
+.m-nadi{background:url("./assets/nadi-mascot-neutral.png") center/contain no-repeat!important;box-shadow:none!important}
 .m-nadi b,.m-nadi u{display:none!important}
 #download .swp,#download .trust{display:none}
 #download .btn-pending{pointer-events:none;opacity:.68;cursor:not-allowed}
@@ -705,7 +706,7 @@ footer a:hover { color: var(--ink); }
 <body>
 
 <header class="bar">
-  <a class="brand" href="#top"><img src="./assets/nadi-icon.png" alt="">Nadi</a>
+  <a class="brand" href="#top"><img src="./assets/nadi-mascot-neutral.png" alt="" width="32" height="32">Nadi</a>
   <div class="bar-r">
   <nav aria-label="Main">
     <a href="#preview">Preview</a>
@@ -1039,7 +1040,7 @@ footer a:hover { color: var(--ink); }
           <div class="h"><b>Memory</b></div>
           <div class="h"><b>Disk</b></div>
           <div class="h"><b>Network</b></div>
-          <div class="nm"><img src="./assets/nadi-icon.png" alt="">Nadi</div>
+          <div class="nm"><img src="./assets/nadi-mascot-neutral.png" alt="">Nadi</div>
           <div class="v">0.3%</div>
           <div class="v hi js-ram" data-to="30.6">30.6 MB</div>
           <div class="v">0 MB/s</div>
@@ -1076,7 +1077,7 @@ footer a:hover { color: var(--ink); }
           <div class="it"><span></span><span>About Nadi</span></div>
           <div class="it"><span></span><span>Exit</span></div>
         </div>
-        <p class="tray-hint"><img src="./assets/nadi-icon.png" alt="">Tray icon, bottom right of your taskbar</p>
+        <p class="tray-hint"><img src="./assets/nadi-mascot-neutral.png" alt="">Tray icon, bottom right of your taskbar</p>
       </div>
       <div class="opts">
         <div class="opt"><h3>Start with Windows</h3><p>Nadi opens on its own every time you sign in, so the notch is always there when you need it.</p></div>
@@ -1125,7 +1126,7 @@ footer a:hover { color: var(--ink); }
   </section>
 
   <section id="download" class="wrap download">
-    <img class="icon" src="./assets/nadi-icon.png" alt="Nadi icon">
+    <img class="icon" src="./assets/nadi-mascot-neutral.png" alt="Nadi icon">
     <h2>Download Nadi</h2>
     <p>Nadi is being prepared for Windows 10 and 11 (64-bit). The official installer is not available yet.</p>
     <div class="dl-pick">
@@ -1142,7 +1143,7 @@ footer a:hover { color: var(--ink); }
 
   <section id="support" class="wrap support">
    <div class="support-card">
-    <img class="mascot-mini" src="./assets/nadi-icon.png" alt="">
+    <img class="mascot-mini" src="./assets/nadi-mascot-cheerful.png" alt="Nadi mascot">
     <h2 class="sec-title">Keep Nadi going.</h2>
     <p class="sec-lede">If Nadi makes your day a little better, you can buy me a coffee. It helps me keep building new features.</p>
     <div class="donate js-donate">
@@ -1206,7 +1207,7 @@ footer a:hover { color: var(--ink); }
   </section>
 </main>
 <div class="ty" id="thanks" role="status" aria-live="polite">
-  <img src="./assets/nadi-icon.png" alt="">
+  <img src="./assets/nadi-mascot-neutral.png" alt="">
   <div class="ty-t"><b>Thanks for downloading Nadi!</b><span>If it makes your day better, you can buy me a coffee.</span></div>
   <a class="ty-go js-ty-go" href="#support" target="_blank" rel="noopener">&#9749; Support</a>
   <button class="ty-x" type="button" aria-label="Close">&times;</button>
