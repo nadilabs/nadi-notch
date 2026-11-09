@@ -1,0 +1,35 @@
+name: Build Nadi social preview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/build_social_preview.py
+      - assets/nadi-mascot-neutral.png
+      - .github/workflows/build-social-preview.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-og-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout website
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install Pillow
+        run: python -m pip install Pillow
+      - name: Generate high-resolution share image
+        run: python scripts/build_social_preview.py
+      - name: Publish generated asset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/nadi-og-preview.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "assets: publish 1200x630 Nadi sharing image"
+            git push
+          fi
