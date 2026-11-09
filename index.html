@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#09090b" name="theme-color"/>
+<meta content="Meet Nadi: an adaptive desktop notch for Windows. Music, synced lyrics, focus, reminders, Shelf and more, right where you need them." name="description"/>
+<meta content="Nadi — Your desktop, in sync." property="og:title"/>
+<meta content="An adaptive notch for Windows. Small by design. Ready when you are." property="og:description"/>
+<meta content="website" property="og:type"/>
+<title>
+   Nadi — Your desktop, in sync.
+  </title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="./css/tokens.css" rel="stylesheet"/>
+<link href="./css/base.css" rel="stylesheet"/>
+<link href="./css/layout.css" rel="stylesheet"/>
+<link href="./css/components.css" rel="stylesheet"/>
+<link href="./css/preview.css" rel="stylesheet"/>
+<link href="./css/responsive.css" rel="stylesheet"/>
+<script src="./js/main.js" type="module">
+</script>
+</head>
+<body>
+<svg aria-hidden="true" class="icon-sprite" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-arrow" viewbox="0 0 24 24">
+<path d="M4 12h16m-7-7 7 7-7 7">
+</path>
+</symbol>
+<symbol id="i-download" viewbox="0 0 24 24">
+<path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3">
+</path>
+</symbol>
+<symbol id="i-play" viewbox="0 0 24 24">
+<path d="m9 5 11 7-11 7V5Z">
+</path>
+</symbol>
+<symbol id="i-pause" viewbox="0 0 24 24">
+<path d="M8 5v14M16 5v14">
+</path>
+</symbol>
+<symbol id="i-volume" viewbox="0 0 24 24">
+<path d="M11 5 6 9H3v6h3l5 4V5Zm4 3a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14">
+</path>
+</symbol>
+<symbol id="i-chevron" viewbox="0 0 24 24">
+<path d="m9 5 7 7-7 7">
+</path>
+</symbol>
+<symbol id="i-music" viewbox="0 0 24 24">
+<path d="M9 18V5l12-2v13M9 8l12-2M9 18a3 2 0 1 1-6 0 3 2 0 1 1 6 0Zm12-2a3 2 0 1 1-6 0 3 2 0 1 1 6 0Z">
+</path>
+</symbol>
+<symbol id="i-lyrics" viewbox="0 0 24 24">
+<path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 3V6a2 2 0 0 1 1-2Zm3 5h8m-8 4h5">
+</path>
+</symbol>
+<symbol id="i-timer" viewbox="0 0 24 24">
+<circle cx="12" cy="13" r="8">
+</circle>
+<path d="M12 13V8m-4-6h8m-4 3V2">
+</path>
+</symbol>
+<symbol id="i-droplet" viewbox="0 0 24 24">
+<path d="M12 3C9 8 5 12 5 16a7 7 0 0 0 14 0c0-4-4-8-7-13Z">
+</path>
+</symbol>
+<symbol id="i-folder" viewbox="0 0 24 24">
+<path d="M3 7h7l2 2h9v11H3V7Zm0 0V4h7l2 3">
+</path>
+</symbol>
+<symbol id="i-list" viewbox="0 0 24 24">
+<path d="m4 6 2 2 3-4m3 3h9M4 14l2 2 3-4m3 3h9m-9 5h9">
+</path>
+</symbol>
+<symbol id="i-calendar" viewbox="0 0 24 24">
+<rect height="16" rx="2" width="18" x="3" y="5">
+</rect>
+<path d="M7 3v4m10-4v4M3 10h18">
+</path>
+</symbol>
+<symbol id="i-battery" viewbox="0 0 24 24">
+<rect height="10" rx="2" width="18" x="2" y="7">
+</rect>
+<path d="M22 10v4M5 10h9v4H5">
+</path>
+</symbol>
+<symbol id="i-pray" viewbox="0 0 24 24">
+<path d="M3 18h18M6 18v-6l6-6 6 6v6M10 18v-5h4v5M12 3V1">
+</path>
+</symbol>
+<symbol id="i-grid" viewbox="0 0 24 24">
+<rect height="7" rx="1" width="7" x="3" y="3">
+</rect>
+<rect height="7" rx="1" width="7" x="14" y="3">
+</rect>
+<rect height="7" rx="1" width="7" x="3" y="14">
+</rect>
+<rect height="7" rx="1" width="7" x="14" y="14">
+</rect>
+</symbol>
+<symbol id="i-bell" viewbox="0 0 24 24">
+<path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 9h18c0-1-3-2-3-9Zm-8 12a2 2 0 0 0 4 0">
+</path>
+</symbol>
+<symbol id="i-settings" viewbox="0 0 24 24">
+<path d="M4 7h16M4 17h16M9 4v6m6 4v6">
+</path>
+</symbol>
+<symbol id="i-shield" viewbox="0 0 24 24">
+<path d="M12 2 4 5v7c0 5 4 8 8 10 4-2 8-5 8-10V5l-8-3Zm-4 10 3 3 5-6">
+</path>
+</symbol>
+<symbol id="i-spark" viewbox="0 0 24 24">
+<path d="m12 2 2 8 8 2-8 2-2 8-2-8-8-2 8-2 2-8Z">
+</path>
+</symbol>
+<symbol id="i-github" viewbox="0 0 24 24">
+<path d="M9 20c-5-1-7-5-7-9a10 10 0 0 1 20 0c0 4-2 8-7 9v-4c1-1 2-2 2-4-1-1-3-1-5-1s-4 0-5 1c0 2 1 3 2 4v4Zm-1-16L5 3l1 5m10-4 3-1-1 5">
+</path>
+</symbol>
+<symbol id="i-heart" viewbox="0 0 24 24">
+<path d="M12 21 3.4 12.5a5 5 0 0 1 7.1-7L12 7l1.5-1.5a5 5 0 0 1 7.1 7L12 21Z">
+</path>
+</symbol>
+<symbol id="i-mail" viewbox="0 0 24 24">
+<rect height="14" rx="2" width="20" x="2" y="5">
+</rect>
+<path d="m3 6 9 8 9-8">
+</path>
+</symbol>
+</svg>
+<a class="skip-link" href="#main">
+   Skip to content
+  </a>
+<header class="site-header" id="top">
+<div class="header-inner container">
+<a aria-label="Nadi homepage" class="brand" href="#top">Nadi.</a>
+<nav aria-label="Main navigation" class="main-nav">
+<a data-i18n="nav.features" href="#features">
+      Features
+     </a>
+<a data-i18n="nav.preview" href="#preview">
+      Preview
+     </a>
+<a data-i18n="nav.whatsNew" href="#changelog">
+      What's new
+     </a>
+<a data-i18n="nav.faq" href="#faq">
+      FAQ
+     </a>
+</nav>
+<div class="header-actions">
+<div aria-label="Language" class="language-switch" role="group">
+<button aria-pressed="true" data-language="en" type="button">
+       EN
+      </button>
+<button aria-pressed="false" data-language="id" type="button">
+       ID
+      </button>
+<span aria-hidden="true" class="language-indicator">
+</span>
+</div>
+<a class="header-cta" data-i18n="nav.get" href="#download">
+      Get Nadi
+      <svg class="icon">
+<use href="#i-arrow">
+</use>
+</svg>
+</a>
+<button aria-expanded="false" aria-label="Open menu" class="menu-toggle" type="button">
+<span>
+</span>
+<span>
+</span>
+</button>
+</div>
+</div>
+</header>
+<main id="main">
+<section aria-labelledby="hero-title" class="hero container">
+<p class="eyebrow">
+<span data-i18n="hero.eyebrow">
+      THE ADAPTIVE WINDOWS NOTCH
+     </span>
+</p>
+<h1 data-i18n-html="hero.title" id="hero-title">Your desktop, in sync.</h1>
+<p class="hero-description" data-i18n="hero.description">Meet Nadi. A native Windows notch for music, focus, reminders and everything in between.</p>
+<div class="hero-actions">
+<a class="button button-primary" href="#preview">
+<svg class="icon">
+<use href="#i-download">
+</use>
+</svg>
+<span data-i18n="hero.download">Explore Nadi</span>
+<svg class="icon icon-right">
+<use href="#i-arrow">
+</use>
+</svg>
+</a>
+<a class="button button-outline" href="#support">
+<svg class="icon">
+<use href="#i-heart">
+</use>
+</svg>
+<span data-i18n="hero.support">
+       Support the project
+      </span>
+</a>
+</div>
+<p class="hero-meta">
+<span data-i18n="hero.meta">
+      Designed for Windows 10 &amp; 11 · Free, with no subscription
+     </span>
+</p>
+</section>
+<section aria-labelledby="preview-title" class="desktop-section" data-area="preview" id="preview">
+<div class="container preview-heading">
+<p class="eyebrow" data-i18n="preview.eyebrow">INTERACTIVE PREVIEW</p>
+<h2 class="section-title" data-i18n-html="preview.title" id="preview-title">See Nadi in action.</h2>
+<p class="section-description centered" data-i18n="preview.description">The real interface, captured from Nadi on Windows. Choose a view to explore.</p>
+</div>
+<div class="desktop-stage">
+<div class="desktop-bezel">
+<div class="desktop-screen" id="desktopScreen">
+  <div class="wallpaper" aria-hidden="true">
+    <span class="wallpaper-light"></span>
+    <span class="wallpaper-petal petal-back"></span>
+    <span class="wallpaper-petal petal-left"></span>
+    <span class="wallpaper-petal petal-right"></span>
+    <span class="wallpaper-petal petal-front"></span>
+  </div>
+  <button class="notch-zone" id="notchZone" type="button" aria-label="Switch Nadi preview" title="Click to explore the next view">
+    <span class="notch-shell" id="notchShell">
+      <img alt="Nadi Resting interface rendered on Windows" class="notch-image" id="notchImage" src="./assets/previews/resting.png" width="156" height="30" draggable="false"/>
+    </span>
+  </button>
+  <div class="desktop-taskbar" aria-hidden="true">
+    <span class="taskbar-apps"><i class="taskbar-windows"></i><i class="taskbar-search"></i><i class="taskbar-folder"></i><i class="taskbar-browser"></i></span>
+    <span class="taskbar-clock" id="previewClock">10:24</span>
+  </div>
+</div>
+</div>
+<div class="stage-caption">
+<span data-i18n="preview.caption">
+       Interactive preview · Captured from Nadi's native renderer
+      </span>
+<button aria-pressed="true" class="autoplay-toggle" id="autoplayToggle" type="button">
+<svg class="icon">
+<use href="#i-pause">
+</use>
+</svg>
+<span data-i18n="preview.pause">
+        Pause demo
+       </span>
+</button>
+</div>
+</div>
+<div class="preview-controller container">
+<div aria-label="Choose a Nadi preview mode" class="preview-controls" id="previewModes" role="group">
+</div>
+<div class="preview-detail">
+<div>
+<span class="preview-index" id="previewIndex">
+        01 / 13
+       </span>
+<strong id="previewName">
+        Resting
+       </strong>
+<p id="previewDescription">
+        A quiet companion when your desktop is at rest.
+       </p>
+</div>
+<div class="preview-steps">
+<button aria-label="Previous preview" id="previewPrevious" type="button">
+<svg class="icon flip">
+<use href="#i-chevron">
+</use>
+</svg>
+</button>
+<button aria-label="Next preview" id="previewNext" type="button">
+<svg class="icon">
+<use href="#i-chevron">
+</use>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section aria-labelledby="features-title" class="section container" data-area="features" id="features">
+<div class="section-heading">
+<p class="eyebrow" data-i18n="features.eyebrow">FEATURES</p>
+<h2 class="section-title" data-i18n-html="features.title" id="features-title">Everything within reach.</h2>
+<p class="section-description" data-i18n="features.description">
+      All your little desktop essentials, without another window getting in the way.
+     </p>
+</div>
+<div class="feature-grid" id="featureGrid">
+</div>
+</section>
+<section aria-labelledby="environment-title" class="section environment-section">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow" data-i18n="philosophy.eyebrow">BEHAVIOR</p>
+<h2 class="section-title" data-i18n-html="philosophy.title" id="environment-title">Present when needed. Quiet otherwise.</h2>
+</div>
+<div class="philosophy-grid">
+<article>
+<div class="principle-icon">
+<svg class="icon">
+<use href="#i-spark">
+</use>
+</svg>
+</div>
+<h3 data-i18n="philosophy.one.title">
+        Adaptive by nature
+       </h3>
+<p data-i18n="philosophy.one.body">
+        Nadi responds to how you work. It stays compact, adapts to your desktop and gets out of the way in full screen.
+       </p>
+</article>
+<article>
+<div class="principle-icon">
+<svg class="icon">
+<use href="#i-shield">
+</use>
+</svg>
+</div>
+<h3 data-i18n="philosophy.two.title">
+        Yours to keep
+       </h3>
+<p data-i18n="philosophy.two.body">
+        Your tasks, reminders and saved Shelf references stay on your own device. No Nadi account required.
+       </p>
+</article>
+<article>
+<div class="principle-icon">
+<svg class="icon">
+<use href="#i-settings">
+</use>
+</svg>
+</div>
+<h3 data-i18n="philosophy.three.title">
+        Made for Windows
+       </h3>
+<p data-i18n="philosophy.three.body">
+        Built with native Windows APIs for media, desktop behavior and system-aware interactions.
+       </p>
+</article>
+</div>
+</div>
+</section>
+<section aria-labelledby="customize-title" class="section container split-section" data-area="customize" id="customize">
+<div class="split-visual visual-settings">
+<div class="settings-window">
+<img alt="Nadi Appearance Settings native screenshot" height="555" loading="lazy" src="./assets/previews/appearance.png" width="650"/>
+</div>
+</div>
+<div class="split-copy">
+<p class="eyebrow" data-i18n="customize.eyebrow">CUSTOMIZATION</p>
+<h2 class="section-title" data-i18n="customize.title" id="customize-title">
+      Make it yours.
+     </h2>
+<p class="section-description" data-i18n="customize.description">
+      Choose what appears in your notch. Keep what matters and hide the rest.
+     </p>
+<div class="option-list">
+<div>
+<h3 data-i18n="customize.one.title">
+        Minimal or adaptive
+       </h3>
+<p data-i18n="customize.one.body">
+        Stay discreet when windows get busy, or open the full experience when needed.
+       </p>
+</div>
+<div>
+<h3 data-i18n="customize.two.title">
+        The features you use
+       </h3>
+<p data-i18n="customize.two.body">
+        Organize navigation and turn off features you don't want running.
+       </p>
+</div>
+<div>
+<h3 data-i18n="customize.three.title">
+        Your kind of reminders
+       </h3>
+<p data-i18n="customize.three.body">
+        Set your focus sessions, daily water goal and reminder preferences.
+       </p>
+</div>
+</div>
+</div>
+</section>
+<section aria-labelledby="light-title" class="section container split-section reverse-section" data-area="light" id="light">
+<div class="split-copy">
+<p class="eyebrow" data-i18n="light.eyebrow">NATIVE WINDOWS</p>
+<h2 class="section-title" data-i18n-html="light.title" id="light-title">Part of your desktop.</h2>
+<p class="section-description" data-i18n="light.description">
+      One slim place for the information you need. No second dashboard to manage and no pile of windows to keep open.
+     </p>
+<ul class="check-list">
+<li data-i18n="light.one">
+       Native Windows desktop experience
+      </li>
+<li data-i18n="light.two">
+       Multi-monitor and full-screen awareness
+      </li>
+<li data-i18n="light.three">
+       Designed for a quiet, distraction-light workflow
+      </li>
+</ul>
+</div>
+<div class="split-visual visual-stack">
+<div class="stack-pane stack-pane-one">
+<img alt="Nadi Music player native preview" height="144" loading="lazy" src="./assets/previews/music.png" width="440"/>
+</div>
+<div class="stack-pane stack-pane-two">
+<img alt="Nadi Pomodoro Timeline native preview" height="144" loading="lazy" src="./assets/previews/pomodoro.png" width="440"/>
+</div>
+<div class="stack-pane stack-pane-three">
+<img alt="Nadi Water Reminder native preview" height="144" loading="lazy" src="./assets/previews/water.png" width="440"/>
+</div>
+</div>
+</section>
+<section aria-labelledby="changelog-title" class="section changelog-section" data-area="changelog" id="changelog">
+<div class="container">
+<div class="section-heading">
+<p class="eyebrow" data-i18n="changelog.eyebrow">LATEST</p>
+<h2 class="section-title" data-i18n="changelog.title" id="changelog-title">
+       What's taking shape in Nadi.
+      </h2>
+<p class="section-description" data-i18n="changelog.description">
+       A look at the experience being refined for Nadi 1.0.
+      </p>
+</div>
+<div class="change-grid">
+<article>
+<span class="change-type">
+        01 · PRODUCTIVITY
+       </span>
+<h3 data-i18n="changelog.one.title">
+        A more flexible Pomodoro
+       </h3>
+<p data-i18n="changelog.one.body">
+        Choose a classic focus ring or the session timeline, with time and breaks in one view.
+       </p>
+<img alt="Pomodoro Timeline preview" height="144" loading="lazy" src="./assets/previews/pomodoro.png" width="440"/>
+</article>
+<article>
+<span class="change-type">
+        02 · DAILY FLOW
+       </span>
+<h3 data-i18n="changelog.two.title">
+        Shelf, together with Clipboard
+       </h3>
+<p data-i18n="changelog.two.body">
+        Files and copied text share one place instead of getting split across separate tabs.
+       </p>
+<img alt="Nadi Shelf and Clipboard cards" height="144" loading="lazy" src="./assets/previews/shelf.png" width="440"/>
+</article>
+<article>
+<span class="change-type">
+        03 · GLANCEABLE
+       </span>
+<h3 data-i18n="changelog.three.title">
+        Your day, at a glance
+       </h3>
+<p data-i18n="changelog.three.body">
+        A dedicated Today view for local tasks, dates and supported notification indicators.
+       </p>
+<img alt="Nadi Today view" height="144" loading="lazy" src="./assets/previews/today.png" width="440"/>
+</article>
+</div>
+</div>
+</section>
+<section aria-labelledby="download-title" class="section download-section" data-area="download" id="download">
+<div class="container">
+<p class="eyebrow" data-i18n="download.eyebrow">WINDOWS 10 / 11</p>
+<h2 data-i18n-html="download.title" id="download-title">Nadi for Windows.</h2>
+<p data-i18n="download.description">
+      Nadi is being prepared for its first public Windows release.
+     </p>
+<div class="download-actions">
+<a class="button button-primary" href="#download" id="releaseLink">
+<svg class="icon">
+<use href="#i-download">
+</use>
+</svg>
+<span data-i18n="download.button">
+        Download Nadi
+       </span>
+<svg class="icon icon-right">
+<use href="#i-arrow">
+</use>
+</svg>
+</a>
+<span class="release-status" data-i18n="download.status" id="releaseStatus">
+       Public download not available yet
+      </span>
+</div>
+<div class="download-facts">
+<span>
+       Windows 10 / 11
+      </span>
+<span data-i18n="download.factTwo">
+       Free to use
+      </span>
+<span data-i18n="download.factThree">
+       No subscription
+      </span>
+</div>
+</div>
+</section>
+<section aria-labelledby="support-title" class="section container support-section" data-area="support" id="support">
+<div class="support-panel">
+<p class="eyebrow" data-i18n="support.eyebrow">SUPPORT</p>
+<h2 class="section-title" data-i18n-html="support.title" id="support-title">Help keep Nadi independent.</h2>
+<p class="section-description centered" data-i18n="support.description">
+      Nadi is an independent project. If it makes your day a little better, an optional contribution will help it keep growing.
+     </p>
+<a class="button button-outline" href="#support" id="donateLink">
+<svg class="icon">
+<use href="#i-heart">
+</use>
+</svg>
+<span data-i18n="support.button">
+       Support Nadi
+      </span>
+</a>
+<p class="support-footnote" data-i18n="support.status" id="supportStatus">
+      Donation link coming soon · Always optional
+     </p>
+</div>
+</section>
+<section aria-labelledby="feedback-title" class="section container feedback-section" id="feedback">
+<div class="feedback-copy">
+<p class="eyebrow" data-i18n="feedback.eyebrow">FEEDBACK</p>
+<h2 class="section-title" data-i18n="feedback.title" id="feedback-title">
+      Your thoughts matter.
+     </h2>
+<p class="section-description" data-i18n="feedback.description">
+      Found something that could feel better? Suggestions and bug reports help Nadi get better, one detail at a time.
+     </p>
+</div>
+<div class="feedback-card">
+<span class="feedback-icon">
+<svg class="icon">
+<use href="#i-mail">
+</use>
+</svg>
+</span>
+<h3 data-i18n="feedback.cardTitle">
+      A note to the developer
+     </h3>
+<p data-i18n="feedback.cardBody">
+      The public feedback channel will be announced with the release. Until then, Nadi is still being refined.
+     </p>
+<a class="button button-outline" href="#feedback" id="feedbackLink">
+<span data-i18n="feedback.button">
+       Send feedback
+      </span>
+<svg class="icon">
+<use href="#i-arrow">
+</use>
+</svg>
+</a>
+<small data-i18n="feedback.status" id="feedbackStatus">
+      Feedback channel coming soon
+     </small>
+</div>
+</section>
+<section aria-labelledby="note-title" class="section container note-section" id="note">
+<div class="note-inner">
+<p class="eyebrow" data-i18n="note.eyebrow">FROM NADI SPACE LABS</p>
+<h2 data-i18n="note.title" id="note-title">
+      Independent. Intentional. Always evolving.
+     </h2>
+<p data-i18n="note.body">
+      Nadi started as a small experiment: could the top of a Windows screen feel more useful without becoming another distraction? It remains an independent software project, developed with care and improved through real-world use.
+     </p>
+<div class="note-signature">
+
+<div>
+<strong>
+        Nadi Space Labs
+       </strong>
+<span data-i18n="note.sign">
+        Independent software studio
+       </span>
+</div>
+</div>
+</div>
+</section>
+<section aria-labelledby="faq-title" class="section container faq-section" id="faq">
+<div class="faq-head">
+<p class="eyebrow" data-i18n="faq.eyebrow">FAQ</p>
+<h2 class="section-title" data-i18n="faq.title" id="faq-title">
+      Questions, answered.
+     </h2>
+</div>
+<div class="faq-list" id="faqList">
+</div>
+</section>
+<section aria-labelledby="privacy-title" class="section container privacy-section" id="privacy">
+<div class="privacy-heading">
+<span class="privacy-icon">
+<svg class="icon">
+<use href="#i-shield">
+</use>
+</svg>
+</span>
+<div>
+<p class="eyebrow" data-i18n="privacy.eyebrow">PRIVACY</p>
+<h2 data-i18n="privacy.title" id="privacy-title">
+       Your space stays yours.
+      </h2>
+</div>
+</div>
+<p data-i18n="privacy.body">
+     Nadi doesn't require an account. To-do data and Water Reminder records are kept locally; Shelf holds file references and clipboard history is temporary in memory. System notifications depend on Windows capabilities and permission, and may be unavailable in the classic installer.
+    </p>
+</section>
+</main>
+<footer class="site-footer">
+<div class="container footer-top">
+<div>
+<a class="brand" href="#top">
+
+<span>
+       Nadi
+       <span class="brand-dot">
+        .
+       </span>
+</span>
+</a>
+<p data-i18n="footer.tagline">
+      Your desktop, in sync.
+     </p>
+</div>
+<nav aria-label="Footer navigation">
+<a data-i18n="nav.features" href="#features">
+      Features
+     </a>
+<a data-i18n="nav.preview" href="#preview">
+      Preview
+     </a>
+<a data-i18n="nav.get" href="#download">
+      Get Nadi
+     </a>
+<a data-i18n="footer.privacy" href="#privacy">
+      Privacy
+     </a>
+</nav>
+</div>
+<div class="container footer-bottom">
+<span>
+     ©
+     <span id="year">
+</span>
+     Nadi Space Labs
+    </span>
+<span data-i18n="footer.credit">
+     Independently designed for Windows.
+    </span>
+<a data-i18n="footer.back" href="#top">
+     Back to top ↑
+    </a>
+</div>
+</footer>
+</body>
+</html>

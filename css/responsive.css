@@ -1,0 +1,62 @@
+@media(max-width:900px) {
+ .main-nav { gap:18px; }
+ .container { width:min(var(--max-width),calc(100% - 40px)); }
+ .split-section,.feedback-section { gap:38px; }
+ .desktop-section { padding-top:68px; }
+ .desktop-screen { height:clamp(260px,52vw,480px); }
+ .philosophy-grid { gap:24px; }
+ .change-grid { gap:18px; }
+}
+@media(max-width:690px) {
+ .container { width:calc(100% - 36px); }
+ .header-inner { height:70px; }
+ .brand { font-size:22px; }
+ .main-nav { display:none; position:absolute; top:70px; left:0; right:0; margin:0;
+  padding:18px; background:var(--bg); border-bottom:1px solid var(--border); }
+ .main-nav.is-open { display:grid; gap:14px; }
+ .menu-toggle { display:grid; place-content:center; gap:5px; width:36px; height:36px;
+  border:1px solid var(--border); border-radius:50%; background:transparent; }
+ .menu-toggle span { width:14px; height:1px; background:var(--text); }
+ .header-cta { display:none; }
+ .header-actions { gap:10px; }
+ .hero { padding-top:66px; }
+ .hero h1 { font-size:clamp(44px,10vw,66px); }
+ .hero-description { font-size:15px; margin-top:18px; }
+ .hero-actions { flex-direction:column; width:100%; margin-top:25px; }
+ .hero-actions .button { width:min(100%,310px); }
+ .hero-meta { font-size:11px; }
+ .desktop-section { padding-top:58px; }
+ .preview-heading .section-title { font-size:23px; }
+ .desktop-stage { width:calc(100% - 20px); margin-top:20px; }
+ .desktop-bezel { padding:4px; border-radius:8px; }
+ .desktop-screen { height:clamp(225px,60vw,350px); }
+ .desktop-screen .notch-image { max-width:calc(100% - 12px); }
+ .preview-controls { margin-top:20px; gap:5px; }
+ .preview-controls button { padding:7px 11px; font-size:11px; }
+ .preview-detail { margin-top:16px; }
+ .section { padding-top:85px; }
+ .section-title { font-size:36px; }
+ .section-heading { margin-bottom:29px; }
+ .feature-grid,.philosophy-grid,.change-grid,.split-section,.feedback-section,.faq-section,.privacy-section { grid-template-columns:1fr; }
+ .feature-grid { gap:0; }
+ .feature-card { padding:20px 0; }
+ .philosophy-grid { gap:24px; }
+ .environment-section { margin-top:80px; }
+ .split-visual { min-height:0; }
+ .reverse-section .split-copy,.reverse-section .split-visual { grid-column:auto; grid-row:auto; }
+ .reverse-section .split-copy { order:0; }
+ .reverse-section .split-visual { order:1; }
+ .visual-settings { padding:13px; }
+ .visual-stack { padding:16px; }
+ .change-grid { gap:26px; }
+ .change-grid p { min-height:0; }
+ .download-section { padding:85px 0; margin-top:90px; }
+ .download-section h2 { font-size:43px; }
+ .support-section { padding-top:88px; }
+ .support-panel { padding:42px 19px; }
+ .feedback-section,.faq-section { gap:24px; }
+ .privacy-section { margin-top:80px; padding-top:28px; gap:15px; }
+ .footer-top { display:block; padding-bottom:35px; }
+ .footer-top nav { margin-top:20px; gap:19px; }
+ .footer-bottom { flex-wrap:wrap; justify-content:flex-start; padding-block:20px; }
+}

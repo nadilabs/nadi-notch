@@ -1,0 +1,123 @@
+/* Nadi preview experience, adapted from the interaction model of the Nusa
+   landing page: an edge-attached notch that morphs inside a laptop display.
+   Settled frames are untouched renders from Nadi's Windows renderer. */
+
+.desktop-section { padding-top: 79px; }
+.preview-heading { text-align: center; }
+.preview-heading .eyebrow { display: none; }
+.preview-heading .section-title { margin: 0 0 9px; font-size: 27px; font-weight: 600; letter-spacing: -.045em; }
+.preview-heading .section-description { max-width: 600px; margin-inline: auto; font-size: 14px; color: var(--subtle); }
+
+.desktop-stage { width: min(1030px, calc(100% - 42px)); margin: 32px auto 0; }
+.desktop-bezel { position: relative; padding: 8px 8px 9px; background: #191a1e;
+  border: 1px solid #42444c; border-radius: 17px 17px 9px 9px;
+  box-shadow: 0 36px 90px -42px rgba(0, 0, 0, .92), inset 0 1px rgba(255, 255, 255, .07); }
+.desktop-bezel::after { content: ''; position: absolute; height: 5px; width: 33%; bottom: -8px;
+  left: 50%; border-radius: 0 0 6px 6px; transform: translateX(-50%); background: #2b2c33; }
+.desktop-screen { position: relative; height: clamp(345px, 51vw, 548px); overflow: hidden;
+  border-radius: 9px; background: #a7bbed; isolation: isolate; }
+
+/* Quiet, Windows-like abstract wallpaper: behind the real Nadi UI, not baked
+   into screenshots. No external wallpaper assets or dependencies. */
+.wallpaper { position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  background: linear-gradient(180deg,#e6efff 0%,#bbd4ff 29%,#778ef2 64%,#30266e 100%); }
+.wallpaper-light { position: absolute; inset: -18% 0 0;
+  background: radial-gradient(ellipse 58% 42% at 51% 1%, rgba(255,255,255,.96), transparent 85%),
+              radial-gradient(ellipse 66% 52% at 50% 99%,rgba(36,38,115,.55),transparent 83%); }
+.wallpaper-petal { position: absolute; left: 50%; bottom: -60%; width: 27%; height: 127%;
+  border-radius: 55% 55% 44% 44% / 78% 78% 25% 25%; transform-origin: 50% 15%;
+  background: linear-gradient(0deg,#302a9f 1%,#385fda 44%,#8ec9ff 82%,#f2faff 100%);
+  box-shadow: inset -26px 9px 48px rgba(243, 250, 255, .44), 0 0 70px rgba(49, 102, 222, .16);
+  opacity: .89; filter: saturate(1.06); }
+.petal-back { width: 42%; left: 29%; bottom: -46%; height: 112%; opacity: .5;
+  transform: rotate(43deg); filter: blur(11px); }
+.petal-left { transform: translateX(-50%) rotate(-48deg); }
+.petal-right { transform: translateX(-50%) rotate(48deg); }
+.petal-front { left: 50%; bottom: -72%; width: 26%; height: 115%;
+  transform: translateX(-50%) rotate(0); opacity: .82; }
+.wallpaper::after { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 8%,transparent 22%,rgba(35,38,93,.10) 100%); }
+
+/* This shell uses the Nusa-style width/height spring and shoulder reveal.
+   The real PNG is shown WITHOUT tracing or any CSS redraw once the morph
+   settles, preserving Nadi's actual native silhouette and UI alignment. */
+.notch-zone { position: absolute; z-index: 4; top: 0; left: 50%; transform: translateX(-50%);
+  width: var(--stage-notch-width, 215px); height: var(--stage-notch-height, 42px);
+  margin: 0; padding: 0; border: 0; background: transparent; overflow: visible;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: width .64s cubic-bezier(.34,1.08,.49,1), height .64s cubic-bezier(.34,1.08,.49,1); }
+.notch-zone:focus-visible { outline: 2px solid #ffffff; outline-offset: 5px; border-radius: 7px; }
+.notch-shell { position: absolute; display: block; left: 50%; top: 0; transform: translateX(-50%) scale(var(--notch-scale, 1.34));
+  transform-origin: 50% 0; width: var(--native-width,156px); height: var(--native-height,30px);
+  border-radius: 0 0 32px 32px; background: transparent;
+  transition: width .64s cubic-bezier(.34,1.08,.49,1), height .64s cubic-bezier(.34,1.08,.49,1),
+              border-radius .5s ease, background-color .22s ease; }
+.notch-shell::before,.notch-shell::after { content: ''; position: absolute; top: 0; width: 19px;
+  height: 21px; opacity: 0; pointer-events: none;
+  transition: opacity .16s ease; }
+.notch-shell::before { right: 100%; background: radial-gradient(circle at 0 100%,transparent 19px,#050609 19.6px); }
+.notch-shell::after { left: 100%; background: radial-gradient(circle at 100% 100%,transparent 19px,#050609 19.6px); }
+.notch-shell.is-morphing { background: #050609; }
+.notch-shell.is-morphing::before,.notch-shell.is-morphing::after { opacity: 1; }
+.notch-image { position: absolute; display: block; inset: 0; width: 100%; height: 100%; max-width: none;
+  object-fit: fill; pointer-events: none; user-select: none; -webkit-user-drag: none;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,.32));
+  transition: opacity .24s ease, transform .4s ease; }
+.notch-image.is-changing { opacity: 0; }
+.notch-shell:not(.is-morphing):hover .notch-image { filter: drop-shadow(0 12px 16px rgba(0,0,0,.4)); }
+
+.desktop-taskbar { position: absolute; z-index: 2; inset: auto 0 0; height: 35px;
+  background: rgba(17,26,63,.18); border-top: 1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  display: flex; align-items: center; justify-content: center; }
+.taskbar-apps { display: flex; align-items: center; gap: 13px; height: 100%; }
+.taskbar-apps i { display: block; width: 16px; height: 16px; border-radius: 4px; }
+.taskbar-windows { background: conic-gradient(from 90deg,#f3f8ff 0 25%,transparent 25% 28%,#f3f8ff 28% 50%,transparent 50% 53%,#f3f8ff 53% 75%,transparent 75% 78%,#f3f8ff 78% 100%); }
+.taskbar-search { border: 2px solid rgba(250,252,255,.92); border-radius: 50% !important; position: relative; transform: scale(.72); }
+.taskbar-search::after { content: ''; position: absolute; width: 7px; height: 2px; background: #f8faff; right: -5px; bottom: -1px; transform: rotate(50deg); border-radius: 2px; }
+.taskbar-folder { background: linear-gradient(#ffe39b 25%,#edc66b 26%); border-radius: 3px !important; transform: scale(.86); }
+.taskbar-browser { background: conic-gradient(#ffe2a1,#75c6ff,#6b94ef,#ffe2a1); border-radius: 50% !important; transform: scale(.88); }
+.taskbar-clock { position: absolute; right: 16px; font-size: 10px; line-height: 1; font-variant-numeric: tabular-nums; color: #f9faff; font-weight: 600; }
+
+.stage-caption { text-align: center; margin: 15px auto 0; display: flex; justify-content: center;
+  align-items: center; flex-wrap: wrap; gap: 14px; color: var(--subtle); font-size: 12px; }
+.autoplay-toggle { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none;
+  color: var(--muted); font-size: 12px; padding: 4px; }
+.autoplay-toggle:hover { color: var(--text); }
+.autoplay-toggle .icon { width: 14px; height: 14px; }
+.preview-controller { display: flex; flex-direction: column; align-items: center; }
+.preview-controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; max-width: 940px; margin: 25px auto 0; }
+.preview-controls button { border: 1px solid var(--border); border-radius: 100px; background: transparent;
+  font-size: 12px; color: var(--muted); padding: 7px 14px; line-height: 1.3;
+  transition: color .18s,border-color .18s,background .18s; }
+.preview-controls button:hover { color: var(--text); border-color: rgba(255,255,255,.3); }
+.preview-controls button[aria-pressed="true"] { background: #f2f2f4; border-color: #f2f2f4; color: #101012; }
+.preview-detail { margin-top: 23px; width: min(500px,100%); display: flex; align-items: center;
+  justify-content: space-between; gap: 20px; }
+.preview-detail strong { display: block; font-size: 14px; font-weight: 600; }
+.preview-detail p { color: var(--subtle); font-size: 12px; margin: 5px 0 0; }
+.preview-index { color: var(--subtle); font-variant-numeric: tabular-nums; font-size: 12px; }
+.preview-steps { display: flex; gap: 8px; }
+.preview-steps button { width: 36px; height: 36px; display: grid; place-items: center;
+  border: 1px solid var(--border); border-radius: 50%; background: none; }
+.preview-steps button:hover { background: var(--surface-raised); }
+.preview-steps .icon { width: 16px; height: 16px; }
+
+@media (max-width:690px) {
+  .desktop-stage { width: calc(100% - 18px); margin-top: 21px; }
+  .desktop-bezel { padding: 4px 4px 5px; border-radius: 9px; }
+  .desktop-screen { height: clamp(265px, 76vw, 360px); border-radius: 5px; }
+  .wallpaper-petal { width: 43%; height: 105%; bottom: -52%; }
+  .petal-front { width: 33%; bottom: -60%; }
+  .desktop-taskbar { height: 28px; }
+  .taskbar-apps { gap: 9px; }
+  .taskbar-apps i { width: 12px; height: 12px; }
+  .taskbar-clock { right: 6px; font-size: 8px; }
+  .stage-caption { font-size: 11px; margin-top: 12px; }
+  .preview-controls { gap: 6px; margin-top: 20px; }
+  .preview-controls button { padding: 7px 11px; font-size: 11px; }
+  .preview-detail { margin-top: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notch-shell,.notch-zone,.notch-image { transition-duration: 0.01ms !important; }
+}
