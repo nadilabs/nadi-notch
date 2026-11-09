@@ -482,7 +482,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .intro { position: absolute; left: 0; right: 0; z-index: 6; pointer-events: none; display: none; overflow: visible; }
 .intro-shade { position: absolute; inset: 0; background: var(--void); will-change: clip-path; }
 .intro-glow { position: absolute; left: 0; top: 0; border-radius: 50%; opacity: 0; will-change: transform, opacity;
-  background: radial-gradient(closest-side, rgba(45,91,255,.5), rgba(123,75,255,.2) 55%, transparent); }
+  background: radial-gradient(closest-side, rgba(55,129,252,.5), rgba(48,110,238,.18) 55%, transparent); }
 .intro svg { position: absolute; left: 0; top: 0; overflow: visible; }
 .intro .eyes-g { filter: drop-shadow(0 0 3px rgba(120,190,255,.9)) drop-shadow(0 0 9px rgba(80,140,255,.45)); }
 .preview.pre .intro { display: block; }
@@ -764,9 +764,18 @@ footer a:hover { color: var(--ink); }
     <div class="intro" id="intro" aria-hidden="true">
       <div class="intro-shade"></div>
       <div class="intro-glow"></div>
-      <svg><defs><linearGradient id="introRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#19b8ff"/><stop offset="1" stop-color="#7b4bff"/></linearGradient></defs>
-        <path class="intro-body" fill="#000" stroke="url(#introRim)" stroke-width="2.4"/>
-        <g class="eyes-g"><ellipse class="intro-eye" fill="#fff"/><ellipse class="intro-eye" fill="#fff"/></g></svg>
+      <svg aria-hidden="true"><defs>
+        <linearGradient id="nadiIntroShell" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#cbe9fd"/><stop offset="48%" stop-color="#3781fc"/><stop offset="100%" stop-color="#03195b"/>
+        </linearGradient>
+        <linearGradient id="nadiIntroFace" x1="0%" y1="0%" x2="30%" y2="100%">
+          <stop offset="0%" stop-color="#252728"/><stop offset="68%" stop-color="#020307"/><stop offset="100%" stop-color="#000"/>
+        </linearGradient>
+      </defs>
+        <path class="intro-body" fill="url(#nadiIntroShell)"/>
+        <path class="intro-face" fill="url(#nadiIntroFace)"/>
+        <g class="eyes-g"><ellipse class="intro-eye" fill="#fff"/><ellipse class="intro-eye" fill="#fff"/></g>
+      </svg>
     </div>
     <div class="laptop" id="laptop">
       <div class="lid"><i class="lid-shade" aria-hidden="true"></i><div class="bezel"><span class="cam"></span>
@@ -1419,7 +1428,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObse
 }
 function runIntro() {
   placeIntro();
-  const svg = intro.querySelector("svg"), body = intro.querySelector(".intro-body"), eyes = intro.querySelectorAll(".intro-eye");
+  const svg = intro.querySelector("svg"), body = intro.querySelector(".intro-body"), face = intro.querySelector(".intro-face"), eyes = intro.querySelectorAll(".intro-eye");
   const shade = intro.querySelector(".intro-shade").style, glow = intro.querySelector(".intro-glow").style;
   const u = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--u")) || 1;
   const O = intro.getBoundingClientRect(), Nr = document.getElementById("mnHolder").getBoundingClientRect();
@@ -1428,7 +1437,8 @@ function runIntro() {
   // Notch asli (tertutup) dalam koordinat lapisan intro
   const nx = Nr.left - O.left, ny = Nr.top - O.top, nw = Nr.width, nh = Nr.height;
   const cx = nx + nw / 2, cy = ny + 120 * u, r = 14 * u, e = 10 * u;
-  const N = 140, sc = 250 * u / 544;
+  // Match the supplied flat Nadi artwork (2048 x 2048), not the Nusa mascot outline.
+  const N = 140, sc = 250 * u / 1886;
   const sample = (d, map) => {
     const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
     p.setAttribute("d", d); svg.appendChild(p);
@@ -1436,10 +1446,14 @@ function runIntro() {
     for (let i = 0; i < N; i++) { const q = p.getPointAtLength(L * i / N); out.push(map(q.x, q.y)); }
     p.remove(); return out;
   };
-  const A = sample("M540 708C590 708 618 704 640 690C668 664 690 632 720 632C760 632 778 680 790 730C812 820 820 880 812 930C800 1000 720 1030 540 1030C360 1030 280 1000 268 930C260 880 268 820 290 730C302 680 320 632 360 632C390 632 412 664 440 690C462 704 490 708 540 708Z", (x, y) => [cx + (x - 540) * sc, cy + (y - 870) * sc]);
+  // Silhouettes traced from Nadi-icon(1).png: blue outer shell and dark face.
+  // Both continuously morph into the SAME notch contour; the blue rim naturally closes.
+  const A = sample("M1071 126C1141 127 1204 132 1264 142C1324 152 1383 166 1434 183C1485 200 1534 226 1568 245C1602 264 1621 280 1641 295C1661 310 1668 316 1686 334C1704 352 1734 382 1752 403C1770 424 1776 429 1796 460C1816 491 1848 540 1869 587C1890 634 1910 685 1925 745C1940 805 1953 898 1960 947C1967 996 1965 1000 1966 1040C1967 1080 1966 1144 1964 1188C1962 1232 1958 1262 1953 1302C1948 1342 1942 1385 1931 1427C1920 1469 1901 1524 1889 1554C1877 1584 1873 1588 1861 1607C1849 1626 1836 1647 1815 1668C1794 1689 1765 1716 1737 1734C1709 1752 1676 1767 1645 1779C1614 1791 1587 1798 1551 1804C1515 1810 1510 1816 1429 1816C1348 1816 1187 1802 1062 1802C937 1802 763 1814 677 1816C591 1818 579 1814 544 1811C509 1808 494 1805 467 1798C440 1791 407 1781 382 1771C357 1761 339 1752 318 1739C297 1726 276 1710 258 1694C240 1678 226 1661 212 1644C198 1627 188 1611 176 1590C164 1569 152 1541 142 1516C132 1491 126 1472 119 1440C112 1408 103 1360 97 1323C91 1286 87 1272 85 1215C83 1158 82 1041 84 984C86 927 91 910 96 875C101 840 108 804 115 774C122 744 127 724 137 694C147 664 156 633 174 596C192 559 224 502 244 470C264 438 276 425 296 402C316 379 341 353 361 334C381 315 396 302 418 286C440 270 468 251 493 237C518 223 543 211 569 200C595 189 617 181 647 172C677 163 715 154 748 148C781 142 791 138 845 134C899 130 1001 125 1071 126Z", (x, y) => [cx + (x - 1024) * sc, cy + (y - 972) * sc]);
+  const F = sample("M1048 149C1113 150 1189 157 1243 165C1297 173 1330 183 1371 198C1412 213 1455 233 1492 255C1529 277 1559 300 1591 331C1623 362 1656 400 1682 438C1708 476 1729 513 1748 557C1767 601 1783 649 1795 701C1807 753 1816 808 1821 867C1826 926 1827 989 1823 1052C1819 1115 1805 1199 1798 1243C1791 1287 1787 1293 1780 1314C1773 1335 1766 1353 1758 1370C1750 1387 1744 1400 1733 1416C1722 1432 1710 1450 1693 1468C1676 1486 1651 1507 1628 1522C1605 1537 1584 1548 1556 1558C1528 1568 1495 1576 1463 1582C1431 1588 1434 1592 1362 1591C1290 1590 1137 1578 1029 1578C921 1578 783 1589 716 1591C649 1593 653 1590 625 1588C597 1586 570 1581 547 1576C524 1571 507 1566 487 1559C467 1552 446 1542 427 1531C408 1520 389 1506 373 1493C357 1480 346 1468 333 1452C320 1436 308 1417 297 1399C286 1381 278 1361 270 1342C262 1323 259 1312 252 1285C245 1258 236 1212 230 1178C224 1144 221 1134 219 1084C217 1034 214 940 218 878C222 816 230 765 242 713C254 661 269 611 288 566C307 521 328 482 355 442C382 402 426 356 451 329C476 302 487 297 506 283C525 269 545 256 563 246C581 236 591 229 613 220C635 211 666 198 693 190C720 182 749 174 775 169C801 164 806 161 851 158C896 155 983 148 1048 149Z", (x, y) => [cx + (x - 1024) * sc, cy + (y - 972) * sc]);
   const x0 = nx, x1 = nx + nw, y0 = ny, y1 = ny + nh;
   const B = sample(`M${cx} ${y0 - 4}L${x1 + e} ${y0 - 4}L${x1 + e} ${y0}Q${x1} ${y0} ${x1} ${y0 + e}L${x1} ${y1 - r}Q${x1} ${y1} ${x1 - r} ${y1}L${x0 + r} ${y1}Q${x0} ${y1} ${x0} ${y1 - r}L${x0} ${y0 + e}Q${x0} ${y0} ${x0 - e} ${y0}L${x0 - e} ${y0 - 4}Z`, (x, y) => [x, y]);
-  const eyeA = [[cx - 70 * sc, cy + 2 * sc], [cx + 70 * sc, cy + 2 * sc]], eyeB = [[cx - 11.7 * u, y0 + 15 * u], [cx + 11.7 * u, y0 + 15 * u]];
+  const eyeA = [[cx + (759 - 1024) * sc, cy + (925 - 972) * sc], [cx + (1282 - 1024) * sc, cy + (925 - 972) * sc]];
+  const eyeB = [[cx - 11.7 * u, y0 + 15 * u], [cx + 11.7 * u, y0 + 15 * u]];
   const c01 = x => x < 0 ? 0 : x > 1 ? 1 : x, seg = (t, a, b) => c01((t - a) / (b - a));
   const eo = x => 1 - Math.pow(1 - x, 3), ei = x => x * x * x, eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
   const eob = x => { const s = 1.6; x -= 1; return 1 + (s + 1) * x * x * x + s * x * x; };
@@ -1453,20 +1467,25 @@ function runIntro() {
     const back = eio(seg(t, 0, 3.0));                // terus mundur ke arah layar, tanpa jeda
     const depth = lerp(1.3, 1, back);
     const m = eio(seg(t, 1.25, 3.0));                // sambil mengecil, naik, dan membentuk notch
-    let d = "";
-    for (let i = 0; i < N; i++) {
-      const ax = cx + (A[i][0] - cx) * depth, ay = cy + (A[i][1] - cy) * depth;
-      d += (i ? "L" : "M") + lerp(ax, B[i][0], m).toFixed(2) + " " + lerp(ay, B[i][1], m).toFixed(2);
-    }
-    body.setAttribute("d", d + "Z");
+    const morphPath = points => {
+      let d = "";
+      for (let i = 0; i < N; i++) {
+        const ax = cx + (points[i][0] - cx) * depth;
+        const ay = cy + (points[i][1] - cy) * depth;
+        d += (i ? "L" : "M") + lerp(ax, B[i][0], m).toFixed(2) + " " + lerp(ay, B[i][1], m).toFixed(2);
+      }
+      return d + "Z";
+    };
+    body.setAttribute("d", morphPath(A));
+    face.setAttribute("d", morphPath(F));
     body.style.opacity = app;
-    body.style.strokeOpacity = (1 - seg(t, 1.7, 2.7)) * .9;
+    face.style.opacity = app;
     const on = t < 0.55 ? 0 : eob(seg(t, 0.55, 0.9)), blink = 1 - Math.sin(Math.PI * seg(t, 1.0, 1.18)) * .92;
     eyes.forEach((el, k) => {
       el.setAttribute("cx", lerp(cx + (eyeA[k][0] - cx) * depth, eyeB[k][0], m).toFixed(2));
       el.setAttribute("cy", lerp(cy + (eyeA[k][1] - cy) * depth, eyeB[k][1], m).toFixed(2));
-      el.setAttribute("rx", lerp(27 * sc * depth, 4.2 * u, m).toFixed(2));
-      el.setAttribute("ry", Math.max(.01, lerp(40 * sc * depth, 6.2 * u, m) * on * blink).toFixed(2));
+      el.setAttribute("rx", lerp(116 * sc * depth, 4.2 * u, m).toFixed(2));
+      el.setAttribute("ry", Math.max(.01, lerp(217 * sc * depth, 6.2 * u, m) * on * blink).toFixed(2));
     });
     // Pusat maskot saat ini: cahaya mengikuti, dan lingkaran transisi keluar dari baliknya
     const my = lerp(cy, y0 + nh / 2, m);
