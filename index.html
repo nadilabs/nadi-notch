@@ -483,33 +483,65 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .intro .eyes-g { filter: drop-shadow(0 0 3px rgba(120,190,255,.9)) drop-shadow(0 0 9px rgba(80,140,255,.45)); }
 .preview.pre .intro { display: block; }
  .preview.pre .mn-holder { opacity: 0; }
-/* A brief contour-following arrival flash; the notch itself remains solid #000. */
+/* Nadi arrival: a soft, one-shot light sweep along the closed notch's lower edge.
+   The actual notch remains solid black; this overlay is invisible after the intro. */
 .nadi-arrival-rim {
   position: absolute; inset: 0 auto auto 0; width: 150px; height: 32px;
   overflow: visible; pointer-events: none; z-index: 9; opacity: 0;
 }
 .nadi-arrival-rim path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
-.nadi-arrival-rim .rim-track { stroke: #429aff; stroke-width: 1.25; opacity: 0; filter: drop-shadow(0 0 3px #3781fc); }
-.nadi-arrival-rim .rim-trail { stroke: #379bff; stroke-width: 3.5; stroke-dasharray: 26 120; stroke-dashoffset: 26; filter: drop-shadow(0 0 3px #2788ff) drop-shadow(0 0 5px #267bff); }
-.nadi-arrival-rim .rim-core { stroke: #effaff; stroke-width: 1.75; stroke-dasharray: 7 120; stroke-dashoffset: 7; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #83ccff); }
-.mn.arrival-flash .nadi-arrival-rim { animation: nadi-arrival-visibility 1.05s linear both; }
-.mn.arrival-flash .nadi-arrival-rim .rim-track { animation: nadi-arrival-track 1.05s ease-out both; }
-.mn.arrival-flash .nadi-arrival-rim .rim-trail { animation: nadi-arrival-trail 1.05s cubic-bezier(.38,0,.22,1) both; }
-.mn.arrival-flash .nadi-arrival-rim .rim-core { animation: nadi-arrival-core 1.05s cubic-bezier(.38,0,.22,1) both; }
+.nadi-arrival-rim .rim-track {
+  stroke: #4b9cff; stroke-width: .9; opacity: 0;
+  filter: drop-shadow(0 0 2.5px rgba(51,139,255,.55));
+}
+.nadi-arrival-rim .rim-trail {
+  stroke: #54adff; stroke-width: 2.75;
+  stroke-dasharray: 20 120; stroke-dashoffset: 20; opacity: 0;
+  filter: drop-shadow(0 0 3px rgba(49,140,255,.7)) drop-shadow(0 0 7px rgba(49,140,255,.35));
+}
+.nadi-arrival-rim .rim-core {
+  stroke: #f2fbff; stroke-width: 1.35;
+  stroke-dasharray: 5 120; stroke-dashoffset: 5; opacity: 0;
+  filter: drop-shadow(0 0 2px rgba(210,240,255,.9)) drop-shadow(0 0 4px rgba(91,176,255,.6));
+}
+.mn.arrival-flash .nadi-arrival-rim {
+  animation: nadi-arrival-visibility 1.28s linear both;
+}
+.mn.arrival-flash .rim-track {
+  animation: nadi-arrival-track 1.28s ease-in-out both;
+}
+.mn.arrival-flash .rim-trail {
+  animation: nadi-arrival-trail-move 1.28s cubic-bezier(.42,0,.24,1) both,
+             nadi-arrival-trail-fade 1.28s ease-in-out both;
+}
+.mn.arrival-flash .rim-core {
+  animation: nadi-arrival-core-move 1.28s cubic-bezier(.42,0,.24,1) both,
+             nadi-arrival-core-fade 1.28s ease-in-out both;
+}
 @keyframes nadi-arrival-visibility {
-  0% { opacity: 0; } 7% { opacity: 1; } 76% { opacity: 1; } 100% { opacity: 0; }
+  0% { opacity: 0; } 8% { opacity: 1; } 86% { opacity: 1; } 100% { opacity: 0; }
 }
 @keyframes nadi-arrival-track {
-  0% { opacity: 0; } 18% { opacity: .52; } 65% { opacity: .34; } 100% { opacity: 0; }
+  0% { opacity: 0; } 16% { opacity: .12; } 44% { opacity: .42; }
+  76% { opacity: .16; } 100% { opacity: 0; }
 }
-@keyframes nadi-arrival-trail {
-  from { stroke-dashoffset: 26; } to { stroke-dashoffset: -100; }
+@keyframes nadi-arrival-trail-move {
+  0%, 10% { stroke-dashoffset: 20; }
+  88%, 100% { stroke-dashoffset: -100; }
 }
-@keyframes nadi-arrival-core {
-  from { stroke-dashoffset: 7; } to { stroke-dashoffset: -100; }
+@keyframes nadi-arrival-core-move {
+  0%, 10% { stroke-dashoffset: 5; }
+  88%, 100% { stroke-dashoffset: -100; }
+}
+@keyframes nadi-arrival-trail-fade {
+  0% { opacity: 0; } 14% { opacity: .35; } 30% { opacity: .88; }
+  62% { opacity: .8; } 86% { opacity: .28; } 100% { opacity: 0; }
+}
+@keyframes nadi-arrival-core-fade {
+  0% { opacity: 0; } 14% { opacity: .2; } 30% { opacity: .95; }
+  58% { opacity: 1; } 84% { opacity: .35; } 100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .nadi-arrival-rim { display: none; } }
-
 /* ===== CTA hero dan dukungan unduhan ============================================= */
 .cta-row { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .cta-row .btn { width: 300px; max-width: 86vw; justify-content: center; box-sizing: border-box; white-space: nowrap; }
