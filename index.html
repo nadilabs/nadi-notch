@@ -643,6 +643,15 @@ section { padding: 110px 0 0; }
 .download .icon { width: 132px; height: 132px; object-fit: contain; filter: drop-shadow(0 24px 40px rgba(45,91,255,.45)); }
 .download h2 { font-size: clamp(36px, 5vw, 60px); line-height: 1.02; letter-spacing: -.03em; margin: 28px 0 10px; font-weight: 800; }
 .download > p { color: var(--mist); margin: 0 auto; max-width: 30em; }
+.download .wl {
+  max-width: 460px;
+  margin: 32px auto 0;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+.download .wl-heading { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.download .wl form { margin-inline: auto; }
+.download .wl-note { max-width: 460px; }
 .steps { text-align: left; max-width: 620px; margin: 70px auto 0; padding: 30px 34px; border: 1px solid var(--line); border-radius: 22px; background: var(--panel); }
 .steps h3 { margin: 0 0 6px; font-size: 19px; }
 .steps > p { margin: 0 0 16px; color: var(--mist); font-size: 15px; }
@@ -756,18 +765,6 @@ footer a:hover { color: var(--ink); }
         </a>
       </div>
       <small>Windows 10 and 11 · 64-bit</small>
-    </div>
-    <div class="wl" id="waitlist">
-      <p class="wl-heading">Get notified when Nadi launches.</p>
-      <form id="wl-form" autocomplete="on">
-        <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
-        <input type="email" name="email" id="wl-email" placeholder="Your email address" aria-label="Your email address" autocomplete="email" maxlength="254" required>
-        <button type="submit">Join Waitlist</button>
-      </form>
-      <div class="done" role="status">You're on the list. Thanks for joining!</div>
-      <div class="count js-wl-count" aria-live="polite" hidden></div>
-      <small class="wl-note">Release updates only. No spam.</small>
-      <div class="msg" role="status" aria-live="polite"></div>
     </div>
   </div>
 
@@ -1169,6 +1166,18 @@ footer a:hover { color: var(--ink); }
         <span class="dl-meta"><b>Nadi 1.0.0</b> · Release pending</span>
         <span class="dl-desc">The official download will be added here when the first release is published.</span>
       </div>
+    </div>
+    <div class="wl" id="waitlist">
+      <p class="wl-heading">Get notified when Nadi launches.</p>
+      <form id="wl-form" autocomplete="on">
+        <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+        <input type="email" name="email" id="wl-email" placeholder="Your email address" aria-label="Your email address" autocomplete="email" maxlength="254" required>
+        <button type="submit">Join Waitlist</button>
+      </form>
+      <div class="done" role="status">You're on the list. Thanks for joining!</div>
+      <div class="count js-wl-count" aria-live="polite" hidden></div>
+      <small class="wl-note">Release updates only. No spam.</small>
+      <div class="msg" role="status" aria-live="polite"></div>
     </div>
     <span class="dl-count js-dlcount" aria-live="polite"></span>
   </section>
