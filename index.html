@@ -482,11 +482,30 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .intro { position: absolute; left: 0; right: 0; z-index: 6; pointer-events: none; display: none; overflow: visible; }
 .intro-shade { position: absolute; inset: 0; background: var(--void); will-change: clip-path; }
 .intro-glow { position: absolute; left: 0; top: 0; border-radius: 50%; opacity: 0; will-change: transform, opacity;
-  background: radial-gradient(closest-side, rgba(55,129,252,.5), rgba(48,110,238,.18) 55%, transparent); }
+  background: radial-gradient(closest-side, rgba(45,115,255,.36), rgba(42,100,222,.12) 55%, transparent); }
 .intro svg { position: absolute; left: 0; top: 0; overflow: visible; }
 .intro .eyes-g { filter: drop-shadow(0 0 3px rgba(120,190,255,.9)) drop-shadow(0 0 9px rgba(80,140,255,.45)); }
 .preview.pre .intro { display: block; }
-.preview.pre .mn-holder { opacity: 0; }
+ .preview.pre .mn-holder { opacity: 0; }
+/* Arrival-only light sweep: follows the exact 150×30 lower notch contour. */
+.nadi-arrival-rim {
+  position: absolute; inset: 0 auto auto 0; width: 150px; height: 31px;
+  overflow: visible; pointer-events: none; z-index: 9; opacity: 0;
+}
+.nadi-arrival-rim path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.mn.arrival-flash .nadi-arrival-rim { animation: nadi-arrival-visibility .82s ease-out both; }
+.mn.arrival-flash .nadi-arrival-rim .rim-ambient { animation: nadi-arrival-ambient .82s ease-out both; }
+.mn.arrival-flash .nadi-arrival-rim .rim-sweep { animation: nadi-arrival-sweep .82s cubic-bezier(.22,.61,.36,1) both; }
+@keyframes nadi-arrival-visibility {
+  0% { opacity: 0; } 12% { opacity: 1; } 68% { opacity: .95; } 100% { opacity: 0; }
+}
+@keyframes nadi-arrival-ambient {
+  0% { stroke-opacity: 0; } 20% { stroke-opacity: .38; } 80% { stroke-opacity: .1; } 100% { stroke-opacity: 0; }
+}
+@keyframes nadi-arrival-sweep {
+  from { stroke-dashoffset: 120; } to { stroke-dashoffset: 20; }
+}
+@media (prefers-reduced-motion: reduce) { .nadi-arrival-rim { display: none; } }
 
 /* ===== Dukungan lebih terlihat: tombol di hero + ucapan terima kasih setelah download ========== */
 /* Dua tombol setara: Download (putih) dan Support (gradasi maskot), sama ukuran, sejajar */
@@ -766,13 +785,16 @@ footer a:hover { color: var(--ink); }
       <div class="intro-glow"></div>
       <svg aria-hidden="true"><defs>
         <linearGradient id="nadiIntroShell" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#cbe9fd"/><stop offset="48%" stop-color="#3781fc"/><stop offset="100%" stop-color="#03195b"/>
+          <stop offset="0%" stop-color="#bfe4ff"/><stop offset="48%" stop-color="#438fff"/><stop offset="100%" stop-color="#153985"/>
+        </linearGradient>
+        <linearGradient id="nadiIntroBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#080e1a"/><stop offset="65%" stop-color="#02040a"/><stop offset="100%" stop-color="#000104"/>
         </linearGradient>
         <linearGradient id="nadiIntroFace" x1="0%" y1="0%" x2="30%" y2="100%">
           <stop offset="0%" stop-color="#252728"/><stop offset="68%" stop-color="#020307"/><stop offset="100%" stop-color="#000"/>
         </linearGradient>
       </defs>
-        <path class="intro-body" fill="url(#nadiIntroShell)"/>
+        <path class="intro-body" fill="url(#nadiIntroBody)" stroke="url(#nadiIntroShell)" stroke-width="1.35" stroke-linejoin="round"/>
         <path class="intro-face" fill="url(#nadiIntroFace)"/>
         <g class="eyes-g"><ellipse class="intro-eye" fill="#fff"/><ellipse class="intro-eye" fill="#fff"/></g>
       </svg>
@@ -793,6 +815,18 @@ footer a:hover { color: var(--ink); }
           <div class="ghost" id="ghost" aria-hidden="true"><span class="g-thumb"></span><svg class="g-cur" viewBox="0 0 15 22"><path d="M1 1v17l4.4-4.2 3 6.8 3-1.3-3-6.6H14z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg><span class="g-badge">+ Copy</span></div>
           <div class="mn-holder" id="mnHolder">
             <div class="mn" id="mn" data-s="pet" role="img" aria-label="Nadi notch preview">
+              <svg class="nadi-arrival-rim" viewBox="0 0 150 31" aria-hidden="true">
+                <defs>
+                  <linearGradient id="nadiArrivalLight" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#367aff" stop-opacity=".1"/>
+                    <stop offset="43%" stop-color="#89d1ff"/>
+                    <stop offset="62%" stop-color="#f2fbff"/>
+                    <stop offset="100%" stop-color="#367aff" stop-opacity=".1"/>
+                  </linearGradient>
+                </defs>
+                <path class="rim-ambient" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" stroke="#5da8ff" stroke-width=".9" stroke-opacity="0"/>
+                <path class="rim-sweep" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" pathLength="100" stroke="url(#nadiArrivalLight)" stroke-width="2.2" stroke-dasharray="14 106" stroke-dashoffset="120" style="filter:drop-shadow(0 0 2.5px #3d98ff)"/>
+              </svg>
 
               <!-- Istirahat: maskot -->
               <div class="ly l-pet"><div class="ambient"></div><div class="eyes" style="gap:15px"><i class="eye" style="width:8.4px;height:12.4px"></i><i class="eye" style="width:8.4px;height:12.4px"></i></div></div>
@@ -1408,7 +1442,15 @@ fbForm.addEventListener("submit", async ev => {
 // Berjalan sekali (sekitar 3 detik) setelah pengunjung menggulir ke pratinjau; setelah itu tidak ada kerja.
 const lap = document.getElementById("laptop"), pv = document.getElementById("preview"), intro = document.getElementById("intro");
 let introDone = true, introRaf = 0;
-const finishIntro = () => { introDone = true; cancelAnimationFrame(introRaf); pv.classList.remove("pre"); };
+const finishIntro = (arrived = false) => {
+  introDone = true;
+  cancelAnimationFrame(introRaf);
+  pv.classList.remove("pre");
+  if (arrived) document.getElementById("mn").classList.add("arrival-flash");
+};
+document.querySelector(".nadi-arrival-rim").addEventListener("animationend", ev => {
+  if (ev.target === ev.currentTarget) document.getElementById("mn").classList.remove("arrival-flash");
+});
 const PAD = 90; // ruang di atas laptop (selebar jarak atas bagian pratinjau) untuk maskot dan cahayanya
 const placeIntro = () => { intro.style.top = (lap.offsetTop - PAD) + "px"; intro.style.height = (lap.offsetHeight + PAD) + "px"; };
 if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
@@ -1437,8 +1479,8 @@ function runIntro() {
   // Notch asli (tertutup) dalam koordinat lapisan intro
   const nx = Nr.left - O.left, ny = Nr.top - O.top, nw = Nr.width, nh = Nr.height;
   const cx = nx + nw / 2, cy = ny + 120 * u, r = 14 * u, e = 10 * u;
-  // Match the supplied flat Nadi artwork (2048 x 2048), not the Nusa mascot outline.
-  const N = 140, sc = 250 * u / 1886;
+  // Flatter silhouette derived from the rounded proportions of Nadi's 3D mascot.
+  const N = 140, sc = 250 * u / 444;
   const sample = (d, map) => {
     const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
     p.setAttribute("d", d); svg.appendChild(p);
@@ -1446,13 +1488,15 @@ function runIntro() {
     for (let i = 0; i < N; i++) { const q = p.getPointAtLength(L * i / N); out.push(map(q.x, q.y)); }
     p.remove(); return out;
   };
-  // Silhouettes traced from Nadi-icon(1).png: blue outer shell and dark face.
-  // Both continuously morph into the SAME notch contour; the blue rim naturally closes.
-  const A = sample("M1071 126C1141 127 1204 132 1264 142C1324 152 1383 166 1434 183C1485 200 1534 226 1568 245C1602 264 1621 280 1641 295C1661 310 1668 316 1686 334C1704 352 1734 382 1752 403C1770 424 1776 429 1796 460C1816 491 1848 540 1869 587C1890 634 1910 685 1925 745C1940 805 1953 898 1960 947C1967 996 1965 1000 1966 1040C1967 1080 1966 1144 1964 1188C1962 1232 1958 1262 1953 1302C1948 1342 1942 1385 1931 1427C1920 1469 1901 1524 1889 1554C1877 1584 1873 1588 1861 1607C1849 1626 1836 1647 1815 1668C1794 1689 1765 1716 1737 1734C1709 1752 1676 1767 1645 1779C1614 1791 1587 1798 1551 1804C1515 1810 1510 1816 1429 1816C1348 1816 1187 1802 1062 1802C937 1802 763 1814 677 1816C591 1818 579 1814 544 1811C509 1808 494 1805 467 1798C440 1791 407 1781 382 1771C357 1761 339 1752 318 1739C297 1726 276 1710 258 1694C240 1678 226 1661 212 1644C198 1627 188 1611 176 1590C164 1569 152 1541 142 1516C132 1491 126 1472 119 1440C112 1408 103 1360 97 1323C91 1286 87 1272 85 1215C83 1158 82 1041 84 984C86 927 91 910 96 875C101 840 108 804 115 774C122 744 127 724 137 694C147 664 156 633 174 596C192 559 224 502 244 470C264 438 276 425 296 402C316 379 341 353 361 334C381 315 396 302 418 286C440 270 468 251 493 237C518 223 543 211 569 200C595 189 617 181 647 172C677 163 715 154 748 148C781 142 791 138 845 134C899 130 1001 125 1071 126Z", (x, y) => [cx + (x - 1024) * sc, cy + (y - 972) * sc]);
-  const F = sample("M1048 149C1113 150 1189 157 1243 165C1297 173 1330 183 1371 198C1412 213 1455 233 1492 255C1529 277 1559 300 1591 331C1623 362 1656 400 1682 438C1708 476 1729 513 1748 557C1767 601 1783 649 1795 701C1807 753 1816 808 1821 867C1826 926 1827 989 1823 1052C1819 1115 1805 1199 1798 1243C1791 1287 1787 1293 1780 1314C1773 1335 1766 1353 1758 1370C1750 1387 1744 1400 1733 1416C1722 1432 1710 1450 1693 1468C1676 1486 1651 1507 1628 1522C1605 1537 1584 1548 1556 1558C1528 1568 1495 1576 1463 1582C1431 1588 1434 1592 1362 1591C1290 1590 1137 1578 1029 1578C921 1578 783 1589 716 1591C649 1593 653 1590 625 1588C597 1586 570 1581 547 1576C524 1571 507 1566 487 1559C467 1552 446 1542 427 1531C408 1520 389 1506 373 1493C357 1480 346 1468 333 1452C320 1436 308 1417 297 1399C286 1381 278 1361 270 1342C262 1323 259 1312 252 1285C245 1258 236 1212 230 1178C224 1144 221 1134 219 1084C217 1034 214 940 218 878C222 816 230 765 242 713C254 661 269 611 288 566C307 521 328 482 355 442C382 402 426 356 451 329C476 302 487 297 506 283C525 269 545 256 563 246C581 236 591 229 613 220C635 211 666 198 693 190C720 182 749 174 775 169C801 164 806 161 851 158C896 155 983 148 1048 149Z", (x, y) => [cx + (x - 1024) * sc, cy + (y - 972) * sc]);
+  // Nadi 3D mascot proportions rendered flat: dark rounded shell, near-black face, white eyes.
+  // Both paths keep continuous point-by-point morphing into the closed notch outline.
+  const A = sample("M256 84 C367 82 447 136 473 244 C487 300 481 358 455 391 C431 422 400 428 364 427 C320 426 289 422 256 422 C222 422 190 427 148 427 C109 428 78 422 55 392 C28 357 24 299 39 239 C63 134 146 82 256 84 Z",
+    (x, y) => [cx + (x - 256) * sc, cy + (y - 256) * sc]);
+  const F = sample("M256 100 C357 97 424 145 440 239 C451 295 442 340 418 365 C393 387 364 383 337 381 C298 380 277 378 256 378 C230 378 214 382 173 381 C139 383 111 386 89 367 C63 341 62 291 72 239 C89 146 158 100 256 100 Z",
+    (x, y) => [cx + (x - 256) * sc, cy + (y - 256) * sc]);
   const x0 = nx, x1 = nx + nw, y0 = ny, y1 = ny + nh;
   const B = sample(`M${cx} ${y0 - 4}L${x1 + e} ${y0 - 4}L${x1 + e} ${y0}Q${x1} ${y0} ${x1} ${y0 + e}L${x1} ${y1 - r}Q${x1} ${y1} ${x1 - r} ${y1}L${x0 + r} ${y1}Q${x0} ${y1} ${x0} ${y1 - r}L${x0} ${y0 + e}Q${x0} ${y0} ${x0 - e} ${y0}L${x0 - e} ${y0 - 4}Z`, (x, y) => [x, y]);
-  const eyeA = [[cx + (759 - 1024) * sc, cy + (925 - 972) * sc], [cx + (1282 - 1024) * sc, cy + (925 - 972) * sc]];
+  const eyeA = [[cx + (203 - 256) * sc, cy + (265 - 256) * sc], [cx + (304 - 256) * sc, cy + (265 - 256) * sc]];
   const eyeB = [[cx - 11.7 * u, y0 + 15 * u], [cx + 11.7 * u, y0 + 15 * u]];
   const c01 = x => x < 0 ? 0 : x > 1 ? 1 : x, seg = (t, a, b) => c01((t - a) / (b - a));
   const eo = x => 1 - Math.pow(1 - x, 3), ei = x => x * x * x, eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
@@ -1480,12 +1524,13 @@ function runIntro() {
     face.setAttribute("d", morphPath(F));
     body.style.opacity = app;
     face.style.opacity = app;
+    body.style.strokeOpacity = (1 - seg(t, 1.8, 2.85)) * .86;
     const on = t < 0.55 ? 0 : eob(seg(t, 0.55, 0.9)), blink = 1 - Math.sin(Math.PI * seg(t, 1.0, 1.18)) * .92;
     eyes.forEach((el, k) => {
       el.setAttribute("cx", lerp(cx + (eyeA[k][0] - cx) * depth, eyeB[k][0], m).toFixed(2));
       el.setAttribute("cy", lerp(cy + (eyeA[k][1] - cy) * depth, eyeB[k][1], m).toFixed(2));
-      el.setAttribute("rx", lerp(116 * sc * depth, 4.2 * u, m).toFixed(2));
-      el.setAttribute("ry", Math.max(.01, lerp(217 * sc * depth, 6.2 * u, m) * on * blink).toFixed(2));
+      el.setAttribute("rx", lerp(23 * sc * depth, 4.2 * u, m).toFixed(2));
+      el.setAttribute("ry", Math.max(.01, lerp(39 * sc * depth, 6.2 * u, m) * on * blink).toFixed(2));
     });
     // Pusat maskot saat ini: cahaya mengikuti, dan lingkaran transisi keluar dari baliknya
     const my = lerp(cy, y0 + nh / 2, m);
@@ -1494,7 +1539,7 @@ function runIntro() {
     const maxR = Math.hypot(Math.max(cx, Wp - cx), Math.max(my, Hp - my)) + 4;
     const R = maxR * ei(seg(t, 1.45, 2.95));
     shade.clipPath = R > 0.5 ? `path(evenodd, "M0 0H${Wp}V${Hp}H0Z M${(cx - R).toFixed(1)} ${my.toFixed(1)}a${R.toFixed(1)} ${R.toFixed(1)} 0 1 0 ${(2 * R).toFixed(1)} 0a${R.toFixed(1)} ${R.toFixed(1)} 0 1 0 ${(-2 * R).toFixed(1)} 0Z")` : "";
-    if (t >= 3.05) { finishIntro(); return; }
+    if (t >= 3.05) { finishIntro(true); return; }
     introRaf = requestAnimationFrame(frame);
   };
   introRaf = requestAnimationFrame(frame);
@@ -1534,6 +1579,7 @@ const MN_SIZE = { pet: 150 * 30, idle: 150 * 30, music: 420 * 140, lyrics: 520 *
   water: 420 * 140, shelf: 420 * 140, clip: 420 * 140, todo: 420 * 140, notif: 310 * 60, widgets: 420 * 140, bt: 310 * 60, charge: 310 * 60 };
 let remindT = 0;
 function show(s, keepBtn) {
+  mn.classList.remove("arrival-flash");
   const prev = mn.dataset.s;
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
