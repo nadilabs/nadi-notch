@@ -1296,10 +1296,12 @@ wlForm.addEventListener("submit", async event => {
     wlButton.textContent = wlLanguage() === "id" ? "Gabung Waitlist" : "Join Waitlist";
   }
 });
-if (localStorage.getItem("nadi-waitlist-joined") === "1") {
-  wlDone.textContent = wlLanguage() === "id" ? "Kamu sudah bergabung dengan waitlist." : "You're already on the waitlist.";
-  waitlist.classList.add("joined");
-}
+try {
+  if (localStorage.getItem("nadi-waitlist-joined") === "1") {
+    wlDone.textContent = wlLanguage() === "id" ? "Kamu sudah bergabung dengan waitlist." : "You're already on the waitlist.";
+    waitlist.classList.add("joined");
+  }
+} catch { /* Waitlist still works when local storage is unavailable. */ }
 refreshWaitlistCount();
 
 // ---- Donasi: isi tautanmu; tombol yang kosong otomatis disembunyikan ------------------------
