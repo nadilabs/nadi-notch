@@ -487,23 +487,30 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .intro .eyes-g { filter: drop-shadow(0 0 3px rgba(120,190,255,.9)) drop-shadow(0 0 9px rgba(80,140,255,.45)); }
 .preview.pre .intro { display: block; }
  .preview.pre .mn-holder { opacity: 0; }
-/* Arrival-only light sweep: follows the exact 150×30 lower notch contour. */
+/* A brief contour-following arrival flash; the notch itself remains solid #000. */
 .nadi-arrival-rim {
-  position: absolute; inset: 0 auto auto 0; width: 150px; height: 31px;
+  position: absolute; inset: 0 auto auto 0; width: 150px; height: 32px;
   overflow: visible; pointer-events: none; z-index: 9; opacity: 0;
 }
 .nadi-arrival-rim path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
-.mn.arrival-flash .nadi-arrival-rim { animation: nadi-arrival-visibility .82s ease-out both; }
-.mn.arrival-flash .nadi-arrival-rim .rim-ambient { animation: nadi-arrival-ambient .82s ease-out both; }
-.mn.arrival-flash .nadi-arrival-rim .rim-sweep { animation: nadi-arrival-sweep .82s cubic-bezier(.22,.61,.36,1) both; }
+.nadi-arrival-rim .rim-track { stroke: #429aff; stroke-width: 1.25; opacity: 0; filter: drop-shadow(0 0 3px #3781fc); }
+.nadi-arrival-rim .rim-trail { stroke: #379bff; stroke-width: 3.5; stroke-dasharray: 26 120; stroke-dashoffset: 26; filter: drop-shadow(0 0 3px #2788ff) drop-shadow(0 0 5px #267bff); }
+.nadi-arrival-rim .rim-core { stroke: #effaff; stroke-width: 1.75; stroke-dasharray: 7 120; stroke-dashoffset: 7; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 5px #83ccff); }
+.mn.arrival-flash .nadi-arrival-rim { animation: nadi-arrival-visibility 1.05s linear both; }
+.mn.arrival-flash .nadi-arrival-rim .rim-track { animation: nadi-arrival-track 1.05s ease-out both; }
+.mn.arrival-flash .nadi-arrival-rim .rim-trail { animation: nadi-arrival-trail 1.05s cubic-bezier(.38,0,.22,1) both; }
+.mn.arrival-flash .nadi-arrival-rim .rim-core { animation: nadi-arrival-core 1.05s cubic-bezier(.38,0,.22,1) both; }
 @keyframes nadi-arrival-visibility {
-  0% { opacity: 0; } 12% { opacity: 1; } 68% { opacity: .95; } 100% { opacity: 0; }
+  0% { opacity: 0; } 7% { opacity: 1; } 76% { opacity: 1; } 100% { opacity: 0; }
 }
-@keyframes nadi-arrival-ambient {
-  0% { stroke-opacity: 0; } 20% { stroke-opacity: .38; } 80% { stroke-opacity: .1; } 100% { stroke-opacity: 0; }
+@keyframes nadi-arrival-track {
+  0% { opacity: 0; } 18% { opacity: .52; } 65% { opacity: .34; } 100% { opacity: 0; }
 }
-@keyframes nadi-arrival-sweep {
-  from { stroke-dashoffset: 120; } to { stroke-dashoffset: 20; }
+@keyframes nadi-arrival-trail {
+  from { stroke-dashoffset: 26; } to { stroke-dashoffset: -100; }
+}
+@keyframes nadi-arrival-core {
+  from { stroke-dashoffset: 7; } to { stroke-dashoffset: -100; }
 }
 @media (prefers-reduced-motion: reduce) { .nadi-arrival-rim { display: none; } }
 
@@ -783,19 +790,9 @@ footer a:hover { color: var(--ink); }
     <div class="intro" id="intro" aria-hidden="true">
       <div class="intro-shade"></div>
       <div class="intro-glow"></div>
-      <svg aria-hidden="true"><defs>
-        <linearGradient id="nadiIntroShell" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#bfe4ff"/><stop offset="48%" stop-color="#438fff"/><stop offset="100%" stop-color="#153985"/>
-        </linearGradient>
-        <linearGradient id="nadiIntroBody" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#080e1a"/><stop offset="65%" stop-color="#02040a"/><stop offset="100%" stop-color="#000104"/>
-        </linearGradient>
-        <linearGradient id="nadiIntroFace" x1="0%" y1="0%" x2="30%" y2="100%">
-          <stop offset="0%" stop-color="#252728"/><stop offset="68%" stop-color="#020307"/><stop offset="100%" stop-color="#000"/>
-        </linearGradient>
-      </defs>
-        <path class="intro-body" fill="url(#nadiIntroBody)" stroke="url(#nadiIntroShell)" stroke-width="1.35" stroke-linejoin="round"/>
-        <path class="intro-face" fill="url(#nadiIntroFace)"/>
+      <svg aria-hidden="true">
+        <path class="intro-body" fill="#080b10" stroke="#4a92ff" stroke-width="1.1" stroke-linejoin="round"/>
+        <path class="intro-face" fill="#000"/>
         <g class="eyes-g"><ellipse class="intro-eye" fill="#fff"/><ellipse class="intro-eye" fill="#fff"/></g>
       </svg>
     </div>
@@ -815,17 +812,10 @@ footer a:hover { color: var(--ink); }
           <div class="ghost" id="ghost" aria-hidden="true"><span class="g-thumb"></span><svg class="g-cur" viewBox="0 0 15 22"><path d="M1 1v17l4.4-4.2 3 6.8 3-1.3-3-6.6H14z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg><span class="g-badge">+ Copy</span></div>
           <div class="mn-holder" id="mnHolder">
             <div class="mn" id="mn" data-s="pet" role="img" aria-label="Nadi notch preview">
-              <svg class="nadi-arrival-rim" viewBox="0 0 150 31" aria-hidden="true">
-                <defs>
-                  <linearGradient id="nadiArrivalLight" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#367aff" stop-opacity=".1"/>
-                    <stop offset="43%" stop-color="#89d1ff"/>
-                    <stop offset="62%" stop-color="#f2fbff"/>
-                    <stop offset="100%" stop-color="#367aff" stop-opacity=".1"/>
-                  </linearGradient>
-                </defs>
-                <path class="rim-ambient" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" stroke="#5da8ff" stroke-width=".9" stroke-opacity="0"/>
-                <path class="rim-sweep" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" pathLength="100" stroke="url(#nadiArrivalLight)" stroke-width="2.2" stroke-dasharray="14 106" stroke-dashoffset="120" style="filter:drop-shadow(0 0 2.5px #3d98ff)"/>
+              <svg class="nadi-arrival-rim" viewBox="0 0 150 32" aria-hidden="true">
+                <path class="rim-track" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16"/>
+                <path class="rim-trail" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" pathLength="100"/>
+                <path class="rim-core" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" pathLength="100"/>
               </svg>
 
               <!-- Istirahat: maskot -->
@@ -1524,7 +1514,10 @@ function runIntro() {
     face.setAttribute("d", morphPath(F));
     body.style.opacity = app;
     face.style.opacity = app;
-    body.style.strokeOpacity = (1 - seg(t, 1.8, 2.85)) * .86;
+    // The dark flat mascot becomes fully black as it forms the real notch.
+    const tone = Math.round(8 * (1 - seg(t, 1.65, 2.95)));
+    body.setAttribute("fill", `rgb(${tone}, ${tone}, ${Math.round(tone * 1.35)})`);
+    body.style.strokeOpacity = (1 - seg(t, 1.8, 2.85)) * .76;
     const on = t < 0.55 ? 0 : eob(seg(t, 0.55, 0.9)), blink = 1 - Math.sin(Math.PI * seg(t, 1.0, 1.18)) * .92;
     eyes.forEach((el, k) => {
       el.setAttribute("cx", lerp(cx + (eyeA[k][0] - cx) * depth, eyeB[k][0], m).toFixed(2));
