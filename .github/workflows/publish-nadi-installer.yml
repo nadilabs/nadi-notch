@@ -1,0 +1,33 @@
+name: Publish Nadi V1.0.0 installer (one-time)
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-nadi-installer.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Retrieve verified installer package
+        env:
+          ARTIFACT_SOURCE_URL: "https://sdmntprindiasocentral.oaiusercontent.com/files/00000000-ad30-8211-9788-9329d456c8c2/raw?se=2026-11-10T15%3A17%3A54Z&sp=r&sv=2026-02-06&sr=b&scid=e852f168-3f09-5cac-b00d-d928a80e883a&skoid=45d5558d-260a-4eed-aec4-6bc512bdfda4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-10T01%3A11%3A46Z&ske=2026-11-11T01%3A11%3A46Z&sks=b&skv=2026-02-06&sig=a0JQkN%2BdjrYIbGyLWKqa1kibvPOg893HCo3vR39mq/0%3D"
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output NadiSetup-V1.0.0-artifact.zip "$ARTIFACT_SOURCE_URL"
+          unzip -j -o NadiSetup-V1.0.0-artifact.zip NadiSetup-V1.0.0.exe
+          printf '%s\n' '47527f5721ae10f5a782f7184780c6347f21415855b590f11714b9749d665748  NadiSetup-V1.0.0.exe' | sha256sum --check -
+      - name: Upload installer to permanent public GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create v1.0.0 --repo "$GITHUB_REPOSITORY" --title "Nadi v1.0.0 — Windows installer" --notes "Official Nadi V1.0.0 installer for Windows 10/11 x64. Filename: NadiSetup-V1.0.0.exe. This build is currently unsigned, so Windows SmartScreen may show a warning. SHA-256: 47527f5721ae10f5a782f7184780c6347f21415855b590f11714b9749d665748"
+          fi
+          gh release upload v1.0.0 NadiSetup-V1.0.0.exe --clobber --repo "$GITHUB_REPOSITORY"
+          gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name'
