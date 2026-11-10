@@ -1356,9 +1356,12 @@ wlForm.addEventListener("submit", async event => {
     if (!data.ok) throw new Error("registration_failed");
     showWaitlistCount(data.count);
     const already = Boolean(data.already_registered);
+    const needsVerification = Boolean(data.verification_sent);
     wlDone.textContent = wlLanguage() === "id"
-      ? already ? "Email ini sudah terdaftar." : "Berhasil! Kamu masuk daftar tunggu."
-      : already ? "This email is already on the list." : "You're on the list. Thanks for joining!";
+      ? needsVerification ? "Cek emailmu untuk mengonfirmasi pendaftaran."
+        : already ? "Email ini sudah terdaftar." : "Emailmu berhasil dicatat di waitlist."
+      : needsVerification ? "Check your inbox to confirm your signup."
+        : already ? "This email is already on the list." : "Your email is saved on the waitlist.";
     waitlist.classList.add("joined");
   } catch {
     wlMessage.textContent = wlLanguage() === "id"
@@ -1370,6 +1373,22 @@ wlForm.addEventListener("submit", async event => {
     wlButton.textContent = wlLanguage() === "id" ? "Gabung Waitlist" : "Join Waitlist";
   }
 });
+// A confirmation link returns to the official domain with a minimal status code.
+const waitlistStatus = new URLSearchParams(window.location.search).get("waitlist");
+if (waitlistStatus === "confirmed") {
+  wlDone.textContent = wlLanguage() === "id"
+    ? "Emailmu sudah dikonfirmasi. Kamu masuk waitlist Nadi."
+    : "Email confirmed. You're on the Nadi waitlist.";
+  waitlist.classList.add("joined");
+} else if (waitlistStatus === "unsubscribed") {
+  wlMessage.textContent = wlLanguage() === "id"
+    ? "Kamu sudah berhenti berlangganan kabar rilis."
+    : "You've unsubscribed from release updates.";
+} else if (waitlistStatus === "invalid") {
+  wlMessage.textContent = wlLanguage() === "id"
+    ? "Tautan tidak valid atau sudah kedaluwarsa. Daftar kembali untuk meminta tautan baru."
+    : "That link is invalid or expired. Join again to request a new link.";
+}
 // The database, not a browser-local flag, determines whether an email is registered.
 refreshWaitlistCount();
 
