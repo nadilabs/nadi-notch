@@ -144,6 +144,30 @@ async function signup(request,env,origin) {
     return respond({error:"unavailable"},503,origin);
   }
 }
+// A small scheduled batch catches signups collected before email delivery was
+// enabled, and retries confirmation delivery after transient provider outages.
+async function sendPendingConfirmations(env) {
+  if(!ready(env))return;
+  const rows=await env.DB.prepare(
+    "SELECT id,email FROM waitlist WHERE confirmed_at IS NULL AND unsubscribed_at IS NULL AND confirmation_sent_at IS NULL ORDER BY id LIMIT 10"
+  ).all();
+  for(const row of (rows.results||[])){
+    const token=makeToken(),hash=await digest(token);
+    await env.DB.prepare(
+      "UPDATE waitlist SET confirm_token_hash=?,confirm_expires_at=datetime('now','+48 hours') WHERE id=?"
+    ).bind(hash,row.id).run();
+    const link=API+"/api/verify?token="+encodeURIComponent(token);
+    const html='<div style="font-family:system-ui;max-width:520px">'
+      +'<h2>Confirm your Nadi waitlist signup</h2><p>Confirm your email to receive the Nadi release announcement.</p>'
+      +'<p><a href="'+link+'">Confirm email</a></p><p>Ignore this email if you did not sign up.</p></div>';
+    try{
+      await sendMail(env,row.email,"Confirm your Nadi waitlist signup",html,"nadi-confirm-"+hash.slice(0,32));
+      await env.DB.prepare(
+        "UPDATE waitlist SET confirmation_sent_at=CURRENT_TIMESTAMP WHERE id=?"
+      ).bind(row.id).run();
+    }catch{/* Try again during a later scheduled run. */}
+  }
+}
 async function sendReleaseBatch(env) {
   if(!ready(env)||!env.NADI_UNSUBSCRIBE_SECRET||!env.NADI_RELEASE_VERSION||!env.NADI_RELEASE_URL)return;
   const url=new URL(env.NADI_RELEASE_URL);
@@ -184,6 +208,9 @@ export default {
     return respond({error:"method_not_allowed"},405,origin);
   },
   async scheduled(controller,env,ctx) {
-    ctx.waitUntil(sendReleaseBatch(env));
+    ctx.waitUntil((async()=>{
+      await sendPendingConfirmations(env);
+      await sendReleaseBatch(env);
+    })());
   }
 };
