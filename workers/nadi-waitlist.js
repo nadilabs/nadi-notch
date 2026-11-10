@@ -201,7 +201,7 @@ export default {
       status:ALLOWED_ORIGINS.has(origin)?204:403,headers:headers(origin)
     });
     if(request.method==="GET") {
-      try{return respond({count:await count(env)},200,origin);}
+      try{return respond({count:await count(env),confirmation_required:ready(env)},200,origin);}
       catch{return respond({error:"unavailable"},503,origin);}
     }
     if(request.method==="POST")return signup(request,env,origin);
