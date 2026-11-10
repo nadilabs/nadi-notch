@@ -1359,7 +1359,6 @@ wlForm.addEventListener("submit", async event => {
       ? already ? "Email ini sudah terdaftar." : "Berhasil! Kamu masuk daftar tunggu."
       : already ? "This email is already on the list." : "You're on the list. Thanks for joining!";
     waitlist.classList.add("joined");
-    try {localStorage.setItem("nadi-waitlist-joined","1");}catch{}
   } catch {
     wlMessage.textContent = wlLanguage() === "id"
       ? "Pendaftaran gagal. Silakan coba lagi."
@@ -1370,12 +1369,7 @@ wlForm.addEventListener("submit", async event => {
     wlButton.textContent = wlLanguage() === "id" ? "Gabung Waitlist" : "Join Waitlist";
   }
 });
-try {
-  if (localStorage.getItem("nadi-waitlist-joined") === "1") {
-    wlDone.textContent = wlLanguage() === "id" ? "Kamu sudah bergabung dengan waitlist." : "You're already on the waitlist.";
-    waitlist.classList.add("joined");
-  }
-} catch { /* Waitlist still works when local storage is unavailable. */ }
+// The database, not a browser-local flag, determines whether an email is registered.
 refreshWaitlistCount();
 
 // ---- Donasi: isi tautanmu; tombol yang kosong otomatis disembunyikan ------------------------
