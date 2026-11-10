@@ -770,6 +770,15 @@ footer a:hover { color: var(--ink); }
 #download .swp,#download .trust{display:none}
 #download .btn-pending{pointer-events:none;opacity:.68;cursor:not-allowed}
 #download .btn-pending:hover{transform:none}
+#download .dl-pick{gap:20px}
+#download .btn-store{background:#171b25;border:1px solid rgba(236,239,247,.17);color:#f4f6ff;font-family:inherit;cursor:not-allowed;opacity:.48;box-shadow:none;transition:none}
+#download .btn-store:hover{transform:none}
+#download .btn-store::before{display:none}
+#download .btn-store svg{width:24px;height:24px;flex:none}
+#download .btn-store:disabled{pointer-events:none}
+#nadi-direct-download[aria-disabled="true"]{pointer-events:none;opacity:.65;cursor:not-allowed}
+#download .dl-count{margin-top:24px;text-align:center;min-height:0}
+#download .dl-count:empty{display:none}
 </style>
 </head>
 <body>
@@ -1199,30 +1208,31 @@ footer a:hover { color: var(--ink); }
   <section id="download" class="wrap download">
     <img class="icon" src="./assets/nadi-mascot-neutral.png" alt="Nadi icon">
     <h2>Download Nadi</h2>
-    <p>There isn't a public installer yet. I'm testing Nadi on Windows 10 and 11 before the first release.</p>
+    <p>Get Nadi for Windows 10 and 11 (64-bit). The Microsoft Store version is coming soon.</p>
     <div class="dl-pick">
       <div class="dl-col">
-        <span class="btn btn-alt btn-pending" aria-disabled="true">
+        <a class="btn btn-alt btn-pending js-dl" id="nadi-direct-download" aria-disabled="true" aria-label="Preparing Nadi installer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
-          Coming soon
-        </span>
-        <span class="dl-meta"><b>Nadi 1.0.0</b> · Release pending</span>
-        <span class="dl-desc">The download link will appear here when Nadi is ready.</span>
+          <span class="dl-button-label">Preparing download</span>
+        </a>
+        <span class="dl-meta"><b>Nadi V1.0.0</b> · Windows x64</span>
+        <span class="dl-desc" id="nadi-download-status" role="status">Checking installer availability…</span>
+      </div>
+      <div class="dl-col">
+        <button class="btn btn-store" type="button" disabled aria-label="Microsoft Store — Coming soon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            <path d="M4.5 8.5h15v12h-15z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path fill="#F25022" d="M8 11h3.5v3.5H8z"/><path fill="#7FBA00" d="M12.5 11H16v3.5h-3.5z"/>
+            <path fill="#00A4EF" d="M8 15.5h3.5V19H8z"/><path fill="#FFB900" d="M12.5 15.5H16V19h-3.5z"/>
+          </svg>
+          <span>Microsoft Store</span>
+        </button>
+        <span class="dl-meta"><b>Microsoft Store</b> · Coming soon</span>
+        <span class="dl-desc">Available after Microsoft approves the listing.</span>
       </div>
     </div>
-    <div class="wl" id="waitlist">
-      <p class="wl-heading">Want a note when it's ready?</p>
-      <form id="wl-form" autocomplete="on">
-        <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
-        <input type="email" name="email" id="wl-email" placeholder="Your email address" aria-label="Your email address" autocomplete="email" maxlength="254" required>
-        <button type="submit">Join Waitlist</button>
-      </form>
-      <div class="done" role="status">You're on the list. Thanks for joining!</div>
-      <div class="count js-wl-count" aria-live="polite" hidden></div>
-      <small class="wl-note">Nadi release updates only. No spam.</small>
-      <div class="msg" role="status" aria-live="polite"></div>
-    </div>
-    <span class="dl-count js-dlcount" aria-live="polite"></span>
+    <p class="dl-count js-dlcount" aria-live="polite"></p>
   </section>
 
   <section id="support" class="wrap support">
@@ -1284,7 +1294,7 @@ footer a:hover { color: var(--ink); }
 
   <section id="privacy" class="wrap">
     <h2 class="sec-title">Privacy</h2>
-    <p>Join the waitlist and your email is stored to manage signups and send release news. The public counter shows a number, not anyone's address. Tasks, water logs, Shelf entries and settings stay on your PC.</p>
+    <p>Tasks, water logs, Shelf entries and settings stay on your PC. Website download counts come from public GitHub release statistics.</p>
     <p>Feedback messages and optional contact details are stored privately for review. They are not displayed on the website.</p>
     <p>Prayer times use the city you choose. Clipboard and focus history stay on your computer.</p>
     <p>Windows notification access is not active in the classic installer. A supported packaged build will require permission; Today only keeps generic indicators in memory.</p>
@@ -1307,91 +1317,6 @@ footer a:hover { color: var(--ink); }
 </footer>
 
 <script>
-// ---- Nadi waitlist (unique emails; counter is independent of downloads) ------------
-const WAITLIST_API = "https://nadi-waitlist.ariyoardiwardana.workers.dev/api/waitlist";
-const waitlist = document.getElementById("waitlist");
-const wlForm = document.getElementById("wl-form");
-const wlCount = waitlist.querySelector(".js-wl-count");
-const wlMessage = waitlist.querySelector(".msg");
-const wlDone = waitlist.querySelector(".done");
-const wlButton = wlForm.querySelector("button");
-const wlEmail = wlForm.querySelector('input[name="email"]');
-const wlWebsite = wlForm.querySelector('input[name="website"]');
-function wlLanguage() {return document.documentElement.lang === "id" ? "id" : "en";}
-function showWaitlistCount(value) {
-  const n = Number(value);
-  if (!Number.isSafeInteger(n) || n < 0) return;
-  const lang = wlLanguage();
-  const label = lang === "id" ? "orang telah bergabung" : "people joined the waitlist";
-  wlCount.textContent = n.toLocaleString(lang === "id" ? "id-ID" : "en-US") + " " + label;
-  wlCount.dataset.count = String(n);
-  wlCount.hidden = false;
-}
-async function refreshWaitlistCount() {
-  try {
-    const response = await fetch(WAITLIST_API, {cache:"no-store"});
-    if (!response.ok) throw new Error("unavailable");
-    const data = await response.json();
-    showWaitlistCount(data.count);
-  } catch {
-    // No fabricated number or prominent technical failure in the hero.
-    wlCount.hidden = true;
-  }
-}
-wlForm.addEventListener("submit", async event => {
-  event.preventDefault();
-  wlMessage.textContent = "";
-  wlMessage.className = "msg";
-  if (!wlForm.reportValidity()) return;
-  wlButton.disabled = true;
-  wlButton.textContent = wlLanguage() === "id" ? "Mengirim…" : "Joining…";
-  try {
-    const response = await fetch(WAITLIST_API, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({email:wlEmail.value.trim(),website:wlWebsite.value})
-    });
-    if (!response.ok) throw new Error("registration_failed");
-    const data = await response.json();
-    if (!data.ok) throw new Error("registration_failed");
-    showWaitlistCount(data.count);
-    const already = Boolean(data.already_registered);
-    const needsVerification = Boolean(data.verification_sent);
-    wlDone.textContent = wlLanguage() === "id"
-      ? needsVerification ? "Cek emailmu untuk mengonfirmasi pendaftaran."
-        : already ? "Email ini sudah terdaftar." : "Emailmu berhasil dicatat di waitlist."
-      : needsVerification ? "Check your inbox to confirm your signup."
-        : already ? "This email is already on the list." : "Your email is saved on the waitlist.";
-    waitlist.classList.add("joined");
-  } catch {
-    wlMessage.textContent = wlLanguage() === "id"
-      ? "Pendaftaran gagal. Silakan coba lagi."
-      : "Could not join right now. Please try again.";
-    wlMessage.classList.add("err");
-  } finally {
-    wlButton.disabled = false;
-    wlButton.textContent = wlLanguage() === "id" ? "Gabung Waitlist" : "Join Waitlist";
-  }
-});
-// A confirmation link returns to the official domain with a minimal status code.
-const waitlistStatus = new URLSearchParams(window.location.search).get("waitlist");
-if (waitlistStatus === "confirmed") {
-  wlDone.textContent = wlLanguage() === "id"
-    ? "Emailmu sudah dikonfirmasi. Kamu masuk waitlist Nadi."
-    : "Email confirmed. You're on the Nadi waitlist.";
-  waitlist.classList.add("joined");
-} else if (waitlistStatus === "unsubscribed") {
-  wlMessage.textContent = wlLanguage() === "id"
-    ? "Kamu sudah berhenti berlangganan kabar rilis."
-    : "You've unsubscribed from release updates.";
-} else if (waitlistStatus === "invalid") {
-  wlMessage.textContent = wlLanguage() === "id"
-    ? "Tautan tidak valid atau sudah kedaluwarsa. Daftar kembali untuk meminta tautan baru."
-    : "That link is invalid or expired. Join again to request a new link.";
-}
-// The database, not a browser-local flag, determines whether an email is registered.
-refreshWaitlistCount();
-
 // ---- Donasi: isi tautanmu; tombol yang kosong otomatis disembunyikan ------------------------
 const DONATE = {
   yapp: "",
@@ -1431,15 +1356,46 @@ if (!Object.values(DONATE).some(Boolean)) {
   go.addEventListener("click", () => setTimeout(hide, 400));
 })();
 
-// ---- Jumlah unduhan (dari GitHub Releases) -----------------------------------------------------
-Promise.resolve([])
-  .then(r => r.json())
-  .then(list => {
-    let n = 0;
-    (Array.isArray(list) ? list : []).forEach(rel => (rel.assets || []).forEach(a => n += Number(a.download_count) || 0));
-    if (n > 0) document.querySelectorAll(".js-dlcount").forEach(e => e.innerHTML = `<b>${n.toLocaleString("en-US")}</b> downloads so far`);
-  })
-  .catch(() => {});
+// ---- Verified public installer + GitHub Release download count ----------------------------
+const NADI_RELEASE_API = "https://api.github.com/repos/nadilabs/nadi-notch/releases/tags/v1.0.0";
+const NADI_INSTALLER_NAME = "NadiSetup-V1.0.0.exe";
+async function refreshNadiDownload() {
+  const button = document.getElementById("nadi-direct-download");
+  const label = button.querySelector(".dl-button-label");
+  const status = document.getElementById("nadi-download-status");
+  const count = document.querySelector(".js-dlcount");
+  try {
+    const response = await fetch(NADI_RELEASE_API, {headers: {"Accept": "application/vnd.github+json"}});
+    if (!response.ok) throw new Error("release_unavailable");
+    const release = await response.json();
+    const asset = (Array.isArray(release.assets) ? release.assets : []).find(a =>
+      a.name === NADI_INSTALLER_NAME && a.state === "uploaded" &&
+      a.browser_download_url.startsWith("https://github.com/nadilabs/nadi-notch/releases/download/")
+    );
+    if (!asset) throw new Error("installer_unavailable");
+    button.href = asset.browser_download_url;
+    button.setAttribute("download", NADI_INSTALLER_NAME);
+    button.removeAttribute("aria-disabled");
+    button.setAttribute("aria-label", "Download NadiSetup-V1.0.0.exe");
+    button.classList.remove("btn-pending");
+    label.textContent = "Download for Windows";
+    status.textContent = "Official installer · 3.8 MB · Unsigned; Windows may show a SmartScreen warning.";
+    const n = Number(asset.download_count);
+    if (Number.isSafeInteger(n) && n >= 0) {
+      const language = document.documentElement.lang === "id" ? "id-ID" : "en-US";
+      count.textContent = n.toLocaleString(language) + " " + (language === "id-ID" ? "unduhan" : "downloads");
+      count.hidden = false;
+    }
+  } catch {
+    button.removeAttribute("href");
+    button.setAttribute("aria-disabled", "true");
+    button.classList.add("btn-pending");
+    label.textContent = "Download coming soon";
+    status.textContent = "The public installer is being prepared.";
+    count.hidden = true;
+  }
+}
+refreshNadiDownload();
 
 // ---- Nadi feedback: POST directly to private Cloudflare D1 storage ------------
 const FEEDBACK_API = "https://nadi-feedback.ariyoardiwardana.workers.dev/api/feedback";
