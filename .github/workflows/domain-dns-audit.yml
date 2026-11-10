@@ -1,0 +1,33 @@
+name: Nadi custom domain DNS audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/domain-dns-audit.yml
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check website and email DNS records
+        run: |
+          set +e
+          echo "== nadi.asalbikin.id CNAME =="
+          dig +noall +answer nadi.asalbikin.id CNAME
+          echo "== nadi.asalbikin.id A & AAAA =="
+          dig +noall +answer nadi.asalbikin.id A
+          dig +noall +answer nadi.asalbikin.id AAAA
+          echo "== asalbikin.id nameservers =="
+          dig +noall +answer asalbikin.id NS
+          echo "== mail sender candidate MX and SPF =="
+          dig +noall +answer nadi.asalbikin.id MX
+          dig +noall +answer nadi.asalbikin.id TXT
+          echo "== optional DMARC =="
+          dig +noall +answer _dmarc.nadi.asalbikin.id TXT
+          echo "== HTTPS response =="
+          curl -ILsS --max-time 12 https://nadi.asalbikin.id/ | head -16
