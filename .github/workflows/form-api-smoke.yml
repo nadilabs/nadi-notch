@@ -1,0 +1,76 @@
+name: Nadi form API smoke test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/form-api-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-public-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify public form APIs and CORS
+        env:
+          TEST_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request, urllib.error
+          from urllib.parse import urljoin
+
+          origin = "https://nadilabs.github.io"
+          waitlist = "https://nadi-waitlist.ariyoardiwardana.workers.dev/api/waitlist"
+          feedback = "https://nadi-feedback.ariyoardiwardana.workers.dev/api/feedback"
+
+          def req(url, method="GET", data=None, origin_header=True):
+              headers = {}
+              if origin_header:
+                  headers["Origin"] = origin
+              if data is not None:
+                  headers["Content-Type"] = "application/json"
+                  data = json.dumps(data).encode("utf-8")
+              request = urllib.request.Request(url, headers=headers, data=data, method=method)
+              try:
+                  with urllib.request.urlopen(request, timeout=15) as response:
+                      raw = response.read().decode("utf-8")
+                      return response.status, dict(response.headers.items()), json.loads(raw) if raw else {}
+              except urllib.error.HTTPError as err:
+                  raw = err.read().decode("utf-8")
+                  return err.code, dict(err.headers.items()), json.loads(raw) if raw else {}
+
+          def check(label, condition, detail):
+              if not condition:
+                  raise AssertionError(label + ": " + str(detail))
+              print("PASS:",label)
+
+          status,h,_ = req(waitlist,method="OPTIONS")
+          check("waitlist OPTIONS", status in (200,204) and h.get("Access-Control-Allow-Origin")==origin, (status,h))
+          status,h,_ = req(feedback,method="OPTIONS")
+          check("feedback OPTIONS", status in (200,204) and h.get("Access-Control-Allow-Origin")==origin, (status,h))
+
+          status,_,before = req(waitlist)
+          check("waitlist count", status==200 and isinstance(before.get("count"),int), (status,before))
+          email = "nadi-api-smoke-" + os.environ["TEST_ID"] + "@example.invalid"
+          status,_,first = req(waitlist,method="POST",data={"email":email,"website":""})
+          check("waitlist signup",status==200 and first.get("ok") and first.get("count")==before["count"]+1,(status,first))
+          status,_,second = req(waitlist,method="POST",data={"email":email,"website":""})
+          check("duplicate not counted twice",status==200 and second.get("already_registered") and second.get("count")==first["count"],(status,second))
+          status,_,after = req(waitlist)
+          check("waitlist count after",status==200 and after["count"]==first["count"],(status,after))
+          status,_,_ = req(waitlist,method="POST",data={"email":"not-an-email","website":""})
+          check("invalid email rejected",status==400,status)
+
+          message = "NADI_FORM_API_SMOKE_" + os.environ["TEST_ID"]
+          status,_,result = req(feedback,method="POST",data={"msg":message,"contact":"","website":""})
+          check("feedback accepted",status==201 and result.get("ok"),(status,result))
+          status,_,_ = req(feedback,method="POST",data={"msg":"x","contact":"","website":""})
+          check("short feedback rejected",status==400,status)
+          status,_,_ = req(feedback)
+          check("feedback not publicly readable",status==405,status)
+          print("PASS: all tests (synthetic records will be cleaned from D1)")
+          PY
