@@ -1,6 +1,6 @@
 // Nadi feedback API. POST only; stored in a private Cloudflare D1 database.
 // No public read endpoint or visitor analytics.
-const SITE = "https://nadilabs.github.io";
+const ALLOWED_ORIGINS = new Set(["https://nadi.asalbikin.id", "https://nadilabs.github.io"]);
 const MAX_BODY = 4096;
 
 function response(data, status, origin) {
@@ -9,8 +9,8 @@ function response(data, status, origin) {
     "Cache-Control": "no-store",
     "Vary": "Origin"
   };
-  if (origin === SITE) {
-    headers["Access-Control-Allow-Origin"] = SITE;
+  if (ALLOWED_ORIGINS.has(origin)) {
+    headers["Access-Control-Allow-Origin"] = origin;
     headers["Access-Control-Allow-Methods"] = "POST, OPTIONS";
     headers["Access-Control-Allow-Headers"] = "Content-Type";
   }
@@ -23,10 +23,10 @@ export default {
     const path = new URL(request.url).pathname;
     if (path !== "/api/feedback") return response({ error: "not_found" }, 404, origin);
     if (request.method === "OPTIONS") {
-      return response({}, origin === SITE ? 200 : 403, origin);
+      return response({}, ALLOWED_ORIGINS.has(origin) ? 200 : 403, origin);
     }
     if (request.method !== "POST") return response({ error: "method_not_allowed" }, 405, origin);
-    if (origin !== SITE) return response({ error: "forbidden" }, 403, origin);
+    if (!ALLOWED_ORIGINS.has(origin)) return response({ error: "forbidden" }, 403, origin);
     if ((request.headers.get("content-type") || "").split(";")[0].trim().toLowerCase() !== "application/json")
       return response({ error: "invalid_content_type" }, 415, origin);
     if (Number(request.headers.get("content-length") || 0) > MAX_BODY)
