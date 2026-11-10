@@ -1087,18 +1087,18 @@ footer a:hover { color: var(--ink); }
   </section>
 
   <section class="wrap">
-    <h2 class="sec-title">A small companion that knows when to rest.</h2>
-    <p class="sec-lede">When nothing is happening, the clock fades and a pair of eyes appears. They doze off after a while, and wave hello when you come back.</p>
+    <h2 class="sec-title">It knows when to stay small.</h2>
+    <p class="sec-lede">Leave Nadi alone and a pair of eyes takes over. After a while, they rest. Come back and they wake up.</p>
     <div class="quiet">
-      <div><h3>Light on your PC</h3><p>Nadi draws only while something moves. When it's idle it uses no CPU at all, even with music in the background.</p></div>
-      <div><h3>Your data stays here</h3><p>Tasks, water logs and shelf items are stored on your computer. There are no accounts and no tracking.</p></div>
-      <div><h3>Made for Windows</h3><p>Built natively for Windows 10 and 11, sharp on every display scale, and it steps aside for full-screen apps.</p></div>
+      <div><h3>Quiet when idle</h3><p>Nadi reduces redraws when nothing changes. It's still being tested across different Windows setups.</p></div>
+      <div><h3>Your files stay yours</h3><p>Tasks, water logs and Shelf entries stay on your PC. You don't need an account to use the app.</p></div>
+      <div><h3>Built for Windows</h3><p>Nadi is a native Windows app. It can move aside for full-screen apps and adapt when your desktop gets busy.</p></div>
     </div>
   </section>
 
   <section id="light" class="wrap">
-    <h2 class="sec-title">So light, you'll forget it's there.</h2>
-    <p class="sec-lede">Nadi is built natively for Windows, not on a hidden web browser. It sits quietly until something happens, then gets out of the way again.</p>
+    <h2 class="sec-title">No browser hiding behind the notch.</h2>
+    <p class="sec-lede">Nadi is written in Rust and uses Windows APIs directly. There's no browser window running underneath it.</p>
     <div class="light">
       <div class="tm" role="img" aria-label="Task Manager showing Nadi using about 30 MB of memory and almost no CPU">
         <div class="tm-title">Processes</div>
@@ -1119,22 +1119,22 @@ footer a:hover { color: var(--ink); }
       <div>
         <div class="stats">
           <div class="stat"><b>~30 MB</b><span>typical memory use</span></div>
-          <div class="stat"><b>0%</b><span>CPU when idle</span></div>
-          <div class="stat"><b>3 MB</b><span>download size</span></div>
+          <div class="stat"><b>Rust</b><span>Native Windows app</span></div>
+          <div class="stat"><b>x64</b><span>Windows 10 &amp; 11</span></div>
         </div>
         <ul class="why-light">
-          <li><b>Native code.</b> Written in Rust and drawn by your graphics card, with no web engine running in the background.</li>
-          <li><b>Draws only when something moves.</b> When the notch is still, Nadi stops drawing completely.</li>
-          <li><b>Waits instead of checking.</b> Windows tells Nadi when a song changes or the charger is plugged in.</li>
-          <li><b>Files stay where they are.</b> The shelf remembers where your files live instead of copying them into memory.</li>
+          <li><b>Built with Rust.</b> A Windows app, not a web page wrapped as a desktop program.</li>
+          <li><b>Less work when idle.</b> Nadi slows down updates when the screen isn't changing.</li>
+          <li><b>Uses Windows events.</b> Music and power changes come from the system where available.</li>
+          <li><b>Files stay in place.</b> Shelf keeps references instead of moving the originals.</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section id="customize" class="wrap">
-    <h2 class="sec-title">Make it yours.</h2>
-    <p class="sec-lede">Click the Nadi icon in the system tray, next to the clock. A few switches decide how Nadi behaves on your screen.</p>
+    <h2 class="sec-title">Set it up once.</h2>
+    <p class="sec-lede">Open Nadi from the system tray. Choose its size, where it appears and which reminders you want.</p>
     <div class="custom">
       <div class="tray-wrap">
         <div class="tray-menu" role="img" aria-label="Nadi tray menu with Start with Windows, Nadi Mascot, Minimal notch, About Nadi and Exit">
@@ -1148,10 +1148,10 @@ footer a:hover { color: var(--ink); }
         <p class="tray-hint"><img src="./assets/nadi-mascot-neutral.png" alt="">Tray icon, bottom right of your taskbar</p>
       </div>
       <div class="opts">
-        <div class="opt"><h3>Start with Windows</h3><p>Nadi opens on its own every time you sign in, so the notch is always there when you need it.</p></div>
-        <div class="opt"><h3>Nadi Mascot</h3><p>When your PC has been quiet for a moment, the clock steps aside and a pair of eyes appears. They doze off, and wave hello when you come back.</p></div>
-        <div class="opt"><h3>Minimal notch</h3><p>Got a laptop with a thick top bezel? The closed notch becomes a thin black line. Lyrics, alerts and hover still work as usual.</p></div>
-        <div class="opt"><h3>About &amp; Exit</h3><p>See which version you have, or close Nadi completely.</p></div>
+        <div class="opt"><h3>Start with Windows</h3><p>Turn this on if you want Nadi to start when you sign in to Windows.</p></div>
+        <div class="opt"><h3>Nadi Mascot</h3><p>Show Nadi's eyes when it's resting. They'll wake up when you return.</p></div>
+        <div class="opt"><h3>Minimal notch</h3><p>Keep only a small handle on screen when space is tight. Hover to bring the notch back.</p></div>
+        <div class="opt"><h3>About &amp; Exit</h3><p>Check the version, change settings or exit from the tray.</p></div>
       </div>
     </div>
   </section>
@@ -1778,6 +1778,32 @@ fit(); addEventListener("resize", fit);
   ID["Coming soon for Windows 10 and 11"] = "Segera hadir untuk Windows 10 dan 11";
   ID["Preview · Windows 10 and 11"] = "Pratinjau · Windows 10 dan 11";
   ID["Coming soon"] = "Segera hadir";
+  ID["It knows when to stay small."] = "Nadi tahu kapan harus mengecil.";
+  ID["Leave Nadi alone and a pair of eyes takes over. After a while, they rest. Come back and they wake up."] = "Saat Nadi dibiarkan, sepasang mata muncul. Setelah beberapa saat, mata itu beristirahat. Ketika kamu kembali, Nadi bangun lagi.";
+  ID["Quiet when idle"] = "Tenang saat idle";
+  ID["Nadi reduces redraws when nothing changes. It's still being tested across different Windows setups."] = "Nadi mengurangi proses menggambar ulang saat tidak ada perubahan. Performanya masih diuji pada berbagai konfigurasi Windows.";
+  ID["Your files stay yours"] = "Filemu tetap milikmu";
+  ID["Tasks, water logs and Shelf entries stay on your PC. You don't need an account to use the app."] = "Tugas, catatan minum, dan isi Shelf tetap tersimpan di PC. Kamu tidak perlu akun untuk memakai aplikasinya.";
+  ID["Built for Windows"] = "Dibuat untuk Windows";
+  ID["Nadi is a native Windows app. It can move aside for full-screen apps and adapt when your desktop gets busy."] = "Nadi adalah aplikasi native Windows. Ia bisa menyingkir saat aplikasi layar penuh dan menyesuaikan diri ketika desktop mulai padat.";
+  ID["No browser hiding behind the notch."] = "Tidak ada browser tersembunyi di balik notch.";
+  ID["Nadi is written in Rust and uses Windows APIs directly. There's no browser window running underneath it."] = "Nadi ditulis dengan Rust dan menggunakan API Windows secara langsung. Tidak ada jendela browser yang berjalan di belakangnya.";
+  ID["Set it up once."] = "Atur sekali saja.";
+  ID["Open Nadi from the system tray. Choose its size, where it appears and which reminders you want."] = "Buka Nadi dari system tray. Pilih ukurannya, tempat tampilnya, dan pengingat yang ingin diaktifkan.";
+  ID["Turn this on if you want Nadi to start when you sign in to Windows."] = "Aktifkan jika kamu ingin Nadi berjalan saat masuk ke Windows.";
+  ID["Show Nadi's eyes when it's resting. They'll wake up when you return."] = "Tampilkan mata Nadi saat beristirahat. Mata itu akan bangun ketika kamu kembali.";
+  ID["Keep only a small handle on screen when space is tight. Hover to bring the notch back."] = "Sisakan pegangan kecil di layar ketika ruang terbatas. Arahkan kursor untuk membuka notch kembali.";
+  ID["Check the version, change settings or exit from the tray."] = "Lihat versinya, ubah pengaturan, atau keluar melalui tray.";
+  ID["Native Windows app"] = "Aplikasi native Windows";
+  ID["A Windows app, not a web page wrapped as a desktop program."] = "Aplikasi Windows, bukan halaman web yang dibungkus menjadi aplikasi desktop.";
+  ID["Nadi slows down updates when the screen isn't changing."] = "Nadi mengurangi pembaruan ketika tampilan tidak berubah.";
+  ID["Music and power changes come from the system where available."] = "Perubahan musik dan daya dibaca dari event Windows jika tersedia.";
+  ID["Shelf keeps references instead of moving the originals."] = "Shelf menyimpan referensi file tanpa memindahkan file aslinya.";
+  ID["Built with Rust."] = "Dibuat dengan Rust.";
+  ID["Less work when idle."] = "Lebih ringan saat idle.";
+  ID["Uses Windows events."] = "Memakai event Windows.";
+  ID["Files stay in place."] = "File tidak dipindahkan.";
+  ID["Windows 10 & 11"] = "Windows 10 dan 11";
   ID["A little more at the top."] = "Sedikit lebih banyak di bagian atas layar.";
   ID["Music, lyrics, timers and files, right at the top of Windows. Hover when you need them. When your desktop gets crowded, Nadi makes itself small."] = "Musik, lirik, timer, dan file, tepat di bagian atas Windows. Arahkan kursor saat dibutuhkan. Saat desktop mulai penuh, Nadi mengecil dengan sendirinya.";
   ID["A few things you need, one hover away."] = "Beberapa hal yang kamu butuhkan, cukup satu hover.";
