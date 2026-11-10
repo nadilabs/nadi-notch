@@ -1269,24 +1269,24 @@ footer a:hover { color: var(--ink); }
 
   <section id="faq" class="wrap faq">
     <h2 class="sec-title">Questions</h2>
-    <details><summary>Is Nadi free?</summary><p>Nadi is planned as a free Windows app. Release information will be shared on this page.</p></details>
-    <details><summary>Which music players work?</summary><p>Any player that shows up in the Windows media overlay: Spotify, Apple Music, Windows Media Player, and most players in Chrome, Edge and Firefox, including YouTube.</p></details>
-    <details><summary>Why doesn't a song have lyrics?</summary><p>Lyrics come from LRCLIB, a free community library. Popular songs almost always have synced lyrics; some local or newer songs don't yet.</p></details>
-    <details><summary>Will it slow down my PC?</summary><p>No. Nadi only draws while something on it is moving. When it's idle it uses no CPU at all, even with music playing in the background.</p></details>
-    <details><summary>My antivirus flagged the installer. Is it safe?</summary><p>Nadi listens for the volume, brightness, Caps Lock and language keys so it can show their overlays, which a few antivirus tools treat with suspicion. It never records or sends what you type. Only download it from this page.</p></details>
-    <details><summary>How do I update?</summary><p>Download the latest installer and run it. It replaces the old version and keeps your tasks, water log and shelf.</p></details>
-    <details><summary>How do I quit or stop it starting with Windows?</summary><p>Click the Nadi icon in the system tray, near the clock. From there you can turn off "Start with Windows", turn the mascot off with "Nadi Mascot", switch to "Minimal notch", or choose Exit.</p></details>
+    <details><summary>Is Nadi free?</summary><p>Yes. Nadi is being built as a free app, with no subscription or paid features.</p></details>
+    <details><summary>Which music players work?</summary><p>Nadi uses the media sessions Windows exposes. Spotify and many browser players can work, depending on the app and its playback support.</p></details>
+    <details><summary>Why doesn't a song have lyrics?</summary><p>Nadi looks up timed lyrics through LRCLIB. Some tracks don't have a match, especially new releases or local files.</p></details>
+    <details><summary>Will it slow down my PC?</summary><p>It's a native Rust app designed to do less work while idle. I'm still testing performance on different PCs before release.</p></details>
+    <details><summary>My antivirus flagged the installer. Is it safe?</summary><p>Unsigned development builds may trigger a Windows warning. Don't ignore an antivirus alert just to install Nadi; use official builds and check release details when they are published.</p></details>
+    <details><summary>How do I update?</summary><p>Public update instructions will be posted here when the first installer is released.</p></details>
+    <details><summary>How do I quit or stop it starting with Windows?</summary><p>Open the Nadi icon in the system tray. Choose Exit to close it, or turn off Start with Windows in Settings to stop it launching at sign-in.</p></details>
     
     
   </section>
 
   <section id="privacy" class="wrap">
     <h2 class="sec-title">Privacy</h2>
-    <p>When you join the Nadi waitlist, your email is stored securely to manage signups and send release updates. The public waitlist counter shows only the number of registered emails, not individual addresses. Your in-app tasks, water log, shelf, clipboard history, and settings stay on your computer.</p>
-    <p>Prayer times are calculated on your PC from the city you choose. Clipboard history, focus history and widgets stay on your computer too.</p>
-    <p>In the Microsoft Store version, Nadi reads notifications only to show them in the notch. They're kept in memory and disappear when Nadi closes.</p>
-    <p>When you use lyrics, Nadi sends the song title, artist and length to LRCLIB (lrclib.net) to find matching lyrics.</p>
-    <p>Nadi is planned to remain free, with no subscription required.</p>
+    <p>Join the waitlist and your email is stored to manage signups and send release news. The public counter shows a number, not anyone's address. Tasks, water logs, Shelf entries and settings stay on your PC.</p>
+    <p>Prayer times use the city you choose. Clipboard and focus history stay on your computer.</p>
+    <p>Windows notification access is not active in the classic installer. A supported packaged build will require permission; Today only keeps generic indicators in memory.</p>
+    <p>To find lyrics, Nadi may send the song title, artist and duration to LRCLIB. It does not send your tasks or Shelf files there.</p>
+    <p>Nadi is planned to stay free. No account or subscription is required to use it.</p>
   </section>
 </main>
 <div class="ty" id="thanks" role="status" aria-live="polite">
@@ -1780,6 +1780,18 @@ fit(); addEventListener("resize", fit);
   ID["Coming soon for Windows 10 and 11"] = "Segera hadir untuk Windows 10 dan 11";
   ID["Preview · Windows 10 and 11"] = "Pratinjau · Windows 10 dan 11";
   ID["Coming soon"] = "Segera hadir";
+  ID["Yes. Nadi is being built as a free app, with no subscription or paid features."] = "Ya. Nadi dibuat sebagai aplikasi gratis, tanpa langganan maupun fitur berbayar.";
+  ID["Nadi uses the media sessions Windows exposes. Spotify and many browser players can work, depending on the app and its playback support."] = "Nadi memakai sesi media yang disediakan Windows. Spotify dan banyak pemutar di browser bisa bekerja, tergantung dukungan masing-masing aplikasi.";
+  ID["Nadi looks up timed lyrics through LRCLIB. Some tracks don't have a match, especially new releases or local files."] = "Nadi mencari lirik tersinkron melalui LRCLIB. Beberapa lagu belum punya kecocokan, terutama rilisan baru atau file lokal.";
+  ID["It's a native Rust app designed to do less work while idle. I'm still testing performance on different PCs before release."] = "Nadi adalah aplikasi native Rust yang dirancang agar lebih ringan saat idle. Performanya masih diuji pada berbagai PC sebelum rilis.";
+  ID["Unsigned development builds may trigger a Windows warning. Don't ignore an antivirus alert just to install Nadi; use official builds and check release details when they are published."] = "Build pengembangan tanpa tanda tangan digital bisa memicu peringatan Windows. Jangan abaikan peringatan antivirus hanya demi memasang Nadi; gunakan build resmi dan periksa informasi rilis saat tersedia.";
+  ID["Public update instructions will be posted here when the first installer is released."] = "Petunjuk pembaruan publik akan tersedia di sini saat installer pertama dirilis.";
+  ID["Open the Nadi icon in the system tray. Choose Exit to close it, or turn off Start with Windows in Settings to stop it launching at sign-in."] = "Buka ikon Nadi di system tray. Pilih Exit untuk menutupnya, atau nonaktifkan Start with Windows di Settings agar tidak berjalan saat login.";
+  ID["Join the waitlist and your email is stored to manage signups and send release news. The public counter shows a number, not anyone's address. Tasks, water logs, Shelf entries and settings stay on your PC."] = "Jika bergabung ke waitlist, emailmu disimpan untuk mengelola pendaftaran dan mengirim kabar rilis. Counter publik hanya menampilkan jumlah, bukan alamat email. Tugas, catatan minum, isi Shelf, dan pengaturan tetap berada di PC.";
+  ID["Prayer times use the city you choose. Clipboard and focus history stay on your computer."] = "Jadwal salat memakai kota yang kamu pilih. Riwayat clipboard dan fokus tetap tersimpan di komputermu.";
+  ID["Windows notification access is not active in the classic installer. A supported packaged build will require permission; Today only keeps generic indicators in memory."] = "Akses notifikasi Windows belum aktif di installer biasa. Paket aplikasi yang didukung akan memerlukan izin; Today hanya menyimpan indikator umum dalam memori.";
+  ID["To find lyrics, Nadi may send the song title, artist and duration to LRCLIB. It does not send your tasks or Shelf files there."] = "Untuk mencari lirik, Nadi dapat mengirim judul, artis, dan durasi lagu ke LRCLIB. Tugas atau file Shelf tidak dikirim ke sana.";
+  ID["Nadi is planned to stay free. No account or subscription is required to use it."] = "Nadi direncanakan tetap gratis. Tidak perlu akun atau langganan untuk menggunakannya.";
   ID["There isn't a public installer yet. I'm testing Nadi on Windows 10 and 11 before the first release."] = "Installer publik belum tersedia. Nadi masih diuji di Windows 10 dan 11 sebelum rilis pertama.";
   ID["The download link will appear here when Nadi is ready."] = "Tautan unduhan akan tersedia di sini ketika Nadi sudah siap.";
   ID["Want a note when it's ready?"] = "Mau dikabari saat Nadi siap?";
