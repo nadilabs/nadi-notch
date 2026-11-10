@@ -23,7 +23,7 @@ jobs:
           import json, os, urllib.request, urllib.error
           from urllib.parse import urljoin
 
-          origin = "https://nadilabs.github.io"
+          origin = "https://nadi.asalbikin.id"
           waitlist = "https://nadi-waitlist.ariyoardiwardana.workers.dev/api/waitlist"
           feedback = "https://nadi-feedback.ariyoardiwardana.workers.dev/api/feedback"
 
