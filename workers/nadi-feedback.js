@@ -17,8 +17,37 @@ function response(data, status, origin) {
   return new Response(JSON.stringify(data), { status, headers });
 }
 
+// Optional email notification. The service is dormant until these Cloudflare
+// Worker secrets are configured: RESEND_API_KEY, NADI_MAIL_FROM, FEEDBACK_INBOX.
+const esc = text => String(text).replace(/[&<>"']/g, c => (
+  {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]
+));
+async function notifyFeedback(env, id, message, contact) {
+  if (!env.RESEND_API_KEY || !env.NADI_MAIL_FROM || !env.FEEDBACK_INBOX) return;
+  const mail = {
+    from: env.NADI_MAIL_FROM,
+    to: [env.FEEDBACK_INBOX],
+    subject: "New feedback for Nadi",
+    html: '<div style="font-family:system-ui,sans-serif;max-width:600px">'
+      + '<h2>New Nadi feedback</h2><p style="white-space:pre-wrap">' + esc(message) + '</p>'
+      + '<p>Contact: ' + esc(contact || "Not provided") + '</p></div>'
+  };
+  const sent = await fetch("https://api.resend.com/emails", {
+    method:"POST",
+    headers:{
+      "Authorization": "Bearer " + env.RESEND_API_KEY,
+      "Content-Type": "application/json",
+      "Idempotency-Key": "nadi-feedback-" + id
+    },
+    body: JSON.stringify(mail)
+  });
+  if (!sent.ok) throw new Error("email_provider_rejected");
+  await env.DB.prepare("UPDATE feedback SET notified_at = CURRENT_TIMESTAMP WHERE id = ?")
+    .bind(id).run();
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin") || "";
     const path = new URL(request.url).pathname;
     if (path !== "/api/feedback") return response({ error: "not_found" }, 404, origin);
@@ -58,9 +87,16 @@ export default {
       ).first();
       if (Number(today?.count || 0) >= 250)
         return response({ error: "temporarily_unavailable" }, 429, origin);
-      await env.DB.prepare(
+      const record = await env.DB.prepare(
         "INSERT INTO feedback (message, contact) VALUES (?, ?)"
       ).bind(msg, contact || null).run();
+      if (env.RESEND_API_KEY && env.NADI_MAIL_FROM && env.FEEDBACK_INBOX) {
+        const id = record.meta.last_row_id;
+        ctx.waitUntil(notifyFeedback(env, id, msg, contact).catch(() => {
+          // The form still succeeds: feedback is durably saved in D1.
+          // Email delivery can be retried separately when configured.
+        }));
+      }
       return response({ ok: true }, 201, origin);
     } catch {
       return response({ error: "temporarily_unavailable" }, 503, origin);
