@@ -415,6 +415,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .fb .msg.ok { color: #8ff0b6; }
 .fb .msg.err { color: #ff8f8f; }
 .fb .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.fb .fb-privacy { margin: 12px 0 0; font-size: 13px; line-height: 1.55; color: var(--mist); }
 
 @media (max-width: 760px) {
   .custom, .warn-grid { grid-template-columns: 1fr; }
@@ -1242,7 +1243,7 @@ footer a:hover { color: var(--ink); }
   <section id="feedback" class="wrap">
     <div class="fb">
       <h2 class="sec-title">Found something odd?</h2>
-      <p class="sec-lede">Feedback isn't open yet. I'll add a way to report bugs when public testing begins.</p>
+      <p class="sec-lede">Found a bug or have an idea? Write it here. Add a contact if you'd like a reply.</p>
       <form novalidate>
         <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
         <textarea name="msg" maxlength="1500" placeholder="Your feedback or idea" aria-label="Your feedback or idea" required></textarea>
@@ -1252,6 +1253,7 @@ footer a:hover { color: var(--ink); }
           <button type="submit">Send feedback</button>
         </div>
       </form>
+      <p class="fb-privacy">Your message and optional contact are stored so I can read your feedback. Please don\'t include passwords.</p>
     </div>
   </section>
 
@@ -1282,6 +1284,7 @@ footer a:hover { color: var(--ink); }
   <section id="privacy" class="wrap">
     <h2 class="sec-title">Privacy</h2>
     <p>Join the waitlist and your email is stored to manage signups and send release news. The public counter shows a number, not anyone's address. Tasks, water logs, Shelf entries and settings stay on your PC.</p>
+    <p>Feedback messages and optional contact details are stored privately for review. They are not displayed on the website.</p>
     <p>Prayer times use the city you choose. Clipboard and focus history stay on your computer.</p>
     <p>Windows notification access is not active in the classic installer. A supported packaged build will require permission; Today only keeps generic indicators in memory.</p>
     <p>To find lyrics, Nadi may send the song title, artist and duration to LRCLIB. It does not send your tasks or Shelf files there.</p>
@@ -1424,26 +1427,48 @@ Promise.resolve([])
   })
   .catch(() => {});
 
-// ---- Masukan (dikirim ke Google Sheet lewat Apps Script yang sama dengan waitlist) ------------
-const SCRIPT_URL = "";
+// ---- Nadi feedback: POST directly to private Cloudflare D1 storage ------------
+const FEEDBACK_API = "https://nadi-feedback.ariyoardiwardana.workers.dev/api/feedback";
 const fbForm = document.querySelector("#feedback form");
+const fbLang = (en, id) => document.documentElement.lang === "id" ? id : en;
 fbForm.addEventListener("submit", async ev => {
   ev.preventDefault();
-  const msgEl = fbForm.querySelector(".msg"), btn = fbForm.querySelector("button");
-  const msg = fbForm.msg.value.trim();
+  const msgEl = fbForm.querySelector(".msg");
+  const btn = fbForm.querySelector("button");
+  const msgInput = fbForm.querySelector('[name="msg"]');
+  const msg = msgInput.value.trim();
   msgEl.className = "msg";
-  if (!SCRIPT_URL) { msgEl.textContent = "Feedback will be available soon."; msgEl.classList.add("err"); return; }
-  if (msg.length < 3) { msgEl.textContent = "Write a few words first."; msgEl.classList.add("err"); fbForm.msg.focus(); return; }
-  btn.disabled = true; btn.textContent = "Sending…"; msgEl.textContent = "";
+  if (msg.length < 5) {
+    msgEl.textContent = fbLang("Write a few words first.", "Tulis pesan sedikit lebih lengkap.");
+    msgEl.classList.add("err");
+    msgInput.focus();
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = fbLang("Sending…", "Mengirim…");
+  msgEl.textContent = "";
   try {
-    const q = new URLSearchParams({ action: "feedback", msg, contact: fbForm.contact.value.trim(), website: fbForm.website.value });
-    const d = await (await fetch(SCRIPT_URL + "?" + q)).json();
-    if (!d.ok) throw new Error(d.error || "failed");
-    fbForm.reset(); msgEl.textContent = "Thanks! Your message reached me."; msgEl.classList.add("ok");
-  } catch (e) {
-    msgEl.textContent = "Couldn't send right now. Please try again in a moment."; msgEl.classList.add("err");
+    const res = await fetch(FEEDBACK_API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        msg,
+        contact: fbForm.querySelector('[name="contact"]').value.trim(),
+        website: fbForm.querySelector('[name="website"]').value
+      })
+    });
+    if (!res.ok) throw new Error("unavailable");
+    const data = await res.json();
+    if (!data.ok) throw new Error("unavailable");
+    fbForm.reset();
+    msgEl.textContent = fbLang("Thanks! Your feedback was saved.", "Terima kasih! Masukanmu sudah tersimpan.");
+    msgEl.classList.add("ok");
+  } catch {
+    msgEl.textContent = fbLang("Couldn't send right now. Please try again later.", "Pesan belum terkirim. Silakan coba lagi nanti.");
+    msgEl.classList.add("err");
   } finally {
-    btn.disabled = false; btn.textContent = "Send feedback";
+    btn.disabled = false;
+    btn.textContent = fbLang("Send feedback", "Kirim masukan");
   }
 });
 
@@ -1779,6 +1804,7 @@ fit(); addEventListener("resize", fit);
   ID["Coming soon for Windows 10 and 11"] = "Segera hadir untuk Windows 10 dan 11";
   ID["Preview · Windows 10 and 11"] = "Pratinjau · Windows 10 dan 11";
   ID["Coming soon"] = "Segera hadir";
+  ID["Feedback messages and optional contact details are stored privately for review. They are not displayed on the website."] = "Pesan feedback dan kontak opsional disimpan secara privat untuk ditinjau. Data tersebut tidak ditampilkan di website.";
   ID["Yes. Nadi is being built as a free app, with no subscription or paid features."] = "Ya. Nadi dibuat sebagai aplikasi gratis, tanpa langganan maupun fitur berbayar.";
   ID["Nadi uses the media sessions Windows exposes. Spotify and many browser players can work, depending on the app and its playback support."] = "Nadi memakai sesi media yang disediakan Windows. Spotify dan banyak pemutar di browser bisa bekerja, tergantung dukungan masing-masing aplikasi.";
   ID["Nadi looks up timed lyrics through LRCLIB. Some tracks don't have a match, especially new releases or local files."] = "Nadi mencari lirik tersinkron melalui LRCLIB. Beberapa lagu belum punya kecocokan, terutama rilisan baru atau file lokal.";
@@ -1798,7 +1824,8 @@ fit(); addEventListener("resize", fit);
   ID["Nadi will be free. If you want to help me keep working on it, you can leave a small tip."] = "Nadi akan gratis. Kalau ingin membantu pengembangannya, kamu bisa memberikan dukungan sukarela.";
   ID["Tips help cover testing, builds and the work that goes into each release."] = "Dukungan membantu biaya pengujian, build, dan pekerjaan di setiap rilis.";
   ID["Found something odd?"] = "Menemukan sesuatu yang aneh?";
-  ID["Feedback isn't open yet. I'll add a way to report bugs when public testing begins."] = "Masukan belum dibuka. Saya akan menambahkan cara melaporkan bug saat pengujian publik dimulai.";
+  ID["Found a bug or have an idea? Write it here. Add a contact if you'd like a reply."] = "Menemukan bug atau punya ide? Tulis di sini. Tambahkan kontak jika ingin dibalas.";
+  ID["Your message and optional contact are stored so I can read your feedback. Please don't include passwords."] = "Pesan dan kontak opsional disimpan agar bisa saya baca. Jangan masukkan kata sandi.";
   ID["A note before the first release."] = "Catatan sebelum rilis pertama.";
   ID["From Nadi Lab"] = "Dari Nadi Lab";
   ID["I'm building Nadi as an independent Windows project. It's still changing, and I'd rather test it properly than call it finished too early."] = "Nadi saya kembangkan sebagai proyek Windows independen. Aplikasinya masih terus berubah; saya memilih mengujinya dengan benar daripada terlalu cepat menyebutnya selesai.";
