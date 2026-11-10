@@ -61,22 +61,13 @@ jobs:
 
           status,_,before = req(waitlist)
           check("waitlist count", status==200 and isinstance(before.get("count"),int), (status,before))
-          email = "nadi-api-smoke-" + os.environ["TEST_ID"] + "@example.invalid"
-          status,_,first = req(waitlist,method="POST",data={"email":email,"website":""})
-          check("waitlist signup",status==200 and first.get("ok") and first.get("count")==before["count"]+1,(status,first))
-          status,_,second = req(waitlist,method="POST",data={"email":email,"website":""})
-          check("duplicate not counted twice",status==200 and second.get("already_registered") and second.get("count")==first["count"],(status,second))
-          status,_,after = req(waitlist)
-          check("waitlist count after",status==200 and after["count"]==first["count"],(status,after))
+          # Read-only smoke checks; never create fake subscribers or feedback in production.
           status,_,_ = req(waitlist,method="POST",data={"email":"not-an-email","website":""})
           check("invalid email rejected",status==400,status)
-
-          message = "NADI_FORM_API_SMOKE_" + os.environ["TEST_ID"]
-          status,_,result = req(feedback,method="POST",data={"msg":message,"contact":"","website":""})
-          check("feedback accepted",status==201 and result.get("ok"),(status,result))
           status,_,_ = req(feedback,method="POST",data={"msg":"x","contact":"","website":""})
           check("short feedback rejected",status==400,status)
           status,_,_ = req(feedback)
           check("feedback not publicly readable",status==405,status)
-          print("PASS: all tests (synthetic records will be cleaned from D1)")
+          print("PASS: all read-only validation checks")
+
           PY
