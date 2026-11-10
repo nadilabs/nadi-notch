@@ -1112,25 +1112,15 @@ footer a:hover { color: var(--ink); }
     <h2 class="sec-title">No browser hiding behind the notch.</h2>
     <p class="sec-lede">Nadi is written in Rust and uses Windows APIs directly. There's no browser window running underneath it.</p>
     <div class="light">
-      <div class="tm" role="img" aria-label="Task Manager showing Nadi using about 30 MB of memory and almost no CPU">
-        <div class="tm-title">Processes</div>
-        <div class="tm-grid">
-          <div class="h nm">Name</div>
-          <div class="h"><b>CPU</b></div>
-          <div class="h"><b>Memory</b></div>
-          <div class="h"><b>Disk</b></div>
-          <div class="h"><b>Network</b></div>
-          <div class="nm"><img src="./assets/nadi-mascot-neutral.png" alt="">Nadi</div>
-          <div class="v">0.3%</div>
-          <div class="v hi js-ram" data-to="30.6">30.6 MB</div>
-          <div class="v">0 MB/s</div>
-          <div class="v">0 Mbps</div>
-        </div>
+      <div class="tm" role="note" aria-label="Performance measurements pending">
+        <div class="tm-title">Performance testing</div>
+        <p class="tm-note">Nadi uses a native Windows interface. RAM and CPU usage depend on which features are active. Reproducible measurements will be published after testing on Windows PCs.</p>
+      </div>
         <div class="tm-note">Windows Task Manager during everyday use. About 45 MB with 70 files on the shelf.</div>
       </div>
       <div>
         <div class="stats">
-          <div class="stat"><b>~30 MB</b><span>typical memory use</span></div>
+          <div class="stat"><b>Native</b><span>No embedded browser engine</span></div>
           <div class="stat"><b>Rust</b><span>Native Windows app</span></div>
           <div class="stat"><b>x64</b><span>Windows 10 &amp; 11</span></div>
         </div>
@@ -1881,6 +1871,19 @@ fit(); addEventListener("resize", fit);
   ID["Pick two things to keep an eye on: your week, water, battery, a world clock or a countdown."] = "Pilih dua hal yang ingin dipantau: agenda minggu ini, air minum, baterai, jam dunia, atau hitung mundur.";
   ID["Today and notifications"] = "Today dan notifikasi";
   ID["See your tasks and the week ahead in Today. Windows notifications need a supported packaged build and your permission."] = "Lihat tugas dan agenda minggu ini di Today. Notifikasi Windows memerlukan paket aplikasi yang didukung dan izin darimu.";
+  ID["Get Nadi for Windows 10 and 11 (64-bit). The Microsoft Store version is coming soon."] = "Unduh Nadi untuk Windows 10 dan 11 (64-bit). Versi Microsoft Store segera hadir.";
+  ID["Preparing download"] = "Menyiapkan unduhan";
+  ID["Checking installer availability…"] = "Memeriksa ketersediaan installer…";
+  ID["Download coming soon"] = "Unduhan segera tersedia";
+  ID["The public installer is being prepared."] = "Installer publik sedang dipersiapkan.";
+  ID["Download for Windows"] = "Unduh untuk Windows";
+  ID["Official installer · 3.8 MB · Unsigned; Windows may show a SmartScreen warning."] = "Installer resmi · 3,8 MB · Belum ditandatangani; Windows mungkin menampilkan peringatan SmartScreen.";
+  ID["Available after Microsoft approves the listing."] = "Tersedia setelah Microsoft menyetujui listing.";
+  ID["Tasks, water logs, Shelf entries and settings stay on your PC. Website download counts come from public GitHub release statistics."] = "Tugas, catatan air, data Shelf, dan pengaturan tetap tersimpan di PC. Jumlah unduhan di website berasal dari statistik rilis GitHub publik.";
+  ID["Performance testing"] = "Pengujian performa";
+  ID["Nadi uses a native Windows interface. RAM and CPU usage depend on which features are active. Reproducible measurements will be published after testing on Windows PCs."] = "Nadi memakai antarmuka native Windows. Pemakaian RAM dan CPU bergantung pada fitur yang aktif. Hasil pengukuran yang dapat diuji ulang akan diterbitkan setelah pengujian di PC Windows.";
+  ID["Native"] = "Native";
+  ID["No embedded browser engine"] = "Tanpa mesin browser tertanam";
   const SKIP = "script,style,svg,code,textarea,#laptop,.sw-art";
   const ATTRS = ["placeholder", "aria-label", "alt", "title"];
   const enTitle = document.title;
