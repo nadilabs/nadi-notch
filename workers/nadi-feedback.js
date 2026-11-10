@@ -46,6 +46,16 @@ async function notifyFeedback(env, id, message, contact) {
     .bind(id).run();
 }
 
+async function retryPendingNotifications(env) {
+  if(!env.RESEND_API_KEY || !env.NADI_MAIL_FROM || !env.FEEDBACK_INBOX)return;
+  const rows=await env.DB.prepare(
+    "SELECT id,message,contact FROM feedback WHERE notified_at IS NULL ORDER BY id LIMIT 10"
+  ).all();
+  for(const row of (rows.results||[])){
+    try{await notifyFeedback(env,row.id,row.message,row.contact);}
+    catch{/* Keep stored and retry on the next scheduled run. */}
+  }
+}
 export default {
   async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin") || "";
@@ -101,5 +111,8 @@ export default {
     } catch {
       return response({ error: "temporarily_unavailable" }, 503, origin);
     }
+  },
+  async scheduled(controller,env,ctx) {
+    ctx.waitUntil(retryPendingNotifications(env));
   }
 };
