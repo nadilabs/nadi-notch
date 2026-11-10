@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - .github/workflows/form-api-smoke.yml
+      - 'workers/nadi-waitlist.js'
+      - 'workers/nadi-feedback.js'
   workflow_dispatch:
 
 permissions:
