@@ -485,6 +485,8 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .release-checksum code { display: block; max-width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(236,239,247,.055); color: var(--ink); font: 12px/1.55 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; overflow-wrap: anywhere; word-break: break-all; white-space: normal; }
 #privacy p { overflow-wrap: anywhere; }
 #privacy p strong { color: var(--ink); font-weight: 650; }
+#privacy .privacy-lede { color: var(--ink); font-size: clamp(16px, 2.1vw, 19px); line-height: 1.65; max-width: 40em; margin-bottom: 32px; }
+#privacy .privacy-lede strong { display: block; font-weight: 750; margin-bottom: 6px; letter-spacing: -.015em; }
 
 /* ===== Intro pratinjau: maskot melayang di depan, mundur ke layar, menjadi notch ===============
    Lapisan ini menutupi seluruh laptop (termasuk bezel) dengan warna latar halaman, jadi awalnya benar-benar gelap.
@@ -1303,11 +1305,12 @@ footer a:hover { color: var(--ink); }
 
   <section id="privacy" class="wrap">
     <h2 class="sec-title">Privacy</h2>
-    <p><strong>Stored on your device.</strong> Nadi keeps tasks, water records, settings, and Clipboard history on your PC. File Shelf references your files without moving the originals.</p>
-    <p><strong>Online features.</strong> Lyrics lookup may send the song title, artist, and duration to an external lyrics service. Prayer times may use your selected city or permitted location to retrieve a schedule.</p>
-    <p><strong>Windows notifications.</strong> Access to notifications depends on the Windows permissions and Nadi build in use. Features that display notifications require the relevant access to be available.</p>
-    <p><strong>Feedback submitted here.</strong> Your feedback and any contact details you choose to provide are sent to our feedback service and stored for review. They are not displayed publicly on the website.</p>
-    <p><strong>Download statistics and accounts.</strong> The download counter uses public GitHub release statistics. You can use Nadi without creating an account.</p>
+    <p class="privacy-lede"><strong>No account. No in-app analytics. No activity tracking.</strong> Your personal workspace stays on your device. Nadi doesn't upload your tasks, clipboard history, files, water records, or Windows notifications to Nadi Labs.</p>
+    <p><strong>Local by default.</strong> Settings, tasks, and water records stay on your PC. Clipboard history is held locally, and File Shelf keeps references to your original files.</p>
+    <p><strong>Online requests.</strong> When looking up lyrics, Nadi may send a song's title, artist, and duration to external lyrics providers. Prayer schedules are calculated locally unless an authorized online source is configured. External services may receive ordinary connection information, such as your IP address.</p>
+    <p><strong>Windows notification access.</strong> Supported builds request Windows permission before accessing notification information. The notification feature does not upload notification content to Nadi Labs.</p>
+    <p><strong>When you send feedback.</strong> Submitting the website feedback form sends your message and any optional contact details to our feedback service for review. This is voluntary and is not part of Nadi's everyday desktop activity.</p>
+    <p><strong>About this website.</strong> The site has no embedded visitor-analytics scripts. Its download counter reads public GitHub release statistics. As with other websites, hosting and external services may process basic connection data.</p>
   </section>
 </main>
 <div class="ty" id="thanks" role="status" aria-live="polite">
@@ -1964,6 +1967,18 @@ fit(); addEventListener("resize", fit);
   ID["Your feedback and any contact details you choose to provide are sent to our feedback service and stored for review. They are not displayed publicly on the website."] = "Masukan dan kontak yang kamu berikan dikirim ke layanan feedback kami dan disimpan untuk ditinjau. Informasi tersebut tidak ditampilkan secara publik di website.";
   ID["Download statistics and accounts."] = "Statistik unduhan dan akun.";
   ID["The download counter uses public GitHub release statistics. You can use Nadi without creating an account."] = "Penghitung unduhan menggunakan statistik rilis publik dari GitHub. Nadi dapat digunakan tanpa membuat akun.";
+  ID["No account. No in-app analytics. No activity tracking."] = "Tanpa akun. Tanpa analitik aplikasi. Tanpa pelacakan aktivitas.";
+  ID["Your personal workspace stays on your device. Nadi doesn't upload your tasks, clipboard history, files, water records, or Windows notifications to Nadi Labs."] = "Ruang kerjamu tetap berada di perangkatmu. Nadi tidak mengunggah tugas, riwayat Clipboard, file, catatan minum, atau notifikasi Windows ke Nadi Labs.";
+  ID["Local by default."] = "Tersimpan secara lokal.";
+  ID["Settings, tasks, and water records stay on your PC. Clipboard history is held locally, and File Shelf keeps references to your original files."] = "Pengaturan, tugas, dan catatan minum tetap tersimpan di PC. Riwayat Clipboard dikelola secara lokal, sedangkan File Shelf menyimpan referensi ke file asli.";
+  ID["Online requests."] = "Permintaan melalui internet.";
+  ID["When looking up lyrics, Nadi may send a song's title, artist, and duration to external lyrics providers. Prayer schedules are calculated locally unless an authorized online source is configured. External services may receive ordinary connection information, such as your IP address."] = "Saat mencari lirik, Nadi dapat mengirim judul, artis, dan durasi lagu ke penyedia lirik pihak ketiga. Jadwal salat dihitung secara lokal kecuali sumber online resmi telah dikonfigurasi. Layanan eksternal dapat menerima informasi koneksi biasa, seperti alamat IP.";
+  ID["Windows notification access."] = "Akses notifikasi Windows.";
+  ID["Supported builds request Windows permission before accessing notification information. The notification feature does not upload notification content to Nadi Labs."] = "Build yang mendukung fitur notifikasi meminta izin Windows sebelum mengakses informasinya. Fitur notifikasi tidak mengunggah isi notifikasi ke Nadi Labs.";
+  ID["When you send feedback."] = "Saat kamu mengirim masukan.";
+  ID["Submitting the website feedback form sends your message and any optional contact details to our feedback service for review. This is voluntary and is not part of Nadi's everyday desktop activity."] = "Mengirim formulir masukan di website akan mengirim pesan dan kontak opsional ke layanan feedback kami untuk ditinjau. Pengiriman ini sukarela dan bukan bagian dari aktivitas desktop sehari-hari.";
+  ID["About this website."] = "Tentang website ini.";
+  ID["The site has no embedded visitor-analytics scripts. Its download counter reads public GitHub release statistics. As with other websites, hosting and external services may process basic connection data."] = "Website ini tidak memasang skrip analitik pengunjung. Penghitung unduhan menggunakan statistik rilis publik GitHub. Seperti website lain, layanan hosting dan layanan eksternal dapat memproses data koneksi dasar.";
   const SKIP = "script,style,svg,code,textarea,#laptop,.sw-art";
   const ATTRS = ["placeholder", "aria-label", "alt", "title"];
   const enTitle = document.title;
