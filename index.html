@@ -390,15 +390,11 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .tm { font-family: var(--ui); background: #1c1c1c; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.08);
   box-shadow: 0 30px 60px -30px rgba(0,0,0,.9); }
 .tm-title { padding: 14px 18px; font-size: 15px; font-weight: 600; color: #fff; border-bottom: 1px solid rgba(255,255,255,.06); }
-.tm-grid { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); font-size: 13px; }
-.tm-grid > div { padding: 10px 12px; text-align: right; color: #fff; }
-.tm-grid .h { color: rgba(255,255,255,.75); border-bottom: 1px solid rgba(255,255,255,.06); }
-.tm-grid .h b { display: block; font-size: 20px; font-weight: 400; color: #fff; }
-.tm-grid .nm { text-align: left; display: flex; align-items: center; gap: 10px; }
-.tm-grid .nm img { width: 20px; height: 20px; }
-.tm-grid .v { background: rgba(70,110,200,.16); font-variant-numeric: tabular-nums; }
-.tm-grid .v.hi { background: rgba(70,110,200,.32); }
-.tm-note { padding: 10px 18px 14px; font-size: 12px; color: rgba(255,255,255,.45); }
+.tm-rows { margin: 0; }
+.tm-rows > div { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,.06); }
+.tm-rows dt { color: rgba(255,255,255,.58); font-size: 13px; }
+.tm-rows dd { margin: 0; color: #fff; font-size: 14px; font-weight: 600; text-align: right; }
+.tm-note { margin: 0; padding: 16px 18px 18px; font-size: 12px; line-height: 1.65; color: rgba(255,255,255,.65); }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 28px 0 26px; }
 .stat b { display: block; font-size: clamp(30px, 4vw, 44px); font-weight: 800; letter-spacing: -.03em; line-height: 1;
   background: linear-gradient(90deg, #2d6bff, #5aaeff 55%, #9de2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -409,7 +405,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .why-light li b { color: var(--ink); font-weight: 600; }
 @media (max-width: 760px) {
   .light { grid-template-columns: 1fr; gap: 32px; }
-  .tm-grid { font-size: 12px; } .tm-grid .h b { font-size: 16px; }
+  .tm-rows > div { gap: 12px; }
 }
 
 /* ===== Sorotan donasi ==================================================================== */
@@ -1070,11 +1066,15 @@ footer a:hover { color: var(--ink); }
     <h2 class="sec-title">No browser hiding behind the notch.</h2>
     <p class="sec-lede">Nadi is written in Rust and uses Windows APIs directly. There's no browser window running underneath it.</p>
     <div class="light">
-      <div class="tm" role="note" aria-label="Performance measurements pending">
-        <div class="tm-title">Performance testing</div>
-        <p class="tm-note">Nadi uses a native Windows interface. RAM and CPU usage depend on which features are active. Reproducible measurements will be published after testing on Windows PCs.</p>
-      </div>
-        <div class="tm-note">Windows Task Manager during everyday use. About 45 MB with 70 files on the shelf.</div>
+      <div class="tm" role="group" aria-label="Nadi native Windows architecture">
+        <div class="tm-title">Built for Windows</div>
+        <dl class="tm-rows">
+          <div><dt>Application</dt><dd>Nadi.exe</dd></div>
+          <div><dt>Language</dt><dd>Rust</dd></div>
+          <div><dt>Interface</dt><dd>Native Windows APIs</dd></div>
+          <div><dt>Browser runtime</dt><dd>None embedded</dd></div>
+        </dl>
+        <p class="tm-note">Actual RAM and CPU use vary with active features and system conditions. We don't publish a fixed memory figure without repeatable measurements.</p>
       </div>
       <div>
         <div class="stats">
