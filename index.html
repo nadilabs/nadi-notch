@@ -316,7 +316,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .tray-menu .it { cursor: default; }
 .tray-menu .it svg { flex: none; }
 .tray-menu .it .tray-chevron { margin-left: auto; color: #595964; font-size: 16px; line-height: 1; }
-.tray-menu .it.tray-parent { position: relative; }
+.tray-menu .it.tray-parent { position: relative; grid-template-columns: 28px minmax(0, 1fr) auto; }
 .tray-menu .tray-sub { display: none; position: absolute; z-index: 10; left: calc(100% - 4px); top: 0; width: 132px; padding: 6px; border-radius: 9px; background: #f9f9fb; box-shadow: 0 12px 28px rgba(0,0,0,.25); border: 1px solid rgba(0,0,0,.10); }
 .tray-menu .tray-parent:hover .tray-sub, .tray-menu .tray-parent:focus-within .tray-sub { display: block; }
 .tray-menu .tray-sub span { display: block; padding: 5px 8px; font-size: 13px; border-radius: 5px; }
