@@ -480,6 +480,11 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .note p b { color: var(--ink); font-weight: 600; }
 .note .legal { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; }
 .note a { color: var(--ink); }
+.release-checksum { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+.release-checksum span { color: var(--ink); font: 600 12px/1.5 var(--ui); letter-spacing: .03em; }
+.release-checksum code { display: block; max-width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(236,239,247,.055); color: var(--ink); font: 12px/1.55 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; overflow-wrap: anywhere; word-break: break-all; white-space: normal; }
+#privacy p { overflow-wrap: anywhere; }
+#privacy p strong { color: var(--ink); font-weight: 650; }
 
 /* ===== Intro pratinjau: maskot melayang di depan, mundur ke layar, menjadi notch ===============
    Lapisan ini menutupi seluruh laptop (termasuk bezel) dengan warna latar halaman, jadi awalnya benar-benar gelap.
@@ -1277,7 +1282,8 @@ footer a:hover { color: var(--ink); }
       <p class="from">Independent Windows development</p>
       <p>Nadi is an independently developed Windows app. It continues to evolve, with stability and usability guiding each update.</p>
       <p>Compatibility testing continues across Windows hardware, display scaling and media players.</p>
-      <p>Download the installer from Nadi Labs GitHub Releases. This build is unsigned and may trigger Windows SmartScreen. SHA-256: 47527f5721ae10f5a782f7184780c6347f21415855b590f11714b9749d665748.</p>
+      <p>Download the installer from Nadi Labs GitHub Releases. This unsigned build may trigger a Windows SmartScreen warning.</p>
+      <p class="release-checksum"><span>Installer SHA-256</span><code>47527f5721ae10f5a782f7184780c6347f21415855b590f11714b9749d665748</code></p>
       <p class="legal">Development builds are provided as-is. If you test one, keep backups of important files and don't rely on it yet for critical reminders.</p>
     </div>
   </section>
@@ -1297,12 +1303,11 @@ footer a:hover { color: var(--ink); }
 
   <section id="privacy" class="wrap">
     <h2 class="sec-title">Privacy</h2>
-    <p>Tasks, water logs, Shelf entries and settings stay on your PC. Website download counts come from public GitHub release statistics.</p>
-    <p>Feedback messages and optional contact details are stored privately for review. They are not displayed on the website.</p>
-    <p>Prayer times use the city you choose. Clipboard and focus history stay on your computer.</p>
-    <p>Windows notification access is not active in the classic installer. A supported packaged build will require permission; Today only keeps generic indicators in memory.</p>
-    <p>To find lyrics, Nadi may send the song title, artist and duration to LRCLIB. It does not send your tasks or Shelf files there.</p>
-    <p>Nadi is free to use and does not require an account or subscription.</p>
+    <p><strong>Stored on your device.</strong> Nadi keeps tasks, water records, settings, and Clipboard history on your PC. File Shelf references your files without moving the originals.</p>
+    <p><strong>Online features.</strong> Lyrics lookup may send the song title, artist, and duration to an external lyrics service. Prayer times may use your selected city or permitted location to retrieve a schedule.</p>
+    <p><strong>Windows notifications.</strong> Access to notifications depends on the Windows permissions and Nadi build in use. Features that display notifications require the relevant access to be available.</p>
+    <p><strong>Feedback submitted here.</strong> Your feedback and any contact details you choose to provide are sent to our feedback service and stored for review. They are not displayed publicly on the website.</p>
+    <p><strong>Download statistics and accounts.</strong> The download counter uses public GitHub release statistics. You can use Nadi without creating an account.</p>
   </section>
 </main>
 <div class="ty" id="thanks" role="status" aria-live="polite">
@@ -1947,6 +1952,18 @@ fit(); addEventListener("resize", fit);
   ID["Check the official Nadi download page for the latest installer and release information."] = "Lihat halaman unduhan resmi Nadi untuk installer terbaru dan informasi rilis.";
   ID["Right-click the Nadi tray icon and choose Exit Nadi Desktop Notch. To disable startup, uncheck Start with Windows in the tray menu."] = "Klik kanan ikon Nadi di system tray lalu pilih Exit Nadi Desktop Notch. Untuk menonaktifkan startup otomatis, hilangkan centang Start with Windows pada menu tray.";
   ID["Nadi is free to use and does not require an account or subscription."] = "Nadi gratis digunakan serta tidak memerlukan akun atau langganan.";
+  ID["Download the installer from Nadi Labs GitHub Releases. This unsigned build may trigger a Windows SmartScreen warning."] = "Unduh installer melalui GitHub Releases resmi Nadi Labs. Build ini belum ditandatangani secara digital dan mungkin memunculkan peringatan Windows SmartScreen.";
+  ID["Installer SHA-256"] = "SHA-256 installer";
+  ID["Stored on your device."] = "Disimpan di perangkatmu.";
+  ID["Nadi keeps tasks, water records, settings, and Clipboard history on your PC. File Shelf references your files without moving the originals."] = "Nadi menyimpan tugas, catatan minum, pengaturan, dan riwayat Clipboard di PC. File Shelf menyimpan referensi file tanpa memindahkan file aslinya.";
+  ID["Online features."] = "Fitur yang menggunakan internet.";
+  ID["Lyrics lookup may send the song title, artist, and duration to an external lyrics service. Prayer times may use your selected city or permitted location to retrieve a schedule."] = "Pencarian lirik dapat mengirim judul lagu, artis, dan durasi ke layanan lirik pihak ketiga. Jadwal salat dapat menggunakan kota yang dipilih atau lokasi yang diizinkan untuk mengambil jadwal.";
+  ID["Windows notifications."] = "Notifikasi Windows.";
+  ID["Access to notifications depends on the Windows permissions and Nadi build in use. Features that display notifications require the relevant access to be available."] = "Akses notifikasi bergantung pada izin Windows dan build Nadi yang digunakan. Fitur yang menampilkan notifikasi memerlukan akses yang sesuai.";
+  ID["Feedback submitted here."] = "Masukan melalui website.";
+  ID["Your feedback and any contact details you choose to provide are sent to our feedback service and stored for review. They are not displayed publicly on the website."] = "Masukan dan kontak yang kamu berikan dikirim ke layanan feedback kami dan disimpan untuk ditinjau. Informasi tersebut tidak ditampilkan secara publik di website.";
+  ID["Download statistics and accounts."] = "Statistik unduhan dan akun.";
+  ID["The download counter uses public GitHub release statistics. You can use Nadi without creating an account."] = "Penghitung unduhan menggunakan statistik rilis publik dari GitHub. Nadi dapat digunakan tanpa membuat akun.";
   const SKIP = "script,style,svg,code,textarea,#laptop,.sw-art";
   const ATTRS = ["placeholder", "aria-label", "alt", "title"];
   const enTitle = document.title;
