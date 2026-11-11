@@ -313,6 +313,16 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
   box-shadow: 0 18px 40px -12px rgba(16,24,64,.45), 0 0 0 1px rgba(0,0,0,.06); font-size: 15px; }
 .tray-menu .it { display: grid; grid-template-columns: 28px 1fr; align-items: center; padding: 9px 12px 9px 6px; border-radius: 6px; transition: background .2s; }
 .tray-menu .it.on { background: rgba(0,0,0,.05); }
+.tray-menu .it { cursor: default; }
+.tray-menu .it svg { flex: none; }
+.tray-menu .it .tray-chevron { margin-left: auto; color: #595964; font-size: 16px; line-height: 1; }
+.tray-menu .it.tray-parent { position: relative; }
+.tray-menu .tray-sub { display: none; position: absolute; z-index: 10; left: calc(100% - 4px); top: 0; width: 132px; padding: 6px; border-radius: 9px; background: #f9f9fb; box-shadow: 0 12px 28px rgba(0,0,0,.25); border: 1px solid rgba(0,0,0,.10); }
+.tray-menu .tray-parent:hover .tray-sub, .tray-menu .tray-parent:focus-within .tray-sub { display: block; }
+.tray-menu .tray-sub span { display: block; padding: 5px 8px; font-size: 13px; border-radius: 5px; }
+.tray-menu .tray-sub span.tray-selected { background: rgba(0,0,0,.05); font-weight: 600; }
+.tray-menu .tray-sub span.tray-selected::before { content: "✓"; margin-right: 9px; }
+@media (max-width: 560px) { .tray-menu .tray-sub { left: auto; right: 0; top: 100%; } }
 .tray-menu .it svg { width: 15px; height: 15px; margin-left: 6px; }
 .tray-menu hr { border: 0; border-top: 1px solid rgba(0,0,0,.1); margin: 6px 4px; }
 .tray-hint { margin: 14px 2px 0; font-size: 13px; color: #1e2757; opacity: .8; display: flex; align-items: center; gap: 8px; }
@@ -385,22 +395,26 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
   .custom { gap: 32px; }
 }
 
-/* ===== Ringan (pemakaian RAM) =========================================================== */
+/* ===== Performance: faithful Task Manager-inspired benchmark table ===== */
 .light { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
-.tm { font-family: var(--ui); background: #1c1c1c; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 30px 60px -30px rgba(0,0,0,.9); }
-.tm-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; font-size: 15px; font-weight: 600; color: #fff; border-bottom: 1px solid rgba(255,255,255,.08); }
-.bench-date { color: rgba(255,255,255,.48); font-size: 11px; font-weight: 500; white-space: nowrap; letter-spacing: .04em; }
-.bench-rows { padding: 9px 18px 5px; }
-.bench-row { display: grid; grid-template-columns: 94px minmax(0, 1fr) 85px; align-items: center; column-gap: 13px; padding: 11px 0; }
-.bench-row + .bench-row { border-top: 1px solid rgba(255,255,255,.06); }
-.bench-label { font-size: 13px; color: rgba(255,255,255,.72); white-space: nowrap; }
-.bench-track { display: block; height: 7px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.12); }
-.bench-fill { display: block; width: var(--bench-width); height: 100%; border-radius: inherit; background: linear-gradient(90deg, #2d6bff, #5aaeff); }
-.bench-value { color: #fff; font-size: 13px; font-weight: 700; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
-.tm-note { margin: 0; padding: 12px 18px 2px; font-size: 12px; line-height: 1.65; color: rgba(255,255,255,.66); }
-.tm-meta { margin: 0; padding: 6px 18px 9px; font-size: 12px; line-height: 1.65; color: rgba(255,255,255,.50); }
-.tm-evidence { display: inline-block; margin: 0 18px 17px; color: #91dbff; font-size: 12px; font-weight: 600; text-underline-offset: 3px; }
+.tm { font-family: var(--ui); background: #1c1c1c; color: #f4f4f6; border: 1px solid rgba(255,255,255,.11); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(0,0,0,.9); }
+.tm-windowbar { display: flex; align-items: center; gap: 9px; padding: 12px 15px; background: #222; border-bottom: 1px solid rgba(255,255,255,.07); font-size: 13px; font-weight: 600; }
+.tm-windowbar svg { width: 16px; height: 16px; flex: none; color: #74b6ff; }
+.tm-date { margin-left: auto; font-size: 11px; font-weight: 500; color: rgba(255,255,255,.48); }
+.tm-table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.tm-table thead th { padding: 12px 14px 10px; text-align: right; font-size: 11px; font-weight: 500; color: rgba(255,255,255,.65); border-bottom: 1px solid rgba(255,255,255,.08); }
+.tm-table thead th:first-child { text-align: left; width: 55%; }
+.tm-table tbody td { padding: 10px 14px; text-align: right; border-bottom: 1px solid rgba(255,255,255,.045); }
+.tm-table tbody tr:last-child td { border-bottom: 0; }
+.tm-table tbody td:first-child { text-align: left; }
+.tm-process { display: flex; align-items: center; gap: 9px; min-width: 0; font-size: 12px; color: #f1f2f7; }
+.tm-process img { width: 20px; height: 20px; object-fit: contain; flex: none; }
+.tm-process span { min-width: 0; }
+.tm-table .tm-cpu { background: rgba(62,106,177,.09); color: rgba(255,255,255,.83); }
+.tm-table .tm-memory { background: rgba(52,109,214,.19); color: #e7eeff; font-weight: 600; }
+.tm-table tbody tr:hover .tm-memory { background: rgba(52,109,214,.27); }
+.tm-note { margin: 0; padding: 13px 15px 0; font-size: 12px; line-height: 1.6; color: rgba(255,255,255,.60); }
+.tm-evidence { display: inline-block; margin: 8px 15px 16px; color: #91dbff; font-size: 12px; font-weight: 600; text-underline-offset: 3px; }
 .tm-evidence:hover { color: #fff; }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 28px 0 26px; }
 .stat b { display: block; font-size: clamp(30px, 4vw, 44px); font-weight: 800; letter-spacing: -.03em; line-height: 1;
@@ -412,7 +426,8 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .why-light li b { color: var(--ink); font-weight: 600; }
 @media (max-width: 760px) {
   .light { grid-template-columns: 1fr; gap: 32px; }
-  .bench-row { grid-template-columns: 90px minmax(0, 1fr) 85px; gap: 10px; }
+  .tm-table thead th, .tm-table tbody td { padding-left: 9px; padding-right: 9px; }
+  .tm-process { gap: 5px; }
 }
 
 /* ===== Sorotan donasi ==================================================================== */
@@ -1073,24 +1088,22 @@ footer a:hover { color: var(--ink); }
     <h2 class="sec-title">No browser hiding behind the notch.</h2>
     <p class="sec-lede">Nadi is written in Rust and uses Windows APIs directly. There's no browser window running underneath it.</p>
     <div class="light">
-      <div class="tm" role="group" aria-label="Nadi measured Windows performance">
-        <div class="tm-title">Measured performance <span class="bench-date">11 NOV 2026</span></div>
-        <div class="bench-rows" role="list" aria-label="Working Set by Nadi mode">
-          <div class="bench-row" role="listitem">
-            <span class="bench-label">Resting</span><span class="bench-track"><span class="bench-fill" style="--bench-width:58.54%"></span></span><span class="bench-value">29.27 MiB</span>
-          </div>
-          <div class="bench-row" role="listitem">
-            <span class="bench-label">Expanded*</span><span class="bench-track"><span class="bench-fill" style="--bench-width:58.34%"></span></span><span class="bench-value">29.17 MiB</span>
-          </div>
-          <div class="bench-row" role="listitem">
-            <span class="bench-label">Music / Lyrics</span><span class="bench-track"><span class="bench-fill" style="--bench-width:67.02%"></span></span><span class="bench-value">33.51 MiB</span>
-          </div>
-          <div class="bench-row" role="listitem">
-            <span class="bench-label">Shelf (70 files)</span><span class="bench-track"><span class="bench-fill" style="--bench-width:96.10%"></span></span><span class="bench-value">48.05 MiB</span>
-          </div>
+      <div class="tm" role="group" aria-label="Measured Nadi performance in a Task Manager-style table">
+        <div class="tm-windowbar">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M5 13h2v2H5zM9 10h2v5H9zM13 6h2v9h-2z" fill="currentColor"/></svg>
+          <span>Task Manager · Nadi benchmark</span>
+          <span class="tm-date">11 Nov 2026</span>
         </div>
-        <p class="tm-note">Working Set (MiB), averaged from the medians of valid trials. Includes shared memory; Expanded has only one valid trial.</p>
-        <p class="tm-meta">Windows 10 Pro · Core i5-7400 · 7 valid 90-second trials on one PC. CPU median ranged from 0–1% by trial.</p>
+        <table class="tm-table" aria-label="Measured Working Set and CPU across Nadi modes">
+          <thead><tr><th scope="col">Nadi mode</th><th scope="col">CPU</th><th scope="col">Memory</th></tr></thead>
+          <tbody>
+            <tr><td><div class="tm-process"><img src="./assets/nadi-mascot-neutral.png" alt=""><span>Resting</span></div></td><td class="tm-cpu">0%</td><td class="tm-memory">29.27 MiB</td></tr>
+            <tr><td><div class="tm-process"><img src="./assets/nadi-mascot-neutral.png" alt=""><span>Expanded*</span></div></td><td class="tm-cpu">0%</td><td class="tm-memory">29.17 MiB</td></tr>
+            <tr><td><div class="tm-process"><img src="./assets/nadi-mascot-neutral.png" alt=""><span>Music / Lyrics</span></div></td><td class="tm-cpu">0%</td><td class="tm-memory">33.51 MiB</td></tr>
+            <tr><td><div class="tm-process"><img src="./assets/nadi-mascot-neutral.png" alt=""><span>Shelf (70 files)</span></div></td><td class="tm-cpu">0–1%</td><td class="tm-memory">48.05 MiB</td></tr>
+          </tbody>
+        </table>
+        <p class="tm-note">Working Set memory in MiB (including shared pages), measured on one Windows PC. *Expanded has one valid trial.</p>
         <a class="tm-evidence" href="https://github.com/nadilabs/nadi-notch/blob/main/benchmarks/2026-11-11.md" target="_blank" rel="noopener noreferrer">Read benchmark &amp; methodology</a>
       </div>
       <div>
@@ -1114,21 +1127,25 @@ footer a:hover { color: var(--ink); }
     <p class="sec-lede">Open Nadi from the system tray. Choose its size, where it appears and which reminders you want.</p>
     <div class="custom">
       <div class="tray-wrap">
-        <div class="tray-menu" role="img" aria-label="Nadi tray menu with Start with Windows, Nadi Mascot, Minimal notch, About Nadi and Exit">
-          <div class="it on"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3 3 7-7"/></svg><span>Start with Windows</span></div>
-          <div class="it"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3 3 7-7"/></svg><span>Nadi Mascot</span></div>
+        <div class="tray-menu" role="img" aria-label="Example of current Nadi system tray menu: Start with Windows, Notch size submenu, Minimal notch, Notifications and Today, Settings and Exit Nadi Desktop Notch">
+          <div class="it"><span></span><span>Start with Windows</span></div>
+          <div class="it tray-parent" tabindex="0"><span></span><span>Notch size</span><span class="tray-chevron" aria-hidden="true">›</span>
+            <div class="tray-sub" aria-hidden="true"><span>Auto</span><span class="tray-selected">100%</span><span>115%</span><span>130%</span><span>150%</span></div>
+          </div>
           <div class="it"><span></span><span>Minimal notch</span></div>
+          <div class="it"><span></span><span>Notifications &amp; Today (0)</span></div>
+          <div class="it"><span></span><span>Settings...</span></div>
           <hr>
-          <div class="it"><span></span><span>About Nadi</span></div>
-          <div class="it"><span></span><span>Exit</span></div>
+          <div class="it"><span></span><span>Exit Nadi Desktop Notch</span></div>
         </div>
         <p class="tray-hint"><img src="./assets/nadi-mascot-neutral.png" alt="">Tray icon, bottom right of your taskbar</p>
       </div>
       <div class="opts">
-        <div class="opt"><h3>Start with Windows</h3><p>Turn this on if you want Nadi to start when you sign in to Windows.</p></div>
-        <div class="opt"><h3>Nadi Mascot</h3><p>Show Nadi's eyes when it's resting. They'll wake up when you return.</p></div>
-        <div class="opt"><h3>Minimal notch</h3><p>Keep only a small handle on screen when space is tight. Hover to bring the notch back.</p></div>
-        <div class="opt"><h3>About &amp; Exit</h3><p>Check the version, change settings or exit from the tray.</p></div>
+        <div class="opt"><h3>Start with Windows</h3><p>Choose whether Nadi launches when you sign in.</p></div>
+        <div class="opt"><h3>Notch size</h3><p>Choose Auto, 100%, 115%, 130%, or 150% from the tray submenu.</p></div>
+        <div class="opt"><h3>Minimal notch</h3><p>Switch between a thin strip and the standard notch.</p></div>
+        <div class="opt"><h3>Notifications &amp; Today</h3><p>Open Today and notification history directly from the tray.</p></div>
+        <div class="opt"><h3>Settings &amp; Exit</h3><p>Open the full settings panel or exit Nadi from the tray.</p></div>
       </div>
     </div>
   </section>
@@ -1825,14 +1842,24 @@ fit(); addEventListener("resize", fit);
   ID["Official installer · 3.8 MB · Unsigned; Windows may show a SmartScreen warning."] = "Installer resmi · 3,8 MB · Belum ditandatangani; Windows mungkin menampilkan peringatan SmartScreen.";
   ID["Available after Microsoft approves the listing."] = "Tersedia setelah Microsoft menyetujui listing.";
   ID["Tasks, water logs, Shelf entries and settings stay on your PC. Website download counts come from public GitHub release statistics."] = "Tugas, catatan air, data Shelf, dan pengaturan tetap tersimpan di PC. Jumlah unduhan di website berasal dari statistik rilis GitHub publik.";
-  ID["Nadi measured Windows performance"] = "Performa Nadi terukur di Windows";
-  ID["Measured performance"] = "Performa terukur";
-  ID["Working Set by Nadi mode"] = "Working Set menurut mode Nadi";
   ID["Music / Lyrics"] = "Musik / Lirik";
   ID["Shelf (70 files)"] = "Shelf (70 file)";
-  ID["Working Set (MiB), averaged from the medians of valid trials. Includes shared memory; Expanded has only one valid trial."] = "Working Set (MiB), rata-rata dari median trial yang valid. Termasuk memori bersama; Expanded hanya memiliki satu trial valid.";
-  ID["Windows 10 Pro · Core i5-7400 · 7 valid 90-second trials on one PC. CPU median ranged from 0–1% by trial."] = "Windows 10 Pro · Core i5-7400 · 7 trial valid masing-masing 90 detik pada satu PC. Median CPU per trial berkisar 0–1%.";
   ID["Read benchmark & methodology"] = "Lihat benchmark & metodologi";
+  ID["Task Manager · Nadi benchmark"] = "Task Manager · Benchmark Nadi";
+  ID["Nadi mode"] = "Mode Nadi";
+  ID["Measured Working Set and CPU across Nadi modes"] = "Working Set dan CPU terukur pada mode Nadi";
+  ID["Measured Nadi performance in a Task Manager-style table"] = "Performa Nadi terukur dalam tabel bergaya Task Manager";
+  ID["Working Set memory in MiB (including shared pages), measured on one Windows PC. *Expanded has one valid trial."] = "Memori Working Set dalam MiB (termasuk halaman bersama), diukur pada satu PC Windows. *Expanded hanya memiliki satu trial valid.";
+  ID["Notch size"] = "Ukuran notch";
+  ID["Notifications & Today (0)"] = "Notifikasi & Today (0)";
+  ID["Settings..."] = "Pengaturan...";
+  ID["Exit Nadi Desktop Notch"] = "Keluar dari Nadi Desktop Notch";
+  ID["Settings & Exit"] = "Pengaturan & Keluar";
+  ID["Choose whether Nadi launches when you sign in."] = "Atur apakah Nadi berjalan ketika masuk ke Windows.";
+  ID["Choose Auto, 100%, 115%, 130%, or 150% from the tray submenu."] = "Pilih Auto, 100%, 115%, 130%, atau 150% melalui submenu tray.";
+  ID["Switch between a thin strip and the standard notch."] = "Beralih antara notch tipis dan notch standar.";
+  ID["Open Today and notification history directly from the tray."] = "Buka Today dan riwayat notifikasi langsung melalui tray.";
+  ID["Open the full settings panel or exit Nadi from the tray."] = "Buka pengaturan lengkap atau keluar dari Nadi melalui tray.";
   ID["Native"] = "Native";
   ID["No embedded browser engine"] = "Tanpa mesin browser tertanam";
   ID["Available for Windows 10 and 11"] = "Tersedia untuk Windows 10 dan 11";
