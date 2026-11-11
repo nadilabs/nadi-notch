@@ -42,16 +42,17 @@
   --u: 1.3; /* skala notch di layar laptop: 1 dp = --u px (diatur JS) */
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
 body {
   margin: 0; background: var(--void); color: var(--ink);
   font-family: var(--font); font-size: 18px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  overflow-x: clip; /* viewport guard for animated desktop-preview elements */
 }
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
-.wrap { width: min(1080px, 100% - 48px); margin-inline: auto; }
+.wrap { width: min(1080px, calc(100% - 48px)); margin-inline: auto; min-width: 0; }
 
 /* ===== Bilah atas + notch maskot di tepi halaman ================================= */
 .bar {
@@ -365,7 +366,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .donate a span { font-weight: 400; color: var(--mist); font-size: 14px; }
 .donate a i { font-style: normal; font-size: 18px; }
 /* Dua tombol dukungan (Yapp & PayPal): sama-sama putih dan sama ukurannya */
-.donate a.primary { min-width: 280px; justify-content: center; }
+.donate a.primary { min-width: min(280px, 100%); justify-content: center; }
 .donate a .pp-img { height: 24px; width: auto; display: block; }
 .donate a { white-space: nowrap; }
 @media (max-width: 560px) {
@@ -391,12 +392,13 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .fb .fb-privacy { margin: 12px 0 0; font-size: 13px; line-height: 1.55; color: var(--mist); }
 
 @media (max-width: 760px) {
-  .custom, .warn-grid { grid-template-columns: 1fr; }
+  .custom, .warn-grid { grid-template-columns: minmax(0, 1fr); }
   .custom { gap: 32px; }
 }
 
 /* ===== Performance: faithful Task Manager-inspired benchmark table ===== */
-.light { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.light { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+.light > * { min-width: 0; }
 .tm { font-family: var(--ui); background: #1c1c1c; color: #f4f4f6; border: 1px solid rgba(255,255,255,.11); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(0,0,0,.9); }
 .tm-windowbar { display: flex; align-items: center; gap: 9px; padding: 12px 15px; background: #222; border-bottom: 1px solid rgba(255,255,255,.07); font-size: 13px; font-weight: 600; }
 .tm-windowbar svg { width: 16px; height: 16px; flex: none; color: #74b6ff; }
@@ -416,7 +418,8 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .tm-note { margin: 0; padding: 13px 15px 0; font-size: 12px; line-height: 1.6; color: rgba(255,255,255,.60); }
 .tm-evidence { display: inline-block; margin: 8px 15px 16px; color: #91dbff; font-size: 12px; font-weight: 600; text-underline-offset: 3px; }
 .tm-evidence:hover { color: #fff; }
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 28px 0 26px; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 28px 0 26px; }
+.stat { min-width: 0; }
 .stat b { display: block; font-size: clamp(30px, 4vw, 44px); font-weight: 800; letter-spacing: -.03em; line-height: 1;
   background: linear-gradient(90deg, #2d6bff, #5aaeff 55%, #9de2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .stat span { display: block; margin-top: 8px; color: var(--mist); font-size: 14px; }
@@ -425,9 +428,26 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .why-light li::before { content: ""; position: absolute; left: 0; top: .55em; width: 10px; height: 10px; border-radius: 50%; background: var(--glow); }
 .why-light li b { color: var(--ink); font-weight: 600; }
 @media (max-width: 760px) {
-  .light { grid-template-columns: 1fr; gap: 32px; }
+  .light { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .tm-table thead th, .tm-table tbody td { padding-left: 9px; padding-right: 9px; }
   .tm-process { gap: 5px; }
+}
+
+@media (max-width: 560px) {
+  .wrap { width: calc(100% - 32px); }
+  .note { padding: 28px 20px; }
+  .stats { gap: 10px; }
+  .stat b { font-size: clamp(24px, 7vw, 34px); }
+  .stat span { font-size: 12px; overflow-wrap: anywhere; }
+  .tray-wrap { min-width: 0; padding: 16px; }
+  .tray-menu { min-width: 0; max-width: 100%; font-size: 13px; }
+  .tray-menu .it { grid-template-columns: 20px minmax(0, 1fr); padding-right: 6px; }
+  .tray-menu .it.tray-parent { grid-template-columns: 20px minmax(0, 1fr) auto; }
+  .tm-windowbar { flex-wrap: wrap; }
+  .tm-table { font-size: 11px; }
+  .tm-process { font-size: 11px; }
+  .tm-process img { width: 16px; height: 16px; }
+  .donate a { max-width: 100%; min-width: 0; white-space: normal; text-align: center; flex-wrap: wrap; }
 }
 
 /* ===== Sorotan donasi ==================================================================== */
@@ -456,7 +476,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .note { max-width: 760px; margin: 0 auto; padding: 40px 36px; border-radius: 24px; border: 1px solid var(--line); background: var(--panel); }
 .note h2 { margin: 0 0 6px; font-size: clamp(26px, 3.4vw, 34px); letter-spacing: -.02em; }
 .note .from { margin: 0 0 22px; color: var(--mist); font-size: 14px; }
-.note p { margin: 0 0 14px; color: var(--mist); font-size: 16px; }
+.note p { margin: 0 0 14px; color: var(--mist); font-size: 16px; overflow-wrap: anywhere; /* long SHA-256 must not widen the page */ }
 .note p b { color: var(--ink); font-weight: 600; }
 .note .legal { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; }
 .note a { color: var(--ink); }
@@ -464,7 +484,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 /* ===== Intro pratinjau: maskot melayang di depan, mundur ke layar, menjadi notch ===============
    Lapisan ini menutupi seluruh laptop (termasuk bezel) dengan warna latar halaman, jadi awalnya benar-benar gelap.
    Maskot dan cahayanya berada DI LUAR layar; laptop baru terlihat lewat transisi lingkaran. */
-.preview { position: relative; }
+.preview { position: relative; overflow-x: clip; /* keep animated glow inside the viewport */ }
 .intro { position: absolute; left: 0; right: 0; z-index: 6; pointer-events: none; display: none; overflow: visible; }
 .intro-shade { position: absolute; inset: 0; background: var(--void); will-change: clip-path; }
 .intro-glow { position: absolute; left: 0; top: 0; border-radius: 50%; opacity: 0; will-change: transform, opacity;
@@ -697,7 +717,7 @@ footer a:hover { color: var(--ink); }
   body { font-size: 17px; }
   .bar nav { display: none; }
   .hero { padding-top: 120px; }
-  .features, .quiet { grid-template-columns: 1fr; }
+  .features, .quiet { grid-template-columns: minmax(0, 1fr); }
   .quiet { gap: 28px; }
   section { padding-top: 80px; }
   .steps { padding: 24px 22px; }
