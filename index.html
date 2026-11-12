@@ -608,6 +608,25 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .try button[aria-pressed="true"] { background: var(--ink); color: #05060c; border-color: var(--ink); }
 .cap { text-align: center; color: var(--mist); font-size: 15px; margin: 14px 0 0; min-height: 1.6em; }
 
+/* Uploaded Nadi UI reference screens; keep original notch simulation for other modes. */
+.nadi-shot-stage {
+  display:none; position:absolute; z-index:9; top:0; left:50%; width:780px; height:215px;
+  transform:translateX(-50%) scale(var(--nadi-shot-scale, 1));
+  transform-origin:top center; pointer-events:none;
+}
+.nadi-shot-stage canvas { width:780px; height:215px; display:block; }
+.nadi-shot-source { display:none !important; }
+.preview.has-shot .nadi-shot-stage { display:block; }
+.preview.has-shot .mn-holder { visibility:hidden; }
+.preview .try--variants { margin-top:10px; }
+.preview .try--variants button { font-size:13px; padding:7px 12px; }
+.preview .preview-variant-caption { margin:21px auto 0; text-align:center; color:var(--mist); font-size:13px; line-height:1.45; }
+@media (max-width:560px) {
+  .preview .try--variants { gap:6px; }
+  .preview .try--variants button { font-size:12px; padding:7px 10px; }
+}
+
+
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
 .sec-title { font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.03em; font-weight: 800; margin: 0 0 14px; max-width: 16ch; }
@@ -843,6 +862,13 @@ footer a:hover { color: var(--ink); }
     <div class="laptop" id="laptop">
       <div class="lid"><i class="lid-shade" aria-hidden="true"></i><div class="bezel"><span class="cam"></span>
         <div class="screen">
+          <div class="nadi-shot-stage" id="nadi-shot-stage">
+            <canvas id="nadi-shot-canvas" width="780" height="215" role="img" aria-label="Nadi notch UI preview"></canvas>
+            <picture class="nadi-shot-source" aria-hidden="true">
+              <source type="image/avif" srcset="./assets/preview/nadi-ui-sprite.avif">
+              <img id="nadi-shot-sprite" src="./assets/preview/nadi-ui-sprite.webp" alt="" decoding="async">
+            </picture>
+          </div>
           <div class="wall" aria-hidden="true">
             <i class="petal back" style="--r:-76deg"></i><i class="petal back" style="--r:76deg"></i>
             <i class="petal back" style="--r:-48deg"></i><i class="petal back" style="--r:48deg"></i>
@@ -1035,17 +1061,26 @@ footer a:hover { color: var(--ink); }
         <button type="button" data-s="pet" aria-pressed="true">Resting</button>
         <button type="button" data-s="idle" aria-pressed="false">Closed</button>
         <button type="button" data-s="music" aria-pressed="false">Music</button>
-        <button type="button" data-s="lyrics" aria-pressed="false">Lyrics</button>
-        <button type="button" data-s="pomo" aria-pressed="false">Focus timer</button>
+        <button type="button" data-s="lyrics" aria-pressed="false">Lyrics Expanded</button>
+        <button type="button" data-s="pomo" aria-pressed="false">Pomodoro New</button>
         <button type="button" data-s="notif" aria-pressed="false">Notification</button>
-        <button type="button" data-s="prayer" aria-pressed="false">Prayer</button>
-        <button type="button" data-s="water" aria-pressed="false">Water</button>
+        <button type="button" data-s="prayer" aria-pressed="false">Pray Reminder</button>
+        <button type="button" data-s="water" aria-pressed="false">Water Reminder</button>
         <button type="button" data-s="shelf" aria-pressed="false">Shelf</button>
         <button type="button" data-s="clip" aria-pressed="false">Clipboard</button>
         <button type="button" data-s="todo" aria-pressed="false">To-do</button>
         <button type="button" data-s="widgets" aria-pressed="false">Widgets</button>
         <button type="button" data-s="bt" aria-pressed="false">Headphones</button>
         <button type="button" data-s="charge" aria-pressed="false">Charging</button>
+      </div>
+      <p class="preview-variant-caption">More Nadi UI variations</p>
+      <div class="try try--variants" role="group" aria-label="Additional Nadi UI screenshot variants">
+        <button type="button" data-s="lyrics-peek-short" aria-pressed="false">Lyrics Peek · Short</button>
+        <button type="button" data-s="lyrics-peek-medium" aria-pressed="false">Lyrics Peek · Medium</button>
+        <button type="button" data-s="lyrics-peek-long" aria-pressed="false">Lyrics Peek · Long</button>
+        <button type="button" data-s="pomo-classic" aria-pressed="false">Pomodoro Classic</button>
+        <button type="button" data-s="water-chart" aria-pressed="false">Water · Chart</button>
+        <button type="button" data-s="water-settings" aria-pressed="false">Water · Settings</button>
       </div>
       <p class="cap" id="cap" aria-live="polite"></p>
     </div>
@@ -1586,11 +1621,61 @@ function runIntro() {
 const mn = document.getElementById("mn");
 const cap = document.getElementById("cap");
 const btns = document.querySelectorAll(".try button");
+// Static UI references provided for this website. Other modes retain the interactive HTML demo.
+// One optimized 12-frame sprite preserves the exact proportions of each Nadi notch screen.
+const nadiShotStage = document.getElementById("nadi-shot-stage");
+const nadiShotCanvas = document.getElementById("nadi-shot-canvas");
+const nadiShotSprite = document.getElementById("nadi-shot-sprite");
+const nadiShotContext = nadiShotCanvas.getContext("2d");
+const nadiShots = {
+  idle: [0,217,45,"Closed"],
+  music: [1,611,200,"Music"],
+  lyrics: [2,778,200,"Lyrics Expanded"],
+  "lyrics-peek-short": [3,207,42,"Lyrics Peek Short"],
+  "lyrics-peek-medium": [4,321,42,"Lyrics Peek Medium"],
+  "lyrics-peek-long": [5,630,42,"Lyrics Peek Long"],
+  pomo: [6,611,200,"Pomodoro New"],
+  "pomo-classic": [7,611,200,"Pomodoro Classic"],
+  water: [8,611,200,"Water Reminder"],
+  "water-chart": [9,611,200,"Water Reminder Chart"],
+  "water-settings": [10,611,200,"Water Reminder Settings"],
+  prayer: [11,611,200,"Pray Reminder"]
+};
+function fitNadiScreenshot() {
+  const available = Math.max(200, document.getElementById("laptop").clientWidth - 24);
+  nadiShotStage.style.setProperty("--nadi-shot-scale", Math.min(1.32, available / 780).toFixed(4));
+}
+function showNadiScreenshot(state) {
+  const shot = nadiShots[state];
+  if (!shot || !nadiShotContext || !nadiShotSprite.complete || !nadiShotSprite.naturalWidth) {
+    pv.classList.remove("has-shot");
+    return false;
+  }
+  const [frame,width,height,label] = shot;
+  nadiShotContext.clearRect(0,0,780,215);
+  const sx = Math.round((780 - width)/2), sy = frame*215 + Math.round((215 - height)/2);
+  nadiShotContext.drawImage(nadiShotSprite,sx,sy,width,height,sx,0,width,height);
+  nadiShotCanvas.setAttribute("aria-label", label + " — Nadi UI screenshot");
+  fitNadiScreenshot();
+  pv.classList.add("has-shot");
+  return true;
+}
+nadiShotSprite.addEventListener("load", () => showNadiScreenshot(mn.dataset.s));
+nadiShotSprite.addEventListener("error", () => pv.classList.remove("has-shot"));
+window.addEventListener("resize", fitNadiScreenshot, { passive:true });
+fitNadiScreenshot();
+
 const captions = {
   pet: "Leave Nadi alone for a moment, and the eyes come out.",
   idle: "Closed mode keeps the essentials in a small space.",
   music: "Music controls, right at the top of Windows.",
-  lyrics: "Timed lyrics appear beside the music controls.",
+  lyrics: "Expanded lyrics beside the album and media controls.",
+  "lyrics-peek-short": "A compact lyrics peek in the smallest notch.",
+  "lyrics-peek-medium": "Medium lyrics peek with more room for each line.",
+  "lyrics-peek-long": "Long lyrics peek for an extended line.",
+  "pomo-classic": "The classic Pomodoro timer layout.",
+  "water-chart": "Weekly water intake chart.",
+  "water-settings": "Water Reminder settings for bottle, goal and hours.",
   pomo: "Start a focus timer and watch the minutes go by.",
   notif: "Windows notifications need a supported packaged build and your permission.",
   prayer: "Pray Reminder shows today's times for the city you choose.",
@@ -1620,10 +1705,11 @@ function show(s, keepBtn) {
   const prev = mn.dataset.s;
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
+  showNadiScreenshot(s);
   const ly = mn.querySelector(".l-" + s);
   if (ly && prev !== s) { ly.classList.remove("play"); void ly.offsetWidth; ly.classList.add("play"); } // animasi isi diputar ulang
   clearTimeout(remindT);
-  if (s === "prayer") remindT = setTimeout(() => { if (mn.dataset.s === "prayer") show("remind", "prayer"); }, 3600); // halaman Prayer menyusut jadi pengingat
+  if (s === "prayer" && !pv.classList.contains("has-shot")) remindT = setTimeout(() => { if (mn.dataset.s === "prayer") show("remind", "prayer"); }, 3600); // halaman Prayer menyusut jadi pengingat
   if (s === "water" && prev !== "water") setTimeout(waterGrow, 220);
   if (s === "shelf" && prev !== "shelf") shelfDemo();
   if (s !== "shelf") { shelfRun++; ghost.className = "ghost"; shStop(); }
@@ -2007,6 +2093,25 @@ fit(); addEventListener("resize", fit);
   ID["Submitting the website feedback form sends your message and any optional contact details to our feedback service for review. This is voluntary and is not part of Nadi's everyday desktop activity."] = "Mengirim formulir masukan di website akan mengirim pesan dan kontak opsional ke layanan feedback kami untuk ditinjau. Pengiriman ini sukarela dan bukan bagian dari aktivitas desktop sehari-hari.";
   ID["About this website."] = "Tentang website ini.";
   ID["The site has no embedded visitor-analytics scripts. Its download counter reads public GitHub release statistics. As with other websites, hosting and external services may process basic connection data."] = "Website ini tidak memasang skrip analitik pengunjung. Penghitung unduhan menggunakan statistik rilis publik GitHub. Seperti website lain, layanan hosting dan layanan eksternal dapat memproses data koneksi dasar.";
+  ID["Lyrics Expanded"] = "Lirik Expanded";
+  ID["Pomodoro New"] = "Pomodoro Baru";
+  ID["Pray Reminder"] = "Pray Reminder";
+  ID["Water Reminder"] = "Water Reminder";
+  ID["More Nadi UI variations"] = "Variasi UI Nadi lainnya";
+  ID["Additional Nadi UI screenshot variants"] = "Variasi tangkapan layar UI Nadi";
+  ID["Lyrics Peek · Short"] = "Lyrics Peek · Pendek";
+  ID["Lyrics Peek · Medium"] = "Lyrics Peek · Sedang";
+  ID["Lyrics Peek · Long"] = "Lyrics Peek · Panjang";
+  ID["Pomodoro Classic"] = "Pomodoro Klasik";
+  ID["Water · Chart"] = "Water · Grafik";
+  ID["Water · Settings"] = "Water · Pengaturan";
+  ID["Expanded lyrics beside the album and media controls."] = "Lirik Expanded di samping sampul album dan kontrol musik.";
+  ID["A compact lyrics peek in the smallest notch."] = "Lirik singkat pada notch paling kecil.";
+  ID["Medium lyrics peek with more room for each line."] = "Lyrics Peek ukuran sedang dengan ruang teks lebih luas.";
+  ID["Long lyrics peek for an extended line."] = "Lyrics Peek panjang untuk satu baris lirik lebih lebar.";
+  ID["The classic Pomodoro timer layout."] = "Tampilan timer Pomodoro klasik.";
+  ID["Weekly water intake chart."] = "Grafik asupan air mingguan.";
+  ID["Water Reminder settings for bottle, goal and hours."] = "Pengaturan Water Reminder untuk botol, target, dan jam.";
   const SKIP = "script,style,svg,code,textarea,#laptop,.sw-art";
   const ATTRS = ["placeholder", "aria-label", "alt", "title"];
   const enTitle = document.title;
