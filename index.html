@@ -618,21 +618,9 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .nadi-shot-source { display:none !important; }
 .preview.has-shot .nadi-shot-stage { display:block; }
 .preview.has-shot .mn-holder { visibility:hidden; }
-/* Keep precise screenshot assets available without hiding the animated HTML
-   preview by default. A screenshot cannot animate its internal content. */
-.nadi-shot-stage.shot-enter canvas { animation:nadi-shot-reveal .42s cubic-bezier(.2,.75,.2,1) both; }
-@keyframes nadi-shot-reveal {
-  from { opacity:0; transform:translateY(-8px) scale(.985); filter:blur(2px); }
-  to { opacity:1; transform:none; filter:none; }
-}
-.preview-view { display:flex; align-items:center; justify-content:center; gap:9px; margin:24px auto 12px; flex-wrap:wrap; }
-.preview-view-label { color:var(--mist); font-size:13px; margin-right:3px; }
-.preview-view button { border:1px solid var(--line); background:rgba(236,239,247,.04); color:var(--mist); border-radius:999px; padding:7px 15px; font:600 13px/1.4 var(--ui); cursor:pointer; }
-.preview-view button[aria-pressed="true"] { background:#e9efff; border-color:#e9efff; color:#101827; }
-.preview-view button:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
-.preview-view-note { margin:0 auto; padding:0 16px; max-width:630px; color:var(--mist); font-size:12px; line-height:1.5; text-align:center; }
-.preview-view-note[hidden] { display:none !important; }
-@media (prefers-reduced-motion:reduce) { .nadi-shot-stage.shot-enter canvas { animation:none; } }
+/* Latest Nadi screenshots are the single visual source. Their motion is
+   rendered on the same canvas; the older HTML simulation only fills gaps. */
+.nadi-shot-stage canvas { image-rendering:auto; }
 .preview .try--variants { display:none; margin-top:10px; }
 .preview[data-variant-group="lyrics"] .try--variants[data-variant-for="lyrics"],
 .preview[data-variant-group="pomo"] .try--variants[data-variant-for="pomo"],
@@ -1076,13 +1064,6 @@ footer a:hover { color: var(--ink); }
     </div>
 
     <div class="wrap">
-      <div class="preview-view" role="group" aria-label="Preview display mode">
-        <span class="preview-view-label">Display</span>
-        <button type="button" id="nadi-preview-motion" aria-pressed="true">Animated</button>
-        <button type="button" id="nadi-preview-exact" aria-pressed="false">Exact UI</button>
-      </div>
-      <p class="preview-view-note">Animated shows a live HTML/CSS simulation. Exact UI uses original static Nadi screenshots.</p>
-      <p class="preview-view-note" id="preview-static-note" hidden>This variation is a static UI reference; its internal animations are not available yet.</p>
       <div class="try" role="group" aria-label="Preview the notch">
         <button type="button" data-s="pet" aria-pressed="true">Resting</button>
         <button type="button" data-s="idle" aria-pressed="false">Closed</button>
@@ -1675,57 +1656,111 @@ function fitNadiScreenshot() {
   const available = Math.max(200, document.getElementById("laptop").clientWidth - 24);
   nadiShotStage.style.setProperty("--nadi-shot-scale", Math.min(1.32, available / 780).toFixed(4));
 }
-let nadiPreviewView = "animated";
-const nadiMotionButton = document.getElementById("nadi-preview-motion");
-const nadiExactButton = document.getElementById("nadi-preview-exact");
-const nadiStaticNote = document.getElementById("preview-static-note");
-function hasLiveNadiLayer(state) {
-  return Boolean(mn.querySelector(".l-" + state));
+// One Nadi preview: the latest exported UI remains the visual source.
+const nadiReducedMotion=matchMedia("(prefers-reduced-motion: reduce)");
+const nadiShotMotion={state:"",previous:"",since:0,raf:0};
+const nadiClamp=v=>Math.max(0,Math.min(1,v));
+function nadiDrawShot(state,opacity=1,scale=1) {
+  const shot=nadiShots[state]; if(!shot||opacity<=0) return;
+  const [frame,width,height]=shot;
+  const sx=Math.round((780-width)/2), sy=frame*215+Math.round((215-height)/2);
+  const ctx=nadiShotContext;
+  ctx.save(); ctx.globalAlpha=opacity;
+  ctx.translate(390,107.5); ctx.scale(scale,scale); ctx.translate(-390,-107.5);
+  ctx.drawImage(nadiShotSprite,sx,sy,width,height,sx,0,width,height);
+  ctx.restore();
+}
+function nadiGlow(x,y,rx,ry,opacity,rgb) {
+  const ctx=nadiShotContext;
+  ctx.save();
+  ctx.globalCompositeOperation="screen";
+  ctx.translate(x,y); ctx.scale(rx,ry);
+  const gradient=ctx.createRadialGradient(0,0,0,0,0,1);
+  gradient.addColorStop(0,"rgba("+rgb+","+opacity+")");
+  gradient.addColorStop(1,"rgba("+rgb+",0)");
+  ctx.fillStyle=gradient; ctx.fillRect(-1,-1,2,2);
+  ctx.restore();
+}
+function nadiDrawMotion(state,sec) {
+  const pulse=.5+.5*Math.sin(sec*3.0);
+  if(state==="idle") {
+    nadiGlow(442,109,26,19,.07+.10*pulse,"210,231,255");
+  } else if(state==="music") {
+    // Playback indicator on top of the unchanged original progress track.
+    nadiGlow(246+(sec*12)%227,143,13,3,.13+.11*pulse,"255,255,255");
+    nadiGlow(612,34,26,18,.05+.09*pulse,"185,224,255");
+  } else if(state==="lyrics") {
+    nadiGlow(487+18*Math.sin(sec*.9),98,105,17,.05+.055*pulse,"202,230,255");
+  } else if(state.startsWith("lyrics-peek-")) {
+    const width=nadiShots[state][1], left=(780-width)/2;
+    const ctx=nadiShotContext;
+    ctx.save();ctx.beginPath();ctx.rect(left+41,92,Math.max(25,width-58),28);ctx.clip();
+    nadiGlow(left+42+((sec*18)%Math.max(40,width-56)),106,23,8,.10,"210,235,255");
+    ctx.restore();
+  } else if(state==="pomo") {
+    nadiGlow(513,80,54,24,.05+.10*pulse,"145,84,246");
+  } else if(state==="pomo-classic") {
+    nadiGlow(450,155,32,22,.05+.09*pulse,"255,55,113");
+  } else if(state==="water") {
+    // Decorative light: the 0% meter never shows fabricated water intake.
+    nadiGlow(520,120,57,58,.035+.065*pulse,"72,182,255");
+    nadiGlow(196,149,50,17,.035+.06*pulse,"54,166,255");
+  } else if(state==="water-chart") {
+    nadiGlow(454+54*Math.sin(sec*.7),125,67,43,.04+.06*pulse,"32,152,255");
+  } else if(state==="water-settings") {
+    nadiGlow(549,110,65,37,.04+.06*pulse,"48,170,255");
+  } else if(state==="prayer") {
+    nadiGlow(586,71,36,24,.06+.13*pulse,"255,180,29");
+  }
+}
+function nadiStopMotion() {
+  if(nadiShotMotion.raf) cancelAnimationFrame(nadiShotMotion.raf);
+  nadiShotMotion.raf=0;
+}
+function nadiPaintShot(now) {
+  nadiShotMotion.raf=0;
+  if(document.hidden || !pv.classList.contains("has-shot") ||
+    !nadiShotContext || !nadiShotSprite.complete || !nadiShotSprite.naturalWidth) return;
+  const ctx=nadiShotContext;
+  ctx.clearRect(0,0,780,215);
+  const moving=!nadiReducedMotion.matches;
+  const elapsed=moving?Math.max(0,now-nadiShotMotion.since):1000;
+  const progress=nadiClamp(elapsed/370);
+  const fade=1-Math.pow(1-progress,3);
+  if(nadiShotMotion.previous && fade<1)
+    nadiDrawShot(nadiShotMotion.previous,1-fade,1-.015*fade);
+  nadiDrawShot(nadiShotMotion.state,fade,1+.025*(1-fade));
+  if(moving && fade>.94) nadiDrawMotion(nadiShotMotion.state,elapsed/1000);
+  if(moving) nadiShotMotion.raf=requestAnimationFrame(nadiPaintShot);
 }
 function showNadiScreenshot(state) {
-  const shot = nadiShots[state];
-  if (!shot || !nadiShotContext || !nadiShotSprite.complete || !nadiShotSprite.naturalWidth) {
+  const shot=nadiShots[state];
+  if(!shot || !nadiShotContext || !nadiShotSprite.complete || !nadiShotSprite.naturalWidth) {
+    nadiStopMotion();
     pv.classList.remove("has-shot");
     return false;
   }
-  const [frame,width,height,label] = shot;
-  nadiShotContext.clearRect(0,0,780,215);
-  const sx = Math.round((780 - width)/2), sy = frame*215 + Math.round((215 - height)/2);
-  nadiShotContext.drawImage(nadiShotSprite,sx,sy,width,height,sx,0,width,height);
-  nadiShotCanvas.setAttribute("aria-label", label + " — Nadi UI screenshot");
+  const previous=nadiShotMotion.state;
+  nadiShotMotion.previous=previous!==state&&nadiShots[previous]?previous:"";
+  nadiShotMotion.state=state;
+  nadiShotMotion.since=performance.now();
+  nadiShotCanvas.setAttribute("aria-label",shot[3]+" — Nadi animated UI preview");
   fitNadiScreenshot();
   pv.classList.add("has-shot");
-  nadiShotStage.classList.remove("shot-enter");
-  void nadiShotStage.offsetWidth;
-  nadiShotStage.classList.add("shot-enter");
+  nadiStopMotion();
+  nadiPaintShot(performance.now());
   return true;
 }
-function syncNadiPreview(state=mn.dataset.s) {
-  // Screenshots are exact but static. Do not cover the original animated DOM
-  // when the user selects Animated and the selected state has a live layer.
-  const live = hasLiveNadiLayer(state);
-  const screenshot = (nadiPreviewView === "exact" || !live) && Boolean(nadiShots[state]);
-  if (screenshot) showNadiScreenshot(state);
-  else pv.classList.remove("has-shot");
-  nadiStaticNote.hidden = !(nadiPreviewView === "animated" && !live && Boolean(nadiShots[state]));
-  nadiMotionButton.setAttribute("aria-pressed", String(nadiPreviewView === "animated"));
-  nadiExactButton.setAttribute("aria-pressed", String(nadiPreviewView === "exact"));
-}
-function setNadiPreviewView(view) {
-  if (nadiPreviewView === view) return;
-  nadiPreviewView = view;
-  if (!introDone) finishIntro();
-  syncNadiPreview();
-  if (view === "animated") {
-    const layer = mn.querySelector(".l-" + mn.dataset.s);
-    if (layer) { layer.classList.remove("play"); void layer.offsetWidth; layer.classList.add("play"); }
+nadiShotSprite.addEventListener("load",()=>showNadiScreenshot(mn.dataset.s));
+nadiShotSprite.addEventListener("error",()=>{nadiStopMotion();pv.classList.remove("has-shot");});
+window.addEventListener("resize",fitNadiScreenshot,{passive:true});
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden) nadiStopMotion();
+  else if(pv.classList.contains("has-shot")){
+    nadiShotMotion.since=performance.now()-450;
+    nadiPaintShot(performance.now());
   }
-}
-nadiMotionButton.addEventListener("click", () => setNadiPreviewView("animated"));
-nadiExactButton.addEventListener("click", () => setNadiPreviewView("exact"));
-nadiShotSprite.addEventListener("load", () => syncNadiPreview());
-nadiShotSprite.addEventListener("error", () => pv.classList.remove("has-shot"));
-window.addEventListener("resize", fitNadiScreenshot, { passive:true });
+});
 fitNadiScreenshot();
 
 const captions = {
@@ -1768,7 +1803,7 @@ function show(s, keepBtn) {
   const prev = mn.dataset.s;
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
-  syncNadiPreview(s);
+  showNadiScreenshot(s);
   const variantGroup = s === "lyrics" || s.startsWith("lyrics-peek-") ? "lyrics"
     : s === "pomo" || s === "pomo-classic" ? "pomo"
     : s === "water" || s.startsWith("water-") ? "water" : "";
@@ -2167,12 +2202,6 @@ fit(); addEventListener("resize", fit);
   ID["Pray Reminder"] = "Pray Reminder";
   ID["Water Reminder"] = "Water Reminder";
   ID["More Nadi UI variations"] = "Variasi UI Nadi lainnya";
-  ID["Preview display mode"] = "Mode tampilan pratinjau";
-  ID["Display"] = "Tampilan";
-  ID["Animated"] = "Animasi";
-  ID["Exact UI"] = "Tampilan asli";
-  ID["Animated shows a live HTML/CSS simulation. Exact UI uses original static Nadi screenshots."] = "Animasi menampilkan simulasi HTML/CSS yang bergerak. Tampilan asli menggunakan screenshot Nadi yang statis.";
-  ID["This variation is a static UI reference; its internal animations are not available yet."] = "Variasi ini masih berupa referensi UI statis; animasi internalnya belum tersedia.";
   ID["Additional Nadi UI screenshot variants"] = "Variasi tangkapan layar UI Nadi";
   ID["Lyrics Peek variants"] = "Variasi Lyrics Peek";
   ID["Pomodoro variants"] = "Variasi Pomodoro";
