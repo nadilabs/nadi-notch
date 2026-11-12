@@ -783,6 +783,8 @@ footer a:hover { color: var(--ink); }
 #download .btn-store:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 #download .btn-store::before{display:none}
 #download .btn-store svg{width:24px;height:24px;flex:none}
+#download .dl-store-fallback{display:inline-block;max-width:100%;color:var(--cyan);font-size:12px;line-height:1.45;text-align:center;text-underline-offset:3px;overflow-wrap:anywhere}
+#download .dl-store-fallback:hover{color:#fff}
 #nadi-direct-download[aria-disabled="true"]{pointer-events:none;opacity:.65;cursor:not-allowed}
 #download .dl-count{margin-top:24px;text-align:center;min-height:0}
 #download .dl-count:empty{display:none}
@@ -1232,7 +1234,7 @@ footer a:hover { color: var(--ink); }
         <span class="dl-desc" id="nadi-download-status" role="status">Official installer · 3.8 MB · Unsigned; Windows may show a SmartScreen warning.</span>
       </div>
       <div class="dl-col">
-        <a class="btn btn-store" href="https://apps.microsoft.com/detail/9PBTP0T67DWG?hl=en-us&amp;gl=ID&amp;ocid=pdpshare" target="_blank" rel="noopener noreferrer" aria-label="Get Nadi from Microsoft Store">
+        <a class="btn btn-store" id="nadi-store-link" href="https://apps.microsoft.com/detail/9PBTP0T67DWG?hl=en-us&amp;gl=ID&amp;ocid=pdpshare" target="_blank" rel="noopener noreferrer" aria-label="Get Nadi from Microsoft Store">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
             <path d="M4.5 8.5h15v12h-15z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
             <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -1243,6 +1245,7 @@ footer a:hover { color: var(--ink); }
         </a>
         <span class="dl-meta"><b>Microsoft Store</b> · Available now</span>
         <span class="dl-desc">Install Nadi from its Microsoft Store listing and manage updates in the Store.</span>
+        <a class="dl-store-fallback" href="https://apps.microsoft.com/detail/9PBTP0T67DWG?hl=en-us&amp;gl=ID&amp;ocid=pdpshare" target="_blank" rel="noopener noreferrer">View Store listing in browser</a>
       </div>
     </div>
     <p class="dl-count js-dlcount" aria-live="polite"></p>
@@ -1371,6 +1374,21 @@ if (!Object.values(DONATE).some(Boolean)) {
   ty.querySelector(".ty-x").addEventListener("click", hide);
   go.addEventListener("click", () => setTimeout(hide, 400));
 })();
+
+// On Windows, open Nadi directly in the native Microsoft Store app.
+// On other platforms (or when scripts are unavailable), the normal HTTPS
+// listing remains the primary link. Browsers may ask for external-app consent.
+const nadiStoreButton = document.getElementById("nadi-store-link");
+if (nadiStoreButton) {
+  const platform = navigator.userAgentData?.platform || navigator.platform || "";
+  const isWindows = /Windows|Win32|Win64|WinCE/i.test(platform) || /Windows/i.test(navigator.userAgent || "");
+  if (isWindows) {
+    nadiStoreButton.href = "ms-windows-store://pdp/?ProductId=9PBTP0T67DWG";
+    nadiStoreButton.removeAttribute("target");
+    nadiStoreButton.removeAttribute("rel");
+    nadiStoreButton.title = "Open Nadi in the Microsoft Store app";
+  }
+}
 
 // ---- Verified public installer + GitHub Release download count ----------------------------
 const NADI_RELEASE_API = "https://api.github.com/repos/nadilabs/nadi-notch/releases/tags/v1.0.0";
@@ -1944,6 +1962,8 @@ fit(); addEventListener("resize", fit);
   ID["Feature availability and behavior may change as development continues."] = "Ketersediaan dan perilaku fitur dapat berubah selama pengembangan.";
   ID["Get Nadi for Windows 10 and 11 (64-bit). Choose Microsoft Store or the standalone installer."] = "Dapatkan Nadi untuk Windows 10 dan 11 (64-bit). Pilih Microsoft Store atau installer mandiri.";
   ID["Get it on Microsoft Store"] = "Unduh di Microsoft Store";
+  ID["View Store listing in browser"] = "Lihat halaman Store di browser";
+  ID["Open Nadi in the Microsoft Store app"] = "Buka Nadi di aplikasi Microsoft Store";
   ID["Get Nadi from Microsoft Store"] = "Dapatkan Nadi melalui Microsoft Store";
   ID["Available now"] = "Sudah tersedia";
   ID["Install Nadi from its Microsoft Store listing and manage updates in the Store."] = "Instal Nadi melalui Microsoft Store dan kelola pembaruannya di sana.";
