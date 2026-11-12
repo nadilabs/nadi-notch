@@ -778,11 +778,11 @@ footer a:hover { color: var(--ink); }
 #download .btn-pending{pointer-events:none;opacity:.68;cursor:not-allowed}
 #download .btn-pending:hover{transform:none}
 #download .dl-pick{gap:20px}
-#download .btn-store{background:#171b25;border:1px solid rgba(236,239,247,.17);color:#f4f6ff;font-family:inherit;cursor:not-allowed;opacity:.48;box-shadow:none;transition:none}
-#download .btn-store:hover{transform:none}
+#download .btn-store{background:#171b25;border:1px solid rgba(236,239,247,.35);color:#f4f6ff;font-family:inherit;cursor:pointer;opacity:1;box-shadow:none;transition:transform .25s var(--spring),border-color .2s,background .2s}
+#download .btn-store:hover{background:#20283a;border-color:rgba(145,219,255,.65);transform:translateY(-2px)}
+#download .btn-store:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 #download .btn-store::before{display:none}
 #download .btn-store svg{width:24px;height:24px;flex:none}
-#download .btn-store:disabled{pointer-events:none}
 #nadi-direct-download[aria-disabled="true"]{pointer-events:none;opacity:.65;cursor:not-allowed}
 #download .dl-count{margin-top:24px;text-align:center;min-height:0}
 #download .dl-count:empty{display:none}
@@ -1221,7 +1221,7 @@ footer a:hover { color: var(--ink); }
   <section id="download" class="wrap download">
     <img class="icon" src="./assets/nadi-mascot-neutral.png" alt="Nadi icon">
     <h2>Download Nadi</h2>
-    <p>Download Nadi for Windows 10 and 11 (64-bit). Microsoft Store availability is pending approval.</p>
+    <p>Get Nadi for Windows 10 and 11 (64-bit). Choose Microsoft Store or the standalone installer.</p>
     <div class="dl-pick">
       <div class="dl-col">
         <a class="btn btn-alt js-dl" id="nadi-direct-download" href="https://github.com/nadilabs/nadi-notch/releases/download/v1.0.0/NadiSetup-V1.0.0.exe" download="NadiSetup-V1.0.0.exe" aria-label="Download NadiSetup-V1.0.0.exe">
@@ -1232,17 +1232,17 @@ footer a:hover { color: var(--ink); }
         <span class="dl-desc" id="nadi-download-status" role="status">Official installer · 3.8 MB · Unsigned; Windows may show a SmartScreen warning.</span>
       </div>
       <div class="dl-col">
-        <button class="btn btn-store" type="button" disabled aria-label="Microsoft Store — Coming soon">
+        <a class="btn btn-store" href="https://apps.microsoft.com/detail/9PBTP0T67DWG?hl=en-us&amp;gl=ID&amp;ocid=pdpshare" target="_blank" rel="noopener noreferrer" aria-label="Get Nadi from Microsoft Store">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
             <path d="M4.5 8.5h15v12h-15z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
             <path d="M9 8.5v-2a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             <path fill="#F25022" d="M8 11h3.5v3.5H8z"/><path fill="#7FBA00" d="M12.5 11H16v3.5h-3.5z"/>
             <path fill="#00A4EF" d="M8 15.5h3.5V19H8z"/><path fill="#FFB900" d="M12.5 15.5H16V19h-3.5z"/>
           </svg>
-          <span>Microsoft Store</span>
-        </button>
-        <span class="dl-meta"><b>Microsoft Store</b> · Coming soon</span>
-        <span class="dl-desc">Available after Microsoft approves the listing.</span>
+          <span>Get it on Microsoft Store</span>
+        </a>
+        <span class="dl-meta"><b>Microsoft Store</b> · Available now</span>
+        <span class="dl-desc">Install Nadi from its Microsoft Store listing and manage updates in the Store.</span>
       </div>
     </div>
     <p class="dl-count js-dlcount" aria-live="polite"></p>
@@ -1942,7 +1942,11 @@ fit(); addEventListener("resize", fit);
   ID["About Windows notifications"] = "Tentang notifikasi Windows";
   ID["Today can display tasks independently. Reading Windows notifications requires a supported packaged build, permission and further testing."] = "Today dapat menampilkan tugas secara mandiri. Membaca notifikasi Windows memerlukan paket aplikasi yang didukung, izin, dan pengujian lanjutan.";
   ID["Feature availability and behavior may change as development continues."] = "Ketersediaan dan perilaku fitur dapat berubah selama pengembangan.";
-  ID["Download Nadi for Windows 10 and 11 (64-bit). Microsoft Store availability is pending approval."] = "Unduh Nadi untuk Windows 10 dan 11 (64-bit). Ketersediaan di Microsoft Store masih menunggu persetujuan.";
+  ID["Get Nadi for Windows 10 and 11 (64-bit). Choose Microsoft Store or the standalone installer."] = "Dapatkan Nadi untuk Windows 10 dan 11 (64-bit). Pilih Microsoft Store atau installer mandiri.";
+  ID["Get it on Microsoft Store"] = "Unduh di Microsoft Store";
+  ID["Get Nadi from Microsoft Store"] = "Dapatkan Nadi melalui Microsoft Store";
+  ID["Available now"] = "Sudah tersedia";
+  ID["Install Nadi from its Microsoft Store listing and manage updates in the Store."] = "Instal Nadi melalui Microsoft Store dan kelola pembaruannya di sana.";
   ID["Support Nadi's development."] = "Dukung pengembangan Nadi.";
   ID["Nadi is free to use. Optional contributions help support testing and future improvements."] = "Nadi gratis digunakan. Dukungan sukarela membantu pengujian dan pengembangan berikutnya.";
   ID["Contributions help cover testing, builds and continued development."] = "Dukungan membantu biaya pengujian, build, dan pengembangan berkelanjutan.";
