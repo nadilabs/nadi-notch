@@ -618,6 +618,21 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .nadi-shot-source { display:none !important; }
 .preview.has-shot .nadi-shot-stage { display:block; }
 .preview.has-shot .mn-holder { visibility:hidden; }
+/* Keep precise screenshot assets available without hiding the animated HTML
+   preview by default. A screenshot cannot animate its internal content. */
+.nadi-shot-stage.shot-enter canvas { animation:nadi-shot-reveal .42s cubic-bezier(.2,.75,.2,1) both; }
+@keyframes nadi-shot-reveal {
+  from { opacity:0; transform:translateY(-8px) scale(.985); filter:blur(2px); }
+  to { opacity:1; transform:none; filter:none; }
+}
+.preview-view { display:flex; align-items:center; justify-content:center; gap:9px; margin:24px auto 12px; flex-wrap:wrap; }
+.preview-view-label { color:var(--mist); font-size:13px; margin-right:3px; }
+.preview-view button { border:1px solid var(--line); background:rgba(236,239,247,.04); color:var(--mist); border-radius:999px; padding:7px 15px; font:600 13px/1.4 var(--ui); cursor:pointer; }
+.preview-view button[aria-pressed="true"] { background:#e9efff; border-color:#e9efff; color:#101827; }
+.preview-view button:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
+.preview-view-note { margin:0 auto; padding:0 16px; max-width:630px; color:var(--mist); font-size:12px; line-height:1.5; text-align:center; }
+.preview-view-note[hidden] { display:none !important; }
+@media (prefers-reduced-motion:reduce) { .nadi-shot-stage.shot-enter canvas { animation:none; } }
 .preview .try--variants { display:none; margin-top:10px; }
 .preview[data-variant-group="lyrics"] .try--variants[data-variant-for="lyrics"],
 .preview[data-variant-group="pomo"] .try--variants[data-variant-for="pomo"],
@@ -1061,6 +1076,13 @@ footer a:hover { color: var(--ink); }
     </div>
 
     <div class="wrap">
+      <div class="preview-view" role="group" aria-label="Preview display mode">
+        <span class="preview-view-label">Display</span>
+        <button type="button" id="nadi-preview-motion" aria-pressed="true">Animated</button>
+        <button type="button" id="nadi-preview-exact" aria-pressed="false">Exact UI</button>
+      </div>
+      <p class="preview-view-note">Animated shows a live HTML/CSS simulation. Exact UI uses original static Nadi screenshots.</p>
+      <p class="preview-view-note" id="preview-static-note" hidden>This variation is a static UI reference; its internal animations are not available yet.</p>
       <div class="try" role="group" aria-label="Preview the notch">
         <button type="button" data-s="pet" aria-pressed="true">Resting</button>
         <button type="button" data-s="idle" aria-pressed="false">Closed</button>
@@ -1653,6 +1675,13 @@ function fitNadiScreenshot() {
   const available = Math.max(200, document.getElementById("laptop").clientWidth - 24);
   nadiShotStage.style.setProperty("--nadi-shot-scale", Math.min(1.32, available / 780).toFixed(4));
 }
+let nadiPreviewView = "animated";
+const nadiMotionButton = document.getElementById("nadi-preview-motion");
+const nadiExactButton = document.getElementById("nadi-preview-exact");
+const nadiStaticNote = document.getElementById("preview-static-note");
+function hasLiveNadiLayer(state) {
+  return Boolean(mn.querySelector(".l-" + state));
+}
 function showNadiScreenshot(state) {
   const shot = nadiShots[state];
   if (!shot || !nadiShotContext || !nadiShotSprite.complete || !nadiShotSprite.naturalWidth) {
@@ -1666,9 +1695,35 @@ function showNadiScreenshot(state) {
   nadiShotCanvas.setAttribute("aria-label", label + " — Nadi UI screenshot");
   fitNadiScreenshot();
   pv.classList.add("has-shot");
+  nadiShotStage.classList.remove("shot-enter");
+  void nadiShotStage.offsetWidth;
+  nadiShotStage.classList.add("shot-enter");
   return true;
 }
-nadiShotSprite.addEventListener("load", () => showNadiScreenshot(mn.dataset.s));
+function syncNadiPreview(state=mn.dataset.s) {
+  // Screenshots are exact but static. Do not cover the original animated DOM
+  // when the user selects Animated and the selected state has a live layer.
+  const live = hasLiveNadiLayer(state);
+  const screenshot = (nadiPreviewView === "exact" || !live) && Boolean(nadiShots[state]);
+  if (screenshot) showNadiScreenshot(state);
+  else pv.classList.remove("has-shot");
+  nadiStaticNote.hidden = !(nadiPreviewView === "animated" && !live && Boolean(nadiShots[state]));
+  nadiMotionButton.setAttribute("aria-pressed", String(nadiPreviewView === "animated"));
+  nadiExactButton.setAttribute("aria-pressed", String(nadiPreviewView === "exact"));
+}
+function setNadiPreviewView(view) {
+  if (nadiPreviewView === view) return;
+  nadiPreviewView = view;
+  if (!introDone) finishIntro();
+  syncNadiPreview();
+  if (view === "animated") {
+    const layer = mn.querySelector(".l-" + mn.dataset.s);
+    if (layer) { layer.classList.remove("play"); void layer.offsetWidth; layer.classList.add("play"); }
+  }
+}
+nadiMotionButton.addEventListener("click", () => setNadiPreviewView("animated"));
+nadiExactButton.addEventListener("click", () => setNadiPreviewView("exact"));
+nadiShotSprite.addEventListener("load", () => syncNadiPreview());
 nadiShotSprite.addEventListener("error", () => pv.classList.remove("has-shot"));
 window.addEventListener("resize", fitNadiScreenshot, { passive:true });
 fitNadiScreenshot();
@@ -1713,7 +1768,7 @@ function show(s, keepBtn) {
   const prev = mn.dataset.s;
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
-  showNadiScreenshot(s);
+  syncNadiPreview(s);
   const variantGroup = s === "lyrics" || s.startsWith("lyrics-peek-") ? "lyrics"
     : s === "pomo" || s === "pomo-classic" ? "pomo"
     : s === "water" || s.startsWith("water-") ? "water" : "";
@@ -2112,6 +2167,12 @@ fit(); addEventListener("resize", fit);
   ID["Pray Reminder"] = "Pray Reminder";
   ID["Water Reminder"] = "Water Reminder";
   ID["More Nadi UI variations"] = "Variasi UI Nadi lainnya";
+  ID["Preview display mode"] = "Mode tampilan pratinjau";
+  ID["Display"] = "Tampilan";
+  ID["Animated"] = "Animasi";
+  ID["Exact UI"] = "Tampilan asli";
+  ID["Animated shows a live HTML/CSS simulation. Exact UI uses original static Nadi screenshots."] = "Animasi menampilkan simulasi HTML/CSS yang bergerak. Tampilan asli menggunakan screenshot Nadi yang statis.";
+  ID["This variation is a static UI reference; its internal animations are not available yet."] = "Variasi ini masih berupa referensi UI statis; animasi internalnya belum tersedia.";
   ID["Additional Nadi UI screenshot variants"] = "Variasi tangkapan layar UI Nadi";
   ID["Lyrics Peek variants"] = "Variasi Lyrics Peek";
   ID["Pomodoro variants"] = "Variasi Pomodoro";
