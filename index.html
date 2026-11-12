@@ -618,9 +618,13 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .nadi-shot-source { display:none !important; }
 .preview.has-shot .nadi-shot-stage { display:block; }
 .preview.has-shot .mn-holder { visibility:hidden; }
-.preview .try--variants { margin-top:10px; }
+.preview .try--variants { display:none; margin-top:10px; }
+.preview[data-variant-group="lyrics"] .try--variants[data-variant-for="lyrics"],
+.preview[data-variant-group="pomo"] .try--variants[data-variant-for="pomo"],
+.preview[data-variant-group="water"] .try--variants[data-variant-for="water"] { display:flex; }
 .preview .try--variants button { font-size:13px; padding:7px 12px; }
 .preview .preview-variant-caption { margin:21px auto 0; text-align:center; color:var(--mist); font-size:13px; line-height:1.45; }
+.preview .preview-variant-caption[hidden] { display:none; }
 @media (max-width:560px) {
   .preview .try--variants { gap:6px; }
   .preview .try--variants button { font-size:12px; padding:7px 10px; }
@@ -1073,12 +1077,16 @@ footer a:hover { color: var(--ink); }
         <button type="button" data-s="bt" aria-pressed="false">Headphones</button>
         <button type="button" data-s="charge" aria-pressed="false">Charging</button>
       </div>
-      <p class="preview-variant-caption">More Nadi UI variations</p>
-      <div class="try try--variants" role="group" aria-label="Additional Nadi UI screenshot variants">
+      <p class="preview-variant-caption" id="preview-variant-caption" hidden>More Nadi UI variations</p>
+      <div class="try try--variants" role="group" data-variant-for="lyrics" aria-label="Lyrics Peek variants">
         <button type="button" data-s="lyrics-peek-short" aria-pressed="false">Lyrics Peek · Short</button>
         <button type="button" data-s="lyrics-peek-medium" aria-pressed="false">Lyrics Peek · Medium</button>
         <button type="button" data-s="lyrics-peek-long" aria-pressed="false">Lyrics Peek · Long</button>
+      </div>
+      <div class="try try--variants" role="group" data-variant-for="pomo" aria-label="Pomodoro variants">
         <button type="button" data-s="pomo-classic" aria-pressed="false">Pomodoro Classic</button>
+      </div>
+      <div class="try try--variants" role="group" data-variant-for="water" aria-label="Water Reminder variants">
         <button type="button" data-s="water-chart" aria-pressed="false">Water · Chart</button>
         <button type="button" data-s="water-settings" aria-pressed="false">Water · Settings</button>
       </div>
@@ -1706,6 +1714,12 @@ function show(s, keepBtn) {
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
   showNadiScreenshot(s);
+  const variantGroup = s === "lyrics" || s.startsWith("lyrics-peek-") ? "lyrics"
+    : s === "pomo" || s === "pomo-classic" ? "pomo"
+    : s === "water" || s.startsWith("water-") ? "water" : "";
+  if (variantGroup) pv.dataset.variantGroup = variantGroup;
+  else delete pv.dataset.variantGroup;
+  document.getElementById("preview-variant-caption").hidden = !variantGroup;
   const ly = mn.querySelector(".l-" + s);
   if (ly && prev !== s) { ly.classList.remove("play"); void ly.offsetWidth; ly.classList.add("play"); } // animasi isi diputar ulang
   clearTimeout(remindT);
@@ -2099,6 +2113,9 @@ fit(); addEventListener("resize", fit);
   ID["Water Reminder"] = "Water Reminder";
   ID["More Nadi UI variations"] = "Variasi UI Nadi lainnya";
   ID["Additional Nadi UI screenshot variants"] = "Variasi tangkapan layar UI Nadi";
+  ID["Lyrics Peek variants"] = "Variasi Lyrics Peek";
+  ID["Pomodoro variants"] = "Variasi Pomodoro";
+  ID["Water Reminder variants"] = "Variasi Water Reminder";
   ID["Lyrics Peek · Short"] = "Lyrics Peek · Pendek";
   ID["Lyrics Peek · Medium"] = "Lyrics Peek · Sedang";
   ID["Lyrics Peek · Long"] = "Lyrics Peek · Panjang";
