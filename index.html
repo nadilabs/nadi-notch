@@ -1683,6 +1683,11 @@ function nadiUpdateClosedTime() {
   nadiClosedClock.textContent = String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
 }
 nadiUpdateClosedTime();
+// Canvas stops repainting after the Closed transition. A low-frequency tick
+// keeps the vector clock current without running a 60 fps render loop.
+setInterval(() => {
+  if(!document.hidden && nadiPreviewInView && mn.dataset.s==="idle") nadiUpdateClosedTime();
+}, 15000);
 const nadiShots = {
   idle: [0,217,45,"Closed"],
   music: [1,611,200,"Music"],
