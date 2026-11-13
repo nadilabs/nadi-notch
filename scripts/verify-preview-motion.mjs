@@ -15,6 +15,15 @@ assert.ok(html.includes('transition:none !important'),'legacy transition must be
 assert.ok(html.includes('nadiShell.frame=requestAnimationFrame(nadiShellTick)'));
 assert.ok(html.includes('mn.style.transform = mn.classList.contains("nadi-morphing")'));
 assert.ok(!html.includes('function nadiShellSpring('),'old spring must not race the tween');
+const anchor=html.match(/\\.mn-holder\\s*\\{([^}]*)\\}/)?.[1];
+const shell=html.match(/\\.mn\\s*\\{([^}]*)\\}/)?.[1];
+assert.ok(anchor&&shell,'notch anchor/shell CSS missing');
+assert.match(anchor,/width:\\s*156px/,'outer notch anchor must have a fixed width');
+assert.match(anchor,/height:\\s*30px/,'outer notch anchor must have a fixed height');
+assert.match(shell,/position:\\s*absolute/,'animated shell must not resize its parent');
+assert.match(shell,/left:\\s*50%/,'animated shell must use centered positioning');
+assert.match(shell,/translate:\\s*-50%\\s+0/,'animated shell must offset its own center');
+
 const expr=js.match(/const progress=([^;]+);/);
 assert.ok(expr,'single-clock easing expression missing');
 const ease=vm.runInNewContext('(t)=>('+expr[1]+')');
@@ -42,4 +51,4 @@ for(const fps of [20,30,60,120]){
 }
 assert.equal(ease(0),0);
 assert.equal(ease(1),1);
-console.log('PASS: inline JS syntax, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
+console.log('PASS: inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
