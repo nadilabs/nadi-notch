@@ -625,9 +625,15 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .preview.pre .nadi-compact-live{opacity:0}
 .mn[data-s="minimal"]{--w:44px;--h:4px;--r:2px;--e:1.2px}
 .mn[data-s="music"]{--w:440px;--h:144px;--r:32px;--e:22px}
-/* SVG versions supersede the older coded contents in these modes. */
-.mn[data-s="pet"] .l-pet,.mn[data-s="idle"] .l-idle,
-.mn[data-s="music"] .l-music{visibility:hidden}
+/* Each native SVG replaces its *complete* legacy HTML composition.
+   The shared .l-hdr and .l-dots were not disabled with .l-music; they
+   overlaid the SVG header and footer after the single-shell migration. */
+.mn[data-s="pet"] .l-pet,
+.mn[data-s="idle"] .l-idle,
+.mn[data-s="music"] .l-music,
+.mn[data-s="music"] .l-hdr,
+.mn[data-s="music"] .l-dots{display:none !important}
+.mn[data-s="music"] .nadi-visual-viewport{isolation:isolate}
 #nadi-compact-closed-content,#nadi-resting-art{opacity:0;transition:opacity .14s ease}
 .preview.compact-closed #nadi-compact-closed-content{opacity:1;transition:opacity .20s ease .065s}
 .preview.compact-resting #nadi-resting-art{opacity:1;transition:opacity .20s ease .065s}
@@ -998,12 +1004,12 @@ footer a:hover { color: var(--ink); }
 	.nadi-music-st3{fill:#FFFFFF;}
 	.nadi-music-st4{fill:none;stroke:#51FF00;stroke-width:1.4;}
 	.nadi-music-st5{fill:#B0B0B9;}
-	.nadi-music-st6{font-family:'PlusJakartaSans-Regular';}
+	.nadi-music-st6{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;font-weight:400;}
 	.nadi-music-st7{font-size:10.5px;}
 	.nadi-music-st8{fill:#51FF00;}
 	.nadi-music-st9{fill:#454850;}
 	.nadi-music-st10{fill:#F4F6FB;}
-	.nadi-music-st11{font-family:'PlusJakartaSans-SemiBold';}
+	.nadi-music-st11{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;font-weight:600;}
 	.nadi-music-st12{font-size:13.5px;}
 	.nadi-music-st13{fill:#888B96;}
 	.nadi-music-st14{fill:#A5A7B1;}
