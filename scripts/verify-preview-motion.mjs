@@ -4,16 +4,18 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
-const scripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)];
-assert.ok(scripts.length>0,'no inline script found');
-for(const [,js] of scripts)new vm.Script(js,{filename:'index.html inline script'});
+const start=html.lastIndexOf('<script>');
+const end=html.lastIndexOf('</script>');
+assert.ok(start>=0&&end>start,'inline application script missing');
+const js=html.slice(start+'<script>'.length,end);
+new vm.Script(js,{filename:'index.html inline script'});
 
-assert.match(html,/\\.mn\\.nadi-curve-shell\\s*\\{[^}]*transition:none !important/);
-assert.match(html,/nadiShell\\.frame=requestAnimationFrame\\(nadiShellTick\\)/);
-assert.match(html,/mn\\.style\\.transform = mn\\.classList\\.contains\\("nadi-morphing"\\)/);
+assert.ok(html.includes('.mn.nadi-curve-shell {'),'one-shell class missing');
+assert.ok(html.includes('transition:none !important'),'legacy transition must be disabled');
+assert.ok(html.includes('nadiShell.frame=requestAnimationFrame(nadiShellTick)'));
+assert.ok(html.includes('mn.style.transform = mn.classList.contains("nadi-morphing")'));
 assert.ok(!html.includes('function nadiShellSpring('),'old spring must not race the tween');
-const code=scripts.map(m=>m[1]).join('\\n');
-const expr=code.match(/const progress=([^;]+);/);
+const expr=js.match(/const progress=([^;]+);/);
 assert.ok(expr,'single-clock easing expression missing');
 const ease=vm.runInNewContext('(t)=>('+expr[1]+')');
 
