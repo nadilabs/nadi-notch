@@ -1698,7 +1698,7 @@ function show(s, keepBtn) {
   const ly = mn.querySelector(".l-" + s);
   if (ly && prev !== s) { ly.classList.remove("play"); void ly.offsetWidth; ly.classList.add("play"); } // animasi isi diputar ulang
   clearTimeout(remindT);
-  if (s === "prayer" remindT = setTimeout(() => { if (mn.dataset.s === "prayer") show("remind", "prayer"); }, 3600); // halaman Prayer menyusut jadi pengingat
+  if (s === "prayer") remindT = setTimeout(() => { if (mn.dataset.s === "prayer") show("remind", "prayer"); }, 3600); // halaman Prayer menyusut jadi pengingat
   if (s === "water" && prev !== "water") setTimeout(waterGrow, 220);
   if (s === "shelf" && prev !== "shelf") shelfDemo();
   if (s !== "shelf") { shelfRun++; ghost.className = "ghost"; shStop(); }
