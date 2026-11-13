@@ -608,37 +608,20 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .try button[aria-pressed="true"] { background: var(--ink); color: #05060c; border-color: var(--ink); }
 .cap { text-align: center; color: var(--mist); font-size: 15px; margin: 14px 0 0; min-height: 1.6em; }
 
-/* Uploaded Nadi UI reference screens; keep original notch simulation for other modes. */
-.nadi-shot-stage {
-  display:none; position:absolute; z-index:9; top:0; left:50%; width:780px; height:215px;
-  transform:translateX(-50%) scale(var(--nadi-shot-scale, 1));
-  transform-origin:top center; pointer-events:none;
+/* Closed uses the user-supplied 156×32 animated SVG. All other modes
+   use the original coded HTML/CSS preview until their own SVGs are ready. */
+.nadi-closed-live {
+  position:absolute; z-index:9; top:0; left:50%;
+  width:calc(var(--u) * 156px); height:auto;
+  transform:translateX(-50%);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .35s ease, visibility .35s ease;
 }
-.nadi-shot-stage canvas { width:780px; height:215px; display:block; }
-.nadi-shot-source { display:none !important; }
-.preview.has-shot .nadi-shot-stage { display:block; }
-.preview.has-shot .mn-holder { visibility:hidden; }
-/* Latest Nadi screenshots are the single visual source. Their motion is
-   rendered on the same canvas; the older HTML simulation only fills gaps. */
-.nadi-shot-stage canvas { image-rendering:auto; }
-.nadi-closed-live { position:absolute; top:0; left:50%; transform:translateX(-50%);
-  /* Intrinsic SVG is 156 × 32. fitNadiScreenshot matches the Resting notch's --u scale. */
-  width:156px; height:auto; display:block; opacity:0; visibility:hidden; pointer-events:none;
-  overflow:visible; will-change:opacity; }
+.preview.svg-closed .mn-holder { visibility:hidden; }
+.preview.svg-closed .nadi-closed-live { opacity:1; visibility:visible; }
 .nadi-closed-live.paused #nadi-closed-bars path,
 .nadi-closed-live.paused #nadi-closed-energy { animation-play-state:paused; }
-.preview .try--variants { display:none; margin-top:10px; }
-.preview[data-variant-group="lyrics"] .try--variants[data-variant-for="lyrics"],
-.preview[data-variant-group="pomo"] .try--variants[data-variant-for="pomo"],
-.preview[data-variant-group="water"] .try--variants[data-variant-for="water"] { display:flex; }
-.preview .try--variants button { font-size:13px; padding:7px 12px; }
-.preview .preview-variant-caption { margin:21px auto 0; text-align:center; color:var(--mist); font-size:13px; line-height:1.45; }
-.preview .preview-variant-caption[hidden] { display:none; }
-@media (max-width:560px) {
-  .preview .try--variants { gap:6px; }
-  .preview .try--variants button { font-size:12px; padding:7px 10px; }
-}
-
+@media (prefers-reduced-motion:reduce) { .nadi-closed-live { transition:none; } }
 
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
@@ -875,9 +858,7 @@ footer a:hover { color: var(--ink); }
     <div class="laptop" id="laptop">
       <div class="lid"><i class="lid-shade" aria-hidden="true"></i><div class="bezel"><span class="cam"></span>
         <div class="screen">
-          <div class="nadi-shot-stage" id="nadi-shot-stage">
-            <canvas id="nadi-shot-canvas" width="780" height="215" role="img" aria-label="Nadi notch UI preview"></canvas>
-            <svg class="nadi-closed-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 32" role="img" aria-label="Nadi Closed Notch with animated audio indicator and live clock" id="nadi-closed-live-svg">
+          <svg class="nadi-closed-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 32" role="img" aria-label="Nadi Closed Notch with animated audio indicator and live clock" id="nadi-closed-live-svg">
 <style>
 #nadi-closed-bars path { transform-box:fill-box;transform-origin:center;animation:nadi-eq .85s ease-in-out infinite alternate; }
 #nadi-closed-bars path:nth-child(1) { animation-duration:.63s;animation-delay:-.20s; }
@@ -906,11 +887,6 @@ footer a:hover { color: var(--ink); }
 </g>
 <text transform="matrix(1 0 0 1 60.3241 19.693)" id="nadi-closed-clock" fill="#FFFFFF" font-family="'Plus Jakarta Sans', 'Segoe UI',sans-serif" font-weight="700" font-size="12">07:46</text>
 </svg>
-            <picture class="nadi-shot-source" aria-hidden="true">
-              <source type="image/avif" srcset="./assets/preview/nadi-ui-sprite.avif">
-              <img id="nadi-shot-sprite" src="./assets/preview/nadi-ui-sprite.webp" alt="" decoding="async">
-            </picture>
-          </div>
           <div class="wall" aria-hidden="true">
             <i class="petal back" style="--r:-76deg"></i><i class="petal back" style="--r:76deg"></i>
             <i class="petal back" style="--r:-48deg"></i><i class="petal back" style="--r:48deg"></i>
@@ -1114,19 +1090,6 @@ footer a:hover { color: var(--ink); }
         <button type="button" data-s="widgets" aria-pressed="false">Widgets</button>
         <button type="button" data-s="bt" aria-pressed="false">Headphones</button>
         <button type="button" data-s="charge" aria-pressed="false">Charging</button>
-      </div>
-      <p class="preview-variant-caption" id="preview-variant-caption" hidden>More Nadi UI variations</p>
-      <div class="try try--variants" role="group" data-variant-for="lyrics" aria-label="Lyrics Peek variants">
-        <button type="button" data-s="lyrics-peek-short" aria-pressed="false">Lyrics Peek · Short</button>
-        <button type="button" data-s="lyrics-peek-medium" aria-pressed="false">Lyrics Peek · Medium</button>
-        <button type="button" data-s="lyrics-peek-long" aria-pressed="false">Lyrics Peek · Long</button>
-      </div>
-      <div class="try try--variants" role="group" data-variant-for="pomo" aria-label="Pomodoro variants">
-        <button type="button" data-s="pomo-classic" aria-pressed="false">Pomodoro Classic</button>
-      </div>
-      <div class="try try--variants" role="group" data-variant-for="water" aria-label="Water Reminder variants">
-        <button type="button" data-s="water-chart" aria-pressed="false">Water · Chart</button>
-        <button type="button" data-s="water-settings" aria-pressed="false">Water · Settings</button>
       </div>
       <p class="cap" id="cap" aria-live="polite"></p>
     </div>
@@ -1667,194 +1630,40 @@ function runIntro() {
 const mn = document.getElementById("mn");
 const cap = document.getElementById("cap");
 const btns = document.querySelectorAll(".try button");
-// Static UI references provided for this website. Other modes retain the interactive HTML demo.
-// One optimized 12-frame sprite preserves the exact proportions of each Nadi notch screen.
-const nadiShotStage = document.getElementById("nadi-shot-stage");
-const nadiShotCanvas = document.getElementById("nadi-shot-canvas");
-const nadiShotSprite = document.getElementById("nadi-shot-sprite");
-const nadiShotContext = nadiShotCanvas.getContext("2d");
-const nadiClosedLive = document.getElementById("nadi-closed-live-svg");
-const nadiClosedClock = document.getElementById("nadi-closed-clock");
-let nadiClosedMinute = -1;
+// Closed: live user-supplied vector asset. All other modes remain coded.
+// The clock updates once a minute and CSS moves the six audio bars.
+const nadiClosedLive=document.getElementById("nadi-closed-live-svg");
+const nadiClosedClock=document.getElementById("nadi-closed-clock");
+let nadiClosedMinute=-1;
+let nadiPreviewInView=true;
 function nadiUpdateClosedTime() {
-  const now = new Date();
-  const minuteKey = now.getHours()*60 + now.getMinutes();
-  if(minuteKey === nadiClosedMinute) return;
-  nadiClosedMinute = minuteKey;
-  nadiClosedClock.textContent = String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+  const now=new Date();
+  const key=now.getHours()*60+now.getMinutes();
+  if(nadiClosedMinute===key) return;
+  nadiClosedMinute=key;
+  nadiClosedClock.textContent=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
 }
 nadiUpdateClosedTime();
-// Canvas stops repainting after the Closed transition. A low-frequency tick
-// keeps the vector clock current without running a 60 fps render loop.
-setInterval(() => {
-  if(!document.hidden && nadiPreviewInView && mn.dataset.s==="idle") nadiUpdateClosedTime();
-}, 15000);
-const nadiShots = {
-  idle: [0,217,45,"Closed"],
-  music: [1,611,200,"Music"],
-  lyrics: [2,778,200,"Lyrics Expanded"],
-  "lyrics-peek-short": [3,207,42,"Lyrics Peek Short"],
-  "lyrics-peek-medium": [4,321,42,"Lyrics Peek Medium"],
-  "lyrics-peek-long": [5,630,42,"Lyrics Peek Long"],
-  pomo: [6,611,200,"Pomodoro New"],
-  "pomo-classic": [7,611,200,"Pomodoro Classic"],
-  water: [8,611,200,"Water Reminder"],
-  "water-chart": [9,611,200,"Water Reminder Chart"],
-  "water-settings": [10,611,200,"Water Reminder Settings"],
-  prayer: [11,611,200,"Pray Reminder"]
-};
-function fitNadiScreenshot() {
-  const laptopWidth = document.getElementById("laptop").clientWidth;
-  const available = Math.max(200, laptopWidth - 24);
-  const shotScale = Math.min(1.32, available / 780);
-  nadiShotStage.style.setProperty("--nadi-shot-scale", shotScale.toFixed(6));
-  // Resting uses 150 × 30 dp under --u. Closed's supplied SVG is 156 × 32 dp.
-  // The screenshot container scales separately; counter-scale this SVG to use
-  // the same pixel-to-dp ratio as Resting (instead of the old 217 px sprite).
-  const notchScale = Math.max(0.55, Math.min(1.3, (laptopWidth - 30) / 570));
-  nadiClosedLive.style.width = (156 * notchScale / shotScale).toFixed(3) + "px";
-}
-// One Nadi preview: the latest exported UI remains the visual source.
-const nadiReducedMotion=matchMedia("(prefers-reduced-motion: reduce)");
-const nadiShotMotion={state:"",previous:"",since:0,raf:0};
-const nadiClamp=v=>Math.max(0,Math.min(1,v));
-function nadiDrawShot(state,opacity=1,scale=1) {
-  const shot=nadiShots[state]; if(!shot||opacity<=0) return;
-  const [frame,width,height]=shot;
-  const sx=Math.round((780-width)/2), sy=frame*215+Math.round((215-height)/2);
-  const ctx=nadiShotContext;
-  ctx.save(); ctx.globalAlpha=opacity;
-  ctx.translate(390,107.5); ctx.scale(scale,scale); ctx.translate(-390,-107.5);
-  ctx.drawImage(nadiShotSprite,sx,sy,width,height,sx,0,width,height);
-  ctx.restore();
-}
-function nadiGlow(x,y,rx,ry,opacity,rgb) {
-  const ctx=nadiShotContext;
-  ctx.save();
-  ctx.globalCompositeOperation="screen";
-  ctx.translate(x,y); ctx.scale(rx,ry);
-  const gradient=ctx.createRadialGradient(0,0,0,0,0,1);
-  gradient.addColorStop(0,"rgba("+rgb+","+opacity+")");
-  gradient.addColorStop(1,"rgba("+rgb+",0)");
-  ctx.fillStyle=gradient; ctx.fillRect(-1,-1,2,2);
-  ctx.restore();
-}
-function nadiDrawMotion(state,sec) {
-  const pulse=.5+.5*Math.sin(sec*3.0);
-  if(state==="idle") {
-    nadiGlow(442,109,26,19,.07+.10*pulse,"210,231,255");
-  } else if(state==="music") {
-    // Playback indicator on top of the unchanged original progress track.
-    nadiGlow(246+(sec*12)%227,143,13,3,.13+.11*pulse,"255,255,255");
-    nadiGlow(612,34,26,18,.05+.09*pulse,"185,224,255");
-  } else if(state==="lyrics") {
-    nadiGlow(487+18*Math.sin(sec*.9),98,105,17,.05+.055*pulse,"202,230,255");
-  } else if(state.startsWith("lyrics-peek-")) {
-    const width=nadiShots[state][1], left=(780-width)/2;
-    const ctx=nadiShotContext;
-    ctx.save();ctx.beginPath();ctx.rect(left+41,92,Math.max(25,width-58),28);ctx.clip();
-    nadiGlow(left+42+((sec*18)%Math.max(40,width-56)),106,23,8,.10,"210,235,255");
-    ctx.restore();
-  } else if(state==="pomo") {
-    nadiGlow(513,80,54,24,.05+.10*pulse,"145,84,246");
-  } else if(state==="pomo-classic") {
-    nadiGlow(450,155,32,22,.05+.09*pulse,"255,55,113");
-  } else if(state==="water") {
-    // Decorative light: the 0% meter never shows fabricated water intake.
-    nadiGlow(520,120,57,58,.035+.065*pulse,"72,182,255");
-    nadiGlow(196,149,50,17,.035+.06*pulse,"54,166,255");
-  } else if(state==="water-chart") {
-    nadiGlow(454+54*Math.sin(sec*.7),125,67,43,.04+.06*pulse,"32,152,255");
-  } else if(state==="water-settings") {
-    nadiGlow(549,110,65,37,.04+.06*pulse,"48,170,255");
-  } else if(state==="prayer") {
-    nadiGlow(586,71,36,24,.06+.13*pulse,"255,180,29");
-  }
-}
-function nadiStopMotion() {
-  if(nadiShotMotion.raf) cancelAnimationFrame(nadiShotMotion.raf);
-  nadiShotMotion.raf=0;
-}
-function nadiPaintShot(now) {
-  nadiShotMotion.raf=0;
-  if(document.hidden || !nadiPreviewInView || !pv.classList.contains("has-shot") || !nadiShotContext) return;
-  const ctx=nadiShotContext, current=nadiShotMotion.state, previous=nadiShotMotion.previous;
-  const spriteReady=nadiShotSprite.complete && nadiShotSprite.naturalWidth>0;
-  if(current!=="idle" && !spriteReady) return;
-  ctx.clearRect(0,0,780,215);
-  const moving=!nadiReducedMotion.matches;
-  const elapsed=moving?Math.max(0,now-nadiShotMotion.since):1000;
-  const fade=1-Math.pow(1-nadiClamp(elapsed/370),3);
-  if(spriteReady && previous && previous!=="idle" && fade<1)
-    nadiDrawShot(previous,1-fade,1-.015*fade);
-  if(current!=="idle" && spriteReady)
-    nadiDrawShot(current,fade,1+.025*(1-fade));
-  const closedOpacity=current==="idle"?fade:(previous==="idle"?1-fade:0);
-  nadiClosedLive.style.opacity=closedOpacity.toFixed(3);
-  nadiClosedLive.style.visibility=closedOpacity>.001?"visible":"hidden";
-  if(current==="idle") nadiUpdateClosedTime();
-  if(moving && fade>.94 && current!=="idle") nadiDrawMotion(current,elapsed/1000);
-  // The SVG animates its bars natively; no continuous Canvas redraw needed in Closed.
-  if(moving && (fade<1 || current!=="idle")) nadiShotMotion.raf=requestAnimationFrame(nadiPaintShot);
-}
-function showNadiScreenshot(state) {
-  const shot=nadiShots[state];
-  if(!shot || !nadiShotContext ||
-    (state!=="idle" && (!nadiShotSprite.complete || !nadiShotSprite.naturalWidth))) {
-    nadiStopMotion();
-    nadiClosedLive.style.visibility="hidden";
-    pv.classList.remove("has-shot");
-    return false;
-  }
-  const previous=nadiShotMotion.state;
-  nadiShotMotion.previous=previous!==state&&nadiShots[previous]?previous:"";
-  nadiShotMotion.state=state;
-  nadiShotMotion.since=performance.now();
-  nadiShotCanvas.setAttribute("aria-label",shot[3]+" — Nadi animated UI preview");
-  fitNadiScreenshot();
-  pv.classList.add("has-shot");
-  nadiStopMotion();
-  nadiPaintShot(performance.now());
-  return true;
-}
-nadiShotSprite.addEventListener("load",()=>showNadiScreenshot(mn.dataset.s));
-nadiShotSprite.addEventListener("error",()=>{nadiStopMotion();pv.classList.remove("has-shot");});
-window.addEventListener("resize",fitNadiScreenshot,{passive:true});
-// Stop CSS and Canvas motion while the notebook preview is off screen.
-let nadiPreviewInView=true;
-if("IntersectionObserver" in window) {
-  const observer=new IntersectionObserver(entries=>{
-    nadiPreviewInView=Boolean(entries[0] && entries[0].isIntersecting);
-    nadiClosedLive.classList.toggle("paused",!nadiPreviewInView || document.hidden);
-    if(!nadiPreviewInView) nadiStopMotion();
-    else if(pv.classList.contains("has-shot")) {
-      nadiShotMotion.since=performance.now()-450;
-      nadiPaintShot(performance.now());
-    }
-  },{threshold:0.01});
-  observer.observe(document.getElementById("laptop"));
+setInterval(()=>{
+  if(!document.hidden && nadiPreviewInView && mn.dataset.s==="idle")
+    nadiUpdateClosedTime();
+},15000);
+// Pause the SVG's CSS animations when not visible; no Canvas loop remains.
+if("IntersectionObserver" in window){
+  new IntersectionObserver(entries=>{
+    nadiPreviewInView=Boolean(entries[0]?.isIntersecting);
+    nadiClosedLive.classList.toggle("paused",!nadiPreviewInView||document.hidden);
+  },{threshold:.01}).observe(document.getElementById("laptop"));
 }
 document.addEventListener("visibilitychange",()=>{
-  nadiClosedLive.classList.toggle("paused",document.hidden || !nadiPreviewInView);
-  if(document.hidden) nadiStopMotion();
-  else if(pv.classList.contains("has-shot") && nadiPreviewInView){
-    nadiShotMotion.since=performance.now()-450;
-    nadiPaintShot(performance.now());
-  }
+  nadiClosedLive.classList.toggle("paused",document.hidden||!nadiPreviewInView);
 });
-fitNadiScreenshot();
 
 const captions = {
   pet: "Leave Nadi alone for a moment, and the eyes come out.",
   idle: "Closed mode keeps the essentials in a small space.",
   music: "Music controls, right at the top of Windows.",
   lyrics: "Expanded lyrics beside the album and media controls.",
-  "lyrics-peek-short": "A compact lyrics peek in the smallest notch.",
-  "lyrics-peek-medium": "Medium lyrics peek with more room for each line.",
-  "lyrics-peek-long": "Long lyrics peek for an extended line.",
-  "pomo-classic": "The classic Pomodoro timer layout.",
-  "water-chart": "Weekly water intake chart.",
-  "water-settings": "Water Reminder settings for bottle, goal and hours.",
   pomo: "Start a focus timer and watch the minutes go by.",
   notif: "Windows notifications need a supported packaged build and your permission.",
   prayer: "Pray Reminder shows today's times for the city you choose.",
@@ -1884,17 +1693,12 @@ function show(s, keepBtn) {
   const prev = mn.dataset.s;
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
-  showNadiScreenshot(s);
-  const variantGroup = s === "lyrics" || s.startsWith("lyrics-peek-") ? "lyrics"
-    : s === "pomo" || s === "pomo-classic" ? "pomo"
-    : s === "water" || s.startsWith("water-") ? "water" : "";
-  if (variantGroup) pv.dataset.variantGroup = variantGroup;
-  else delete pv.dataset.variantGroup;
-  document.getElementById("preview-variant-caption").hidden = !variantGroup;
+  pv.classList.toggle("svg-closed",s==="idle");
+  if(s==="idle") nadiUpdateClosedTime();
   const ly = mn.querySelector(".l-" + s);
   if (ly && prev !== s) { ly.classList.remove("play"); void ly.offsetWidth; ly.classList.add("play"); } // animasi isi diputar ulang
   clearTimeout(remindT);
-  if (s === "prayer" && !pv.classList.contains("has-shot")) remindT = setTimeout(() => { if (mn.dataset.s === "prayer") show("remind", "prayer"); }, 3600); // halaman Prayer menyusut jadi pengingat
+  if (s === "prayer" remindT = setTimeout(() => { if (mn.dataset.s === "prayer") show("remind", "prayer"); }, 3600); // halaman Prayer menyusut jadi pengingat
   if (s === "water" && prev !== "water") setTimeout(waterGrow, 220);
   if (s === "shelf" && prev !== "shelf") shelfDemo();
   if (s !== "shelf") { shelfRun++; ghost.className = "ghost"; shStop(); }
@@ -2282,24 +2086,7 @@ fit(); addEventListener("resize", fit);
   ID["Pomodoro New"] = "Pomodoro Baru";
   ID["Pray Reminder"] = "Pray Reminder";
   ID["Water Reminder"] = "Water Reminder";
-  ID["More Nadi UI variations"] = "Variasi UI Nadi lainnya";
-  ID["Additional Nadi UI screenshot variants"] = "Variasi tangkapan layar UI Nadi";
-  ID["Lyrics Peek variants"] = "Variasi Lyrics Peek";
-  ID["Pomodoro variants"] = "Variasi Pomodoro";
-  ID["Water Reminder variants"] = "Variasi Water Reminder";
-  ID["Lyrics Peek · Short"] = "Lyrics Peek · Pendek";
-  ID["Lyrics Peek · Medium"] = "Lyrics Peek · Sedang";
-  ID["Lyrics Peek · Long"] = "Lyrics Peek · Panjang";
-  ID["Pomodoro Classic"] = "Pomodoro Klasik";
-  ID["Water · Chart"] = "Water · Grafik";
-  ID["Water · Settings"] = "Water · Pengaturan";
   ID["Expanded lyrics beside the album and media controls."] = "Lirik Expanded di samping sampul album dan kontrol musik.";
-  ID["A compact lyrics peek in the smallest notch."] = "Lirik singkat pada notch paling kecil.";
-  ID["Medium lyrics peek with more room for each line."] = "Lyrics Peek ukuran sedang dengan ruang teks lebih luas.";
-  ID["Long lyrics peek for an extended line."] = "Lyrics Peek panjang untuk satu baris lirik lebih lebar.";
-  ID["The classic Pomodoro timer layout."] = "Tampilan timer Pomodoro klasik.";
-  ID["Weekly water intake chart."] = "Grafik asupan air mingguan.";
-  ID["Water Reminder settings for bottle, goal and hours."] = "Pengaturan Water Reminder untuk botol, target, dan jam.";
   const SKIP = "script,style,svg,code,textarea,#laptop,.sw-art";
   const ATTRS = ["placeholder", "aria-label", "alt", "title"];
   const enTitle = document.title;
