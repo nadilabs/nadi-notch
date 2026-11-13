@@ -24,7 +24,7 @@
 <link rel="apple-touch-icon" href="./assets/nadi-mascot-neutral.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@700&display=swap" rel="stylesheet">
 <style>
 /* ===== Tokens ================================================================ */
 :root {
@@ -621,6 +621,11 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 /* Latest Nadi screenshots are the single visual source. Their motion is
    rendered on the same canvas; the older HTML simulation only fills gaps. */
 .nadi-shot-stage canvas { image-rendering:auto; }
+.nadi-closed-live { position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:217px; height:auto; display:block; opacity:0; visibility:hidden; pointer-events:none;
+  overflow:visible; will-change:opacity; }
+.nadi-closed-live.paused #nadi-closed-bars path,
+.nadi-closed-live.paused #nadi-closed-energy { animation-play-state:paused; }
 .preview .try--variants { display:none; margin-top:10px; }
 .preview[data-variant-group="lyrics"] .try--variants[data-variant-for="lyrics"],
 .preview[data-variant-group="pomo"] .try--variants[data-variant-for="pomo"],
@@ -871,6 +876,35 @@ footer a:hover { color: var(--ink); }
         <div class="screen">
           <div class="nadi-shot-stage" id="nadi-shot-stage">
             <canvas id="nadi-shot-canvas" width="780" height="215" role="img" aria-label="Nadi notch UI preview"></canvas>
+            <svg class="nadi-closed-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 32" role="img" aria-label="Nadi Closed Notch with animated audio indicator and live clock" id="nadi-closed-live-svg">
+<style>
+#nadi-closed-bars path { transform-box:fill-box;transform-origin:center;animation:nadi-eq .85s ease-in-out infinite alternate; }
+#nadi-closed-bars path:nth-child(1) { animation-duration:.63s;animation-delay:-.20s; }
+#nadi-closed-bars path:nth-child(2) { animation-duration:.82s;animation-delay:-.52s; }
+#nadi-closed-bars path:nth-child(3) { animation-duration:.70s;animation-delay:-.08s; }
+#nadi-closed-bars path:nth-child(4) { animation-duration:.96s;animation-delay:-.42s; }
+#nadi-closed-bars path:nth-child(5) { animation-duration:.77s;animation-delay:-.36s; }
+#nadi-closed-bars path:nth-child(6) { animation-duration:.89s;animation-delay:-.67s; }
+#nadi-closed-energy { animation:nadi-energy 2.8s ease-in-out infinite; }
+@keyframes nadi-eq { from { transform:scaleY(.46); } to { transform:scaleY(1); } }
+@keyframes nadi-energy { 0%,100% { opacity:1; } 50% { opacity:.76; } }
+@media (prefers-reduced-motion:reduce) { #nadi-closed-bars path,#nadi-closed-energy { animation:none; } }
+</style>
+<path d="M0,0c2,0,7,0.9,7,8.9V22c0,5.5,4.5,10,10,10h122c5.5,0,10-4.5,10-10l0-13.1c0-8,5.1-8.9,7-8.9H0z" fill="#050609"/>
+<g id="nadi-closed-bars">
+<path d="M125.8,18L125.8,18c-0.5,0-1-0.4-1-1V15c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V17C126.7,17.6,126.3,18,125.8,18z" fill="#FFFFFF"/>
+<path d="M122,21L122,21c-0.5,0-1-0.4-1-1V12c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V20C122.9,20.6,122.5,21,122,21z" fill="#FFFFFF"/>
+<path d="M118.2,20L118.2,20c-0.5,0-1-0.4-1-1V13c0-0.5,0.4-1,1-1h0c0.5,0,1,0.4,1,1V19C119.1,19.6,118.7,20,118.2,20z" fill="#FFFFFF"/>
+<path d="M114.4,23L114.4,23c-0.5,0-1-0.4-1-1V10c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V22C115.3,22.6,114.9,23,114.4,23z" fill="#FFFFFF"/>
+<path d="M110.5,22L110.5,22c-0.5,0-1-0.4-1-1V11c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V21C111.5,21.6,111.1,22,110.5,22z" fill="#FFFFFF"/>
+<path d="M106.7,19L106.7,19c-0.5,0-1-0.4-1-1V14c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V18C107.7,18.6,107.3,19,106.7,19z" fill="#FFFFFF"/>
+</g>
+<g id="nadi-closed-energy">
+<path d="M36.3,23c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S40.1,23,36.3,23z M36.3,10.4c-3.1,0-5.6,2.5-5.6,5.6s2.5,5.6,5.6,5.6s5.6-2.5,5.6-5.6S39.3,10.4,36.3,10.4z" fill="#51FF00"/>
+<path d="M38,12c0.2,0.1,0.2,0.4,0.2,0.6l-1.2,3h2.2c0.2,0,0.4,0.1,0.5,0.3c0.1,0.2,0,0.4-0.1,0.5L35.1,20c-0.2,0.1-0.4,0.2-0.6,0c-0.2-0.1-0.2-0.4-0.2-0.6l1.2-3h-2.2c-0.2,0-0.4-0.1-0.5-0.3c-0.1-0.2,0-0.4,0.1-0.5l4.4-3.6C37.6,11.8,37.8,11.8,38,12z" fill="#51FF00"/>
+</g>
+<text transform="matrix(1 0 0 1 60.3241 19.693)" id="nadi-closed-clock" fill="#FFFFFF" font-family="'Plus Jakarta Sans', 'Segoe UI',sans-serif" font-weight="700" font-size="12">07:46</text>
+</svg>
             <picture class="nadi-shot-source" aria-hidden="true">
               <source type="image/avif" srcset="./assets/preview/nadi-ui-sprite.avif">
               <img id="nadi-shot-sprite" src="./assets/preview/nadi-ui-sprite.webp" alt="" decoding="async">
@@ -1638,6 +1672,17 @@ const nadiShotStage = document.getElementById("nadi-shot-stage");
 const nadiShotCanvas = document.getElementById("nadi-shot-canvas");
 const nadiShotSprite = document.getElementById("nadi-shot-sprite");
 const nadiShotContext = nadiShotCanvas.getContext("2d");
+const nadiClosedLive = document.getElementById("nadi-closed-live-svg");
+const nadiClosedClock = document.getElementById("nadi-closed-clock");
+let nadiClosedMinute = -1;
+function nadiUpdateClosedTime() {
+  const now = new Date();
+  const minuteKey = now.getHours()*60 + now.getMinutes();
+  if(minuteKey === nadiClosedMinute) return;
+  nadiClosedMinute = minuteKey;
+  nadiClosedClock.textContent = String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+}
+nadiUpdateClosedTime();
 const nadiShots = {
   idle: [0,217,45,"Closed"],
   music: [1,611,200,"Music"],
@@ -1719,24 +1764,32 @@ function nadiStopMotion() {
 }
 function nadiPaintShot(now) {
   nadiShotMotion.raf=0;
-  if(document.hidden || !pv.classList.contains("has-shot") ||
-    !nadiShotContext || !nadiShotSprite.complete || !nadiShotSprite.naturalWidth) return;
-  const ctx=nadiShotContext;
+  if(document.hidden || !nadiPreviewInView || !pv.classList.contains("has-shot") || !nadiShotContext) return;
+  const ctx=nadiShotContext, current=nadiShotMotion.state, previous=nadiShotMotion.previous;
+  const spriteReady=nadiShotSprite.complete && nadiShotSprite.naturalWidth>0;
+  if(current!=="idle" && !spriteReady) return;
   ctx.clearRect(0,0,780,215);
   const moving=!nadiReducedMotion.matches;
   const elapsed=moving?Math.max(0,now-nadiShotMotion.since):1000;
-  const progress=nadiClamp(elapsed/370);
-  const fade=1-Math.pow(1-progress,3);
-  if(nadiShotMotion.previous && fade<1)
-    nadiDrawShot(nadiShotMotion.previous,1-fade,1-.015*fade);
-  nadiDrawShot(nadiShotMotion.state,fade,1+.025*(1-fade));
-  if(moving && fade>.94) nadiDrawMotion(nadiShotMotion.state,elapsed/1000);
-  if(moving) nadiShotMotion.raf=requestAnimationFrame(nadiPaintShot);
+  const fade=1-Math.pow(1-nadiClamp(elapsed/370),3);
+  if(spriteReady && previous && previous!=="idle" && fade<1)
+    nadiDrawShot(previous,1-fade,1-.015*fade);
+  if(current!=="idle" && spriteReady)
+    nadiDrawShot(current,fade,1+.025*(1-fade));
+  const closedOpacity=current==="idle"?fade:(previous==="idle"?1-fade:0);
+  nadiClosedLive.style.opacity=closedOpacity.toFixed(3);
+  nadiClosedLive.style.visibility=closedOpacity>.001?"visible":"hidden";
+  if(current==="idle") nadiUpdateClosedTime();
+  if(moving && fade>.94 && current!=="idle") nadiDrawMotion(current,elapsed/1000);
+  // The SVG animates its bars natively; no continuous Canvas redraw needed in Closed.
+  if(moving && (fade<1 || current!=="idle")) nadiShotMotion.raf=requestAnimationFrame(nadiPaintShot);
 }
 function showNadiScreenshot(state) {
   const shot=nadiShots[state];
-  if(!shot || !nadiShotContext || !nadiShotSprite.complete || !nadiShotSprite.naturalWidth) {
+  if(!shot || !nadiShotContext ||
+    (state!=="idle" && (!nadiShotSprite.complete || !nadiShotSprite.naturalWidth))) {
     nadiStopMotion();
+    nadiClosedLive.style.visibility="hidden";
     pv.classList.remove("has-shot");
     return false;
   }
@@ -1754,9 +1807,24 @@ function showNadiScreenshot(state) {
 nadiShotSprite.addEventListener("load",()=>showNadiScreenshot(mn.dataset.s));
 nadiShotSprite.addEventListener("error",()=>{nadiStopMotion();pv.classList.remove("has-shot");});
 window.addEventListener("resize",fitNadiScreenshot,{passive:true});
+// Stop CSS and Canvas motion while the notebook preview is off screen.
+let nadiPreviewInView=true;
+if("IntersectionObserver" in window) {
+  const observer=new IntersectionObserver(entries=>{
+    nadiPreviewInView=Boolean(entries[0] && entries[0].isIntersecting);
+    nadiClosedLive.classList.toggle("paused",!nadiPreviewInView || document.hidden);
+    if(!nadiPreviewInView) nadiStopMotion();
+    else if(pv.classList.contains("has-shot")) {
+      nadiShotMotion.since=performance.now()-450;
+      nadiPaintShot(performance.now());
+    }
+  },{threshold:0.01});
+  observer.observe(document.getElementById("laptop"));
+}
 document.addEventListener("visibilitychange",()=>{
+  nadiClosedLive.classList.toggle("paused",document.hidden || !nadiPreviewInView);
   if(document.hidden) nadiStopMotion();
-  else if(pv.classList.contains("has-shot")){
+  else if(pv.classList.contains("has-shot") && nadiPreviewInView){
     nadiShotMotion.since=performance.now()-450;
     nadiPaintShot(performance.now());
   }
