@@ -608,16 +608,22 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .try button[aria-pressed="true"] { background: var(--ink); color: #05060c; border-color: var(--ink); }
 .cap { text-align: center; color: var(--mist); font-size: 15px; margin: 14px 0 0; min-height: 1.6em; }
 
-/* Resting, Closed, Minimal share one exact 156x30 vector viewport.
-   Minimal geometry morphs to the original 44x4 SVG silhouette. */
-.nadi-compact-live {position:absolute;z-index:9;top:0;left:50%;
-width:calc(var(--u) * 156px);height:calc(var(--u) * 30px);
-transform:translateX(-50%);pointer-events:none;overflow:visible;
-opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
-.preview.compact-mode .nadi-compact-live{opacity:1;visibility:visible}
+/* Native Nusa-style spring: .mn is the single black shell for EVERY mode.
+   SVG contents are mounted inside it, clipped to the animated shell size. */
+.nadi-visual-viewport {position:absolute;inset:0;z-index:12;
+  overflow:hidden;border-radius:inherit;pointer-events:none}
+.nadi-compact-live {position:absolute;z-index:1;top:0;left:50%;
+  width:156px;height:30px;max-width:none;transform:translateX(-50%);
+  pointer-events:none;overflow:visible;opacity:0;visibility:hidden;
+  transition:opacity .14s ease,visibility .14s}
+.preview.compact-mode .nadi-compact-live {opacity:1;visibility:visible;
+  transition:opacity .24s ease .09s}
 .preview.pre .nadi-compact-live{opacity:0}
-.preview .mn-holder{transition:opacity .25s ease}
-.preview.compact-mode .mn-holder{opacity:0;pointer-events:none}
+.mn[data-s="minimal"]{--w:44px;--h:4px;--r:2px;--e:1.2px}
+.mn[data-s="music"]{--w:440px;--h:144px;--r:32px;--e:22px}
+/* SVG versions supersede the older coded contents in these modes. */
+.mn[data-s="pet"] .l-pet,.mn[data-s="idle"] .l-idle,
+.mn[data-s="music"] .l-music{visibility:hidden}
 #nadi-compact-closed-content,#nadi-resting-art{opacity:0;transition:opacity .14s ease}
 .preview.compact-closed #nadi-compact-closed-content{opacity:1;transition:opacity .20s ease .065s}
 .preview.compact-resting #nadi-resting-art{opacity:1;transition:opacity .20s ease .065s}
@@ -629,13 +635,14 @@ opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
 
 /* Music: live layers taken from the two latest 440x144 Nadi SVGs.
    Keep this vector at native design resolution; its controls use SVG coordinates. */
-.nadi-music-live {position:absolute;top:0;left:50%;z-index:9;
- width:calc(var(--u)*440px);height:calc(var(--u)*144px);
+.nadi-music-live {position:absolute;top:0;left:50%;z-index:2;
+ width:440px;height:144px;max-width:none;
  transform:translateX(-50%);transform-origin:50% 0;
  visibility:hidden;opacity:0;pointer-events:none;overflow:visible;
- transition:opacity .25s cubic-bezier(.22,.75,.28,1),visibility .25s}
-.preview.music-live .nadi-music-live{visibility:visible;opacity:1;pointer-events:auto}
-.preview.music-live .mn-holder{opacity:0;pointer-events:none}
+ transition:opacity .14s ease,visibility .14s}
+.preview.music-live .nadi-music-live{visibility:visible;opacity:1;
+ pointer-events:auto;transition:opacity .28s cubic-bezier(.22,.75,.28,1) .12s}
+.preview.music-live .nadi-visual-viewport{pointer-events:auto}
 .nadi-music-live .nadi-music-eq-bar{transform-box:fill-box;transform-origin:center;
  animation:nadi-music-equalizer .7s ease-in-out infinite alternate;animation-play-state:paused}
 .nadi-music-live.is-playing .nadi-music-eq-bar{animation-play-state:running}
@@ -897,7 +904,23 @@ footer a:hover { color: var(--ink); }
     <div class="laptop" id="laptop">
       <div class="lid"><i class="lid-shade" aria-hidden="true"></i><div class="bezel"><span class="cam"></span>
         <div class="screen">
-          <svg class="nadi-compact-live" id="nadi-compact-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 30" role="img" aria-label="Animated Nadi compact preview">
+          
+
+          <div class="wall" aria-hidden="true">
+            <i class="petal back" style="--r:-76deg"></i><i class="petal back" style="--r:76deg"></i>
+            <i class="petal back" style="--r:-48deg"></i><i class="petal back" style="--r:48deg"></i>
+            <i class="petal back" style="--r:-22deg"></i><i class="petal back" style="--r:22deg"></i>
+            <i class="petal" style="--r:-60deg"></i><i class="petal" style="--r:60deg"></i>
+            <i class="petal" style="--r:-36deg"></i><i class="petal" style="--r:36deg"></i>
+            <i class="petal" style="--r:-14deg"></i><i class="petal" style="--r:14deg"></i>
+            <i class="petal" style="--r:0deg"></i>
+            <span class="shine"></span>
+          </div>
+          <div class="ghost" id="ghost" aria-hidden="true"><span class="g-thumb"></span><svg class="g-cur" viewBox="0 0 15 22"><path d="M1 1v17l4.4-4.2 3 6.8 3-1.3-3-6.6H14z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg><span class="g-badge">+ Copy</span></div>
+          <div class="mn-holder" id="mnHolder">
+            <div class="mn" id="mn" data-s="pet" role="group" aria-label="Nadi notch interactive preview">
+              <div class="nadi-visual-viewport">
+<svg class="nadi-compact-live" id="nadi-compact-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 30" role="img" aria-label="Animated Nadi compact preview">
 <style>
 
 #nadi-closed-bars path { transform-box:fill-box;transform-origin:center;animation:nadi-eq .85s ease-in-out infinite alternate; }
@@ -1082,19 +1105,7 @@ footer a:hover { color: var(--ink); }
  <rect id="nadi-music-mute-hit" x="366" y="105" width="26" height="25" tabindex="0" role="button" aria-label="Mute volume" style="cursor:pointer"/>
 </g>
 </svg>
-          <div class="wall" aria-hidden="true">
-            <i class="petal back" style="--r:-76deg"></i><i class="petal back" style="--r:76deg"></i>
-            <i class="petal back" style="--r:-48deg"></i><i class="petal back" style="--r:48deg"></i>
-            <i class="petal back" style="--r:-22deg"></i><i class="petal back" style="--r:22deg"></i>
-            <i class="petal" style="--r:-60deg"></i><i class="petal" style="--r:60deg"></i>
-            <i class="petal" style="--r:-36deg"></i><i class="petal" style="--r:36deg"></i>
-            <i class="petal" style="--r:-14deg"></i><i class="petal" style="--r:14deg"></i>
-            <i class="petal" style="--r:0deg"></i>
-            <span class="shine"></span>
-          </div>
-          <div class="ghost" id="ghost" aria-hidden="true"><span class="g-thumb"></span><svg class="g-cur" viewBox="0 0 15 22"><path d="M1 1v17l4.4-4.2 3 6.8 3-1.3-3-6.6H14z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg><span class="g-badge">+ Copy</span></div>
-          <div class="mn-holder" id="mnHolder">
-            <div class="mn" id="mn" data-s="pet" role="img" aria-label="Nadi notch preview">
+              </div>
               
 
               <!-- Istirahat: maskot -->
@@ -2173,7 +2184,7 @@ function waterGrow() {
   bars.forEach(b => { b.style.transition = ""; b.style.height = b.dataset.h; });
   wbar.style.transition = ""; wbar.style.width = "152px";
 }
-const MN_SIZE = { pet: 156 * 30, idle: 156 * 30, minimal: 44 * 4, music: 420 * 140, lyrics: 520 * 140, pomo: 420 * 140, prayer: 420 * 140, remind: 310 * 60,
+const MN_SIZE = { pet: 156 * 30, idle: 156 * 30, minimal: 44 * 4, music: 440 * 144, lyrics: 520 * 140, pomo: 420 * 140, prayer: 420 * 140, remind: 310 * 60,
   water: 420 * 140, shelf: 420 * 140, clip: 420 * 140, todo: 420 * 140, notif: 310 * 60, widgets: 420 * 140, bt: 310 * 60, charge: 310 * 60 };
 let remindT = 0;
 function show(s, keepBtn) {
