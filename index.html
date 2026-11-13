@@ -507,7 +507,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 /* Nadi arrival: a soft, one-shot light sweep along the closed notch's lower edge.
    The actual notch remains solid black; this overlay is invisible after the intro. */
 .nadi-arrival-rim {
-  position: absolute; inset: 0 auto auto 0; width: 156px; height: 32px;
+  position: absolute; inset: 0 auto auto 0; width: 156px; height: 30px;
   overflow: visible; pointer-events: none; z-index: 9; opacity: 0;
 }
 .nadi-arrival-rim path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
@@ -918,10 +918,10 @@ footer a:hover { color: var(--ink); }
           <div class="ghost" id="ghost" aria-hidden="true"><span class="g-thumb"></span><svg class="g-cur" viewBox="0 0 15 22"><path d="M1 1v17l4.4-4.2 3 6.8 3-1.3-3-6.6H14z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg><span class="g-badge">+ Copy</span></div>
           <div class="mn-holder" id="mnHolder">
             <div class="mn" id="mn" data-s="pet" role="img" aria-label="Nadi notch preview">
-              <svg class="nadi-arrival-rim" viewBox="0 0 150 32" aria-hidden="true">
-                <path class="rim-track" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16"/>
-                <path class="rim-trail" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" pathLength="100"/>
-                <path class="rim-core" d="M0 16 A14 14 0 0 0 14 30 H136 A14 14 0 0 0 150 16" pathLength="100"/>
+              <svg class="nadi-arrival-rim" viewBox="0 0 156 30" aria-hidden="true">
+                <path class="rim-track" d="M0 16 A14 14 0 0 0 14 30 H142 A14 14 0 0 0 156 16"/>
+                <path class="rim-trail" d="M0 16 A14 14 0 0 0 14 30 H142 A14 14 0 0 0 156 16" pathLength="100"/>
+                <path class="rim-core" d="M0 16 A14 14 0 0 0 14 30 H142 A14 14 0 0 0 156 16" pathLength="100"/>
               </svg>
 
               <!-- Istirahat: maskot -->
