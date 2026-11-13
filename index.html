@@ -1662,6 +1662,86 @@ const btns = document.querySelectorAll(".try button");
 const nadiCompact=document.getElementById("nadi-compact-live");
 const nadiCompactShape=document.getElementById("nadi-compact-shape");
 const nadiClosedClock=document.getElementById("nadi-closed-clock");
+
+const nadiRestingLeft=document.getElementById("nadi-resting-eye-left");
+const nadiRestingRight=document.getElementById("nadi-resting-eye-right");
+const nadiRestingAwake=document.getElementById("nadi-resting-awake");
+const nadiRestingSleepEyes=document.getElementById("nadi-resting-sleep-eyes");
+const nadiRestingSleepZ=document.getElementById("nadi-resting-sleep-z");
+let nadiRestingStarted=performance.now(),nadiRestingElapsed=0,nadiRestingFrame=0;
+const nadiSmoother=x=>{const t=Math.max(0,Math.min(1,x));return t*t*t*(t*(t*6-15)+10)};
+function nadiRestingGesture(t,start,rise,hold,fall){
+  const p=t-start;
+  if(p<0||p>=rise+hold+fall)return 0;
+  if(p<rise)return nadiSmoother(p/rise);
+  if(p<rise+hold)return 1;
+  return 1-nadiSmoother((p-rise-hold)/fall);
+}
+function nadiRestingGlance(t){
+  const gestures=[[4.10,1,.10,.23,.18,.78,.42,.21],[8.65,-1,.11,.26,.16,.69,.44,.22]];
+  for(const [start,dir,prep,travel,settle,hold,returnTime,recover] of gestures){
+    const p=t-start,total=prep+travel+settle+hold+returnTime+recover;
+    if(p<0||p>=total)continue;
+    const a=prep,b=a+travel,c=b+settle,d=c+hold,e=d+returnTime;
+    const x=p<a?-.72*nadiSmoother(p/prep):
+      p<b?-.72+7.10*nadiSmoother((p-a)/travel):
+      p<c?6.38-1.03*nadiSmoother((p-b)/settle):
+      p<d?5.35+.12*Math.sin(Math.PI*(p-c)/hold):
+      p<e?5.35-5.67*nadiSmoother((p-d)/returnTime):
+      -.32*(1-nadiSmoother((p-e)/recover));
+    const y=-.40*Math.max(0,Math.min(1,x/5.35))+.10*Math.sin(Math.PI*p/total);
+    return [dir*x,y];
+  }
+  return [0,0];
+}
+function nadiStopRestingMotion(){
+  if(nadiRestingFrame)cancelAnimationFrame(nadiRestingFrame);
+  nadiRestingFrame=0;
+}
+function nadiDrawResting(t){
+  const blink=Math.max(
+    nadiRestingGesture(t,2.10,.07,.08,.10),
+    nadiRestingGesture(t,7.02,.06,.07,.09),
+    nadiRestingGesture(t,12.10,.08,.07,.10));
+  const [dx,dy]=nadiRestingGlance(t);
+  const drowsy=t>=14?nadiSmoother((t-14)/2.6):0;
+  const toSleep=t>=15.85?nadiSmoother((t-15.85)/.75):0;
+  const opened=Math.max(.12,1-.84*Math.max(blink,drowsy*.93));
+  const gazeAttention=nadiSmoother((Math.abs(dx)-.50)/4.50);
+  const direction=Math.sign(dx);
+  const leftExtra=direction<0?-1.50*gazeAttention:.28*gazeAttention;
+  const rightExtra=direction>0?1.50*gazeAttention:-.28*gazeAttention;
+  nadiRestingLeft.setAttribute("transform",
+    "translate("+(61+dx+leftExtra).toFixed(3)+" "+(15.2+dy).toFixed(3)+") scale("+
+    (1+((direction<0?1.09:.98)-1)*gazeAttention).toFixed(3)+" "+opened.toFixed(3)+")");
+  nadiRestingRight.setAttribute("transform",
+    "translate("+(95+dx+rightExtra).toFixed(3)+" "+(15.2+dy).toFixed(3)+") scale("+
+    (1+((direction>0?1.09:.98)-1)*gazeAttention).toFixed(3)+" "+opened.toFixed(3)+")");
+  nadiRestingAwake.setAttribute("opacity",(1-toSleep).toFixed(3));
+  nadiRestingSleepEyes.setAttribute("opacity",toSleep.toFixed(3));
+  if(t>=16.35){
+    const phase=((t-16.35)/3.2)%1;
+    const fade=Math.pow(Math.sin(Math.PI*phase),2)*nadiSmoother((t-16.35)/.7);
+    nadiRestingSleepZ.setAttribute("opacity",fade.toFixed(3));
+    nadiRestingSleepZ.setAttribute("transform",
+      "translate("+(Math.sin(phase*Math.PI*2)*.65).toFixed(3)+" "+(-3.5*nadiSmoother(phase)).toFixed(3)+")");
+  }else nadiRestingSleepZ.setAttribute("opacity","0");
+}
+function nadiRestingTick(now){
+  nadiRestingFrame=0;
+  if(mn.dataset.s!=="pet"||document.hidden||!nadiPreviewInView)return;
+  if(nadiCompactReduced.matches){nadiDrawResting(0);return;}
+  nadiRestingElapsed=Math.max(0,(now-nadiRestingStarted)/1000);
+  nadiDrawResting(nadiRestingElapsed);
+  nadiRestingFrame=requestAnimationFrame(nadiRestingTick);
+}
+function nadiStartResting(restart){
+  nadiStopRestingMotion();
+  if(restart)nadiRestingElapsed=0;
+  nadiRestingStarted=performance.now()-nadiRestingElapsed*1000;
+  nadiRestingTick(performance.now());
+}
+
 let nadiClosedMinute=-1,nadiPreviewInView=true,nadiCompactAmount=1,nadiCompactTarget=1,nadiCompactFrame=0;
 const nadiCompactReduced=window.matchMedia("(prefers-reduced-motion: reduce)");
 function nadiUpdateClosedTime(){
@@ -1701,6 +1781,8 @@ function nadiMorphTo(target){
 }
 function nadiSetCompactState(state){
  const active=state==="pet"||state==="idle"||state==="minimal";
+ if(state==="pet") nadiStartResting(true);
+ else nadiStopRestingMotion();
  pv.classList.toggle("compact-mode",active);
  pv.classList.toggle("compact-resting",state==="pet");
  pv.classList.toggle("compact-closed",state==="idle");
@@ -1709,10 +1791,16 @@ function nadiSetCompactState(state){
  if(state==="idle")nadiUpdateClosedTime();
 }
 pv.classList.add("compact-mode","compact-resting");
+nadiStartResting(true);
 function nadiPauseCompact(){
  const pause=document.hidden||!nadiPreviewInView;
  nadiCompact.classList.toggle("paused",pause);
- if(pause){nadiStopCompactFrame();nadiCompactAmount=nadiCompactTarget;nadiCompactShape.setAttribute("d",nadiCompactPath(nadiCompactAmount))}
+ if(pause){
+   nadiStopRestingMotion();
+   nadiStopCompactFrame();
+   nadiCompactAmount=nadiCompactTarget;
+   nadiCompactShape.setAttribute("d",nadiCompactPath(nadiCompactAmount));
+ }else if(mn.dataset.s==="pet") nadiStartResting(false);
 }
 if("IntersectionObserver" in window){
  new IntersectionObserver(entries=>{
