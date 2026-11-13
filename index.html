@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-13-preview-monotonic-motion-v3">
+<meta name="nadi-site-revision" content="2026-11-13-preview-fixed-anchor-v4">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -149,10 +149,14 @@ a { color: inherit; }
 .wall .shine { position: absolute; inset: 0; background: radial-gradient(45% 40% at 50% 30%, rgba(255,255,255,.35), transparent 70%); mix-blend-mode: soft-light; }
 
 /* ===== Notch tiruan (ukuran dalam dp, diskalakan --u) ================================== */
-.mn-holder { position: absolute; top: 0; left: 50%; transform: translateX(-50%) scale(var(--u)); transform-origin: top center; }
+/* Fixed-size anchor: the parent transform matrix never changes while
+   the inner notch grows or shrinks. Its center stays on the laptop centerline. */
+.mn-holder { position: absolute; top: 0; left: 50%; width: 156px; height: 30px;
+  transform: translateX(-50%) scale(var(--u)); transform-origin: top center; }
 .mn {
   --w: 156px; --h: 30px; --r: 14px; --e: 10px;
-  position: relative; width: var(--w); height: var(--h); transform-origin: 50% 0;
+  position: absolute; top: 0; left: 50%; translate: -50% 0;
+  width: var(--w); height: var(--h); transform-origin: 50% 0;
   background: #050609; border-radius: 0 0 var(--r) var(--r);
   transition: width .54s cubic-bezier(.22,.75,.28,1), height .54s cubic-bezier(.22,.75,.28,1),
     border-radius .45s ease, box-shadow .20s ease;
