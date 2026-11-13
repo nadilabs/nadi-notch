@@ -15,14 +15,14 @@ assert.ok(html.includes('transition:none !important'),'legacy transition must be
 assert.ok(html.includes('nadiShell.frame=requestAnimationFrame(nadiShellTick)'));
 assert.ok(html.includes('mn.style.transform = mn.classList.contains("nadi-morphing")'));
 assert.ok(!html.includes('function nadiShellSpring('),'old spring must not race the tween');
-const anchor=html.match(/\\.mn-holder\\s*\\{([^}]*)\\}/)?.[1];
-const shell=html.match(/\\.mn\\s*\\{([^}]*)\\}/)?.[1];
+const anchor=html.match(/\.mn-holder\s*\{([^}]*)\}/)?.[1];
+const shell=html.match(/\.mn\s*\{([^}]*)\}/)?.[1];
 assert.ok(anchor&&shell,'notch anchor/shell CSS missing');
-assert.match(anchor,/width:\\s*156px/,'outer notch anchor must have a fixed width');
-assert.match(anchor,/height:\\s*30px/,'outer notch anchor must have a fixed height');
-assert.match(shell,/position:\\s*absolute/,'animated shell must not resize its parent');
-assert.match(shell,/left:\\s*50%/,'animated shell must use centered positioning');
-assert.match(shell,/translate:\\s*-50%\\s+0/,'animated shell must offset its own center');
+assert.match(anchor,/width:\s*156px/,'outer notch anchor must have a fixed width');
+assert.match(anchor,/height:\s*30px/,'outer notch anchor must have a fixed height');
+assert.match(shell,/position:\s*absolute/,'animated shell must not resize its parent');
+assert.match(shell,/left:\s*50%/,'animated shell must use centered positioning');
+assert.match(shell,/translate:\s*-50%\s+0/,'animated shell must offset its own center');
 
 const expr=js.match(/const progress=([^;]+);/);
 assert.ok(expr,'single-clock easing expression missing');
