@@ -1999,7 +1999,7 @@ const nadiMusicUI={
 };
 const nadiMusicDuration=256;
 let nadiMusicElapsed=193,nadiMusicVolume=1,nadiMusicPreviousVolume=1,nadiMusicPlaying=true;
-let nadiMusicFrame=0,nadiMusicLastFrame=0,nadiMusicLastPaint=0,nadiMusicHeaderMinute=-1;
+let nadiMusicFrame=0,nadiMusicLastFrame=0,nadiMusicLastPaint=0,nadiMusicHeaderMinute=-1,nadiMusicInView=true;
 const nadiMusicClamp=(x,min=0,max=1)=>Math.max(min,Math.min(max,x));
 const nadiMusicTime=(seconds)=>{
  const t=Math.max(0,Math.floor(seconds));
@@ -2020,7 +2020,7 @@ function nadiMusicPaint(){
  nadiMusicUI.progress.setAttribute("width",(220*fraction).toFixed(3));
  nadiMusicUI.volume.setAttribute("width",(69.22*nadiMusicVolume).toFixed(3));
  nadiMusicUI.elapsed.textContent=nadiMusicTime(nadiMusicElapsed);
- nadiMusicUI.remaining.textContent="-"+nadiMusicTime(nadiMusicDuration-nadiMusicElapsed);
+ nadiMusicUI.remaining.textContent="-"+nadiMusicTime(Math.ceil(nadiMusicDuration-nadiMusicElapsed));
  nadiMusicUI.waves.style.opacity=nadiMusicVolume>.001?"1":"0";
  nadiMusicSVG.classList.toggle("is-playing",nadiMusicPlaying&&nadiMusicElapsed<nadiMusicDuration);
  nadiMusicSVG.classList.toggle("is-muted",nadiMusicVolume<=.001);
@@ -2040,7 +2040,7 @@ function nadiMusicStop(){
 }
 function nadiMusicTick(now){
  nadiMusicFrame=0;
- if(mn.dataset.s!=="music"||!nadiPreviewInView||document.hidden||!nadiMusicPlaying)return;
+ if(mn.dataset.s!=="music"||!nadiMusicInView||document.hidden||!nadiMusicPlaying)return;
  if(nadiMusicLastFrame){
   // Discard large tab-suspension gaps: preview time runs only while visible.
   nadiMusicElapsed=Math.min(nadiMusicDuration,nadiMusicElapsed+Math.min(.08,(now-nadiMusicLastFrame)/1000));
@@ -2055,7 +2055,7 @@ function nadiMusicTick(now){
 function nadiMusicResume(){
  nadiMusicStop();
  nadiMusicPaint();
- if(nadiMusicPlaying&&mn.dataset.s==="music"&&!document.hidden&&nadiPreviewInView)
+ if(nadiMusicPlaying&&mn.dataset.s==="music"&&!document.hidden&&nadiMusicInView)
   nadiMusicFrame=requestAnimationFrame(nadiMusicTick);
 }
 function nadiMusicShow(state){
@@ -2132,11 +2132,12 @@ document.addEventListener("visibilitychange",()=>{
 });
 if("IntersectionObserver" in window){
  new IntersectionObserver(entries=>{
-  if(!entries[0]?.isIntersecting)nadiMusicStop();
+  nadiMusicInView=Boolean(entries[0]&&entries[0].isIntersecting);
+  if(!nadiMusicInView)nadiMusicStop();
   else if(mn.dataset.s==="music")nadiMusicResume();
  },{threshold:.01}).observe(document.getElementById("laptop"));
 }
-setInterval(()=>{if(mn.dataset.s==="music"&&!document.hidden&&nadiPreviewInView)nadiMusicHeader()},15000);
+setInterval(()=>{if(mn.dataset.s==="music"&&!document.hidden&&nadiMusicInView)nadiMusicHeader()},15000);
 nadiMusicPaint();
 
 const captions = {
