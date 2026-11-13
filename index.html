@@ -154,11 +154,13 @@ a { color: inherit; }
   --w: 156px; --h: 30px; --r: 14px; --e: 10px;
   position: relative; width: var(--w); height: var(--h); transform-origin: 50% 0;
   background: #050609; border-radius: 0 0 var(--r) var(--r);
-  transition: width .62s var(--spring), height .62s var(--spring), border-radius .45s ease;
+  transition: width .62s var(--spring), height .62s var(--spring),
+    border-radius .45s ease, box-shadow .20s ease;
   font-family: var(--ui); color: #fff; font-size: 13px; line-height: 1;
   box-shadow: 0 14px 34px -16px rgba(0,0,0,.95);
 }
-.mn::before, .mn::after { content: ""; position: absolute; top: 0; width: var(--e); height: var(--e); transition: width .45s, height .45s; }
+.mn::before, .mn::after { content: ""; position: absolute; top: 0; width: var(--e); height: var(--e);
+  opacity:1; transition:width .45s, height .45s, opacity .14s ease .24s; }
 .mn::before { right: 100%; background: radial-gradient(circle at 0 100%, transparent calc(var(--e) - .5px), #050609 var(--e)); }
 .mn::after { left: 100%; background: radial-gradient(circle at 100% 100%, transparent calc(var(--e) - .5px), #050609 var(--e)); }
 .mn[data-s="music"], .mn[data-s="pomo"], .mn[data-s="water"], .mn[data-s="shelf"], .mn[data-s="todo"], .mn[data-s="prayer"], .mn[data-s="clip"], .mn[data-s="widgets"] { --w: 420px; --h: 140px; --r: 32px; --e: 22px; }
@@ -624,6 +626,29 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
   transition:opacity .22s ease .16s}
 .preview.pre .nadi-compact-live{opacity:0}
 .mn[data-s="minimal"]{--w:44px;--h:4px;--r:2px;--e:1.2px}
+/* Minimal is only 44×4. The entire animated content viewport (SVGs,
+   legacy feature layers) and the decorative shoulder gradients would become
+   clipped rectangular fragments during the 500ms shrink to 4px. Only the
+   black shell is allowed to paint as it approaches Minimal. */
+.mn[data-s="minimal"]{
+  box-shadow:none;
+}
+.mn[data-s="minimal"]::before,
+.mn[data-s="minimal"]::after{
+  opacity:0;
+  transition:opacity .07s linear, width .45s ease, height .45s ease;
+}
+.mn[data-s="minimal"] .nadi-visual-viewport,
+.mn[data-s="minimal"] > .ly{
+  visibility:hidden !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:none !important;
+}
+@media (prefers-reduced-motion:reduce){
+  .mn, .mn.shrink, .mn::before, .mn::after{transition:none !important;}
+}
+
 .mn[data-s="music"]{--w:440px;--h:144px;--r:32px;--e:22px}
 /* Each native SVG replaces its *complete* legacy HTML composition.
    The shared .l-hdr and .l-dots were not disabled with .l-music; they
