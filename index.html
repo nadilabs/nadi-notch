@@ -647,14 +647,20 @@ opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
 .nadi-music-live #nadi-music-bar-5{animation-duration:.72s;animation-delay:-.51s}
 .nadi-music-live #nadi-music-bar-6{animation-duration:.81s;animation-delay:-.17s}
 @keyframes nadi-music-equalizer{0%{transform:scaleY(.48)}100%{transform:scaleY(1)}}
-.nadi-music-live #nadi-music-waves{transition:opacity .20s ease}
+.nadi-music-live #nadi-music-volume-fill{transition:width .20s cubic-bezier(.2,.8,.2,1)}
+.nadi-music-live #nadi-music-waves{transition:opacity .20s ease;
+ transform-box:fill-box;transform-origin:0% 50%}
+.nadi-music-live.is-playing #nadi-music-waves{animation:nadi-music-wave 1.5s ease-in-out infinite}
+@keyframes nadi-music-wave{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.92)}}
 .nadi-music-live #nadi-music-play-icon,
 .nadi-music-live #nadi-music-pause-icon{transform-origin:220px 116.5px}
 .nadi-music-live [role="slider"]:focus-visible,
 .nadi-music-live [role="button"]:focus-visible{outline:none;stroke:#48b6ff;stroke-width:1}
 @media(prefers-reduced-motion:reduce){.nadi-music-live{transition:none}
- .nadi-music-live .nadi-music-eq-bar{animation:none}
- .nadi-music-live #nadi-music-waves{transition:none}}
+ .nadi-music-live .nadi-music-eq-bar,
+ .nadi-music-live.is-playing #nadi-music-waves{animation:none}
+ .nadi-music-live #nadi-music-waves,
+ .nadi-music-live #nadi-music-volume-fill{transition:none}}
 
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
