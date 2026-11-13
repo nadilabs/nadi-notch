@@ -24,7 +24,7 @@
 <link rel="apple-touch-icon" href="./assets/nadi-mascot-neutral.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* ===== Tokens ================================================================ */
 :root {
@@ -626,6 +626,36 @@ opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
 @media(prefers-reduced-motion:reduce){.nadi-compact-live,
 .preview .mn-holder,#nadi-compact-closed-content,#nadi-resting-art{transition:none}}
 
+
+/* Music: live layers taken from the two latest 440x144 Nadi SVGs.
+   Keep this vector at native design resolution; its controls use SVG coordinates. */
+.nadi-music-live {position:absolute;top:0;left:50%;z-index:9;
+ width:calc(var(--u)*440px);height:calc(var(--u)*144px);
+ transform:translateX(-50%);transform-origin:50% 0;
+ visibility:hidden;opacity:0;pointer-events:none;overflow:visible;
+ transition:opacity .25s cubic-bezier(.22,.75,.28,1),visibility .25s}
+.preview.music-live .nadi-music-live{visibility:visible;opacity:1;pointer-events:auto}
+.preview.music-live .mn-holder{opacity:0;pointer-events:none}
+.nadi-music-live .nadi-music-eq-bar{transform-box:fill-box;transform-origin:center;
+ animation:nadi-music-equalizer .7s ease-in-out infinite alternate;animation-play-state:paused}
+.nadi-music-live.is-playing .nadi-music-eq-bar{animation-play-state:running}
+.nadi-music-live .nadi-music-eq-bar:nth-of-type(2){animation-duration:.86s;animation-delay:-.38s}
+.nadi-music-live #nadi-music-bar-1{animation-duration:.68s;animation-delay:-.12s}
+.nadi-music-live #nadi-music-bar-2{animation-duration:.92s;animation-delay:-.32s}
+.nadi-music-live #nadi-music-bar-3{animation-duration:.77s;animation-delay:-.56s}
+.nadi-music-live #nadi-music-bar-4{animation-duration:1.05s;animation-delay:-.24s}
+.nadi-music-live #nadi-music-bar-5{animation-duration:.72s;animation-delay:-.51s}
+.nadi-music-live #nadi-music-bar-6{animation-duration:.81s;animation-delay:-.17s}
+@keyframes nadi-music-equalizer{0%{transform:scaleY(.48)}100%{transform:scaleY(1)}}
+.nadi-music-live #nadi-music-waves{transition:opacity .20s ease}
+.nadi-music-live #nadi-music-play-icon,
+.nadi-music-live #nadi-music-pause-icon{transform-origin:220px 116.5px}
+.nadi-music-live [role="slider"]:focus-visible,
+.nadi-music-live [role="button"]:focus-visible{outline:none;stroke:#48b6ff;stroke-width:1}
+@media(prefers-reduced-motion:reduce){.nadi-music-live{transition:none}
+ .nadi-music-live .nadi-music-eq-bar{animation:none}
+ .nadi-music-live #nadi-music-waves{transition:none}}
+
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
 .sec-title { font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.03em; font-weight: 800; margin: 0 0 14px; max-width: 16ch; }
@@ -925,6 +955,125 @@ footer a:hover { color: var(--ink); }
   <path class="rim-track" d="M7 9V20.625C7 25.78125 11.5 30 17 30H139C144.5 30 149 25.78125 149 20.625V9" pathLength="100"/>
   <path class="rim-trail" d="M7 9V20.625C7 25.78125 11.5 30 17 30H139C144.5 30 149 25.78125 149 20.625V9" pathLength="100"/>
   <path class="rim-core" d="M7 9V20.625C7 25.78125 11.5 30 17 30H139C144.5 30 149 25.78125 149 20.625V9" pathLength="100"/>
+</g>
+</svg>
+<svg class="nadi-music-live" id="nadi-music-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 144" role="group" aria-label="Nadi Music animated interactive preview" tabindex="-1">
+<style type="text/css">
+	.nadi-music-st0{fill:#050609;}
+	.nadi-music-st1{fill:#545761;}
+	.nadi-music-st2{fill:#F7F7FB;}
+	.nadi-music-st3{fill:#FFFFFF;}
+	.nadi-music-st4{fill:none;stroke:#51FF00;stroke-width:1.4;}
+	.nadi-music-st5{fill:#B0B0B9;}
+	.nadi-music-st6{font-family:'PlusJakartaSans-Regular';}
+	.nadi-music-st7{font-size:10.5px;}
+	.nadi-music-st8{fill:#51FF00;}
+	.nadi-music-st9{fill:#454850;}
+	.nadi-music-st10{fill:#F4F6FB;}
+	.nadi-music-st11{font-family:'PlusJakartaSans-SemiBold';}
+	.nadi-music-st12{font-size:13.5px;}
+	.nadi-music-st13{fill:#888B96;}
+	.nadi-music-st14{fill:#A5A7B1;}
+	.nadi-music-st15{font-size:9.4px;}
+</style>
+<g id="Music_00000109743893889924352420000017581447613751885233_">
+	<g id="_x30_1_x5F_Notch_x5F_Shell_x5F_Bezier_00000172430099378438762400000014062078500689579676_">
+		<path id="Shell_Outline_00000105390624782076594490000003385095545032910221_" class="nadi-music-st0" d="M0,0h440c-5.5,0-19.8,2.5-19.8,25.1
+			v85.7c0,18.3-14.8,33.1-33.1,33.1H52.9c-18.3,0-33.1-14.8-33.1-33.1V25.1C19.8,2.5,5.5,0,0,0z"/>
+	</g>
+	<g id="_x30_5_x5F_Footer_x5F_Navigation_00000167369263481169637990000005563349100766601395_">
+		<circle class="nadi-music-st1" cx="206.7" cy="134" r="1.6"/>
+		<circle class="nadi-music-st1" cx="217.7" cy="134" r="1.6"/>
+		<circle class="nadi-music-st1" cx="228.7" cy="134" r="1.6"/>
+		<circle class="nadi-music-st1" cx="239.7" cy="134" r="1.6"/>
+		<circle class="nadi-music-st1" cx="250.7" cy="134" r="1.6"/>
+		<circle class="nadi-music-st1" cx="261.7" cy="134" r="1.6"/>
+		<path class="nadi-music-st2" d="M178.7,132h17c1.1,0,2,0.9,2,2l0,0c0,1.1-0.9,2-2,2h-17c-1.1,0-2-0.9-2-2l0,0
+			C176.7,132.9,177.6,132,178.7,132z"/>
+	</g>
+	<g>
+		<path class="nadi-music-st3 nadi-music-eq-bar" id="nadi-music-bar-1" d="M385.1,22L385.1,22c-0.5,0-1-0.4-1-1V19c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V21
+			C386.1,21.6,385.7,22,385.1,22z"/>
+		<path class="nadi-music-st3 nadi-music-eq-bar" id="nadi-music-bar-2" d="M381.3,25L381.3,25c-0.5,0-1-0.4-1-1V16c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V24
+			C382.3,24.6,381.8,25,381.3,25z"/>
+		<path class="nadi-music-st3 nadi-music-eq-bar" id="nadi-music-bar-3" d="M377.5,24L377.5,24c-0.5,0-1-0.4-1-1V17c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V23C378.5,23.6,378,24,377.5,24z
+			"/>
+		<path class="nadi-music-st3 nadi-music-eq-bar" id="nadi-music-bar-4" d="M373.7,27L373.7,27c-0.5,0-1-0.4-1-1V14c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V26
+			C374.6,26.6,374.2,27,373.7,27z"/>
+		<path class="nadi-music-st3 nadi-music-eq-bar" id="nadi-music-bar-5" d="M369.9,26L369.9,26c-0.5,0-1-0.4-1-1V15c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V25
+			C370.8,25.6,370.4,26,369.9,26z"/>
+		<path class="nadi-music-st3 nadi-music-eq-bar" id="nadi-music-bar-6" d="M366.1,23L366.1,23c-0.5,0-1-0.4-1-1V18c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1V22C367,22.6,366.6,23,366.1,23z
+			"/>
+	</g>
+	<path class="nadi-music-st2" d="M31.8,78.2c-0.4,0-0.7-0.2-0.9-0.5l-4-5c-0.4-0.4-0.4-1.1,0-1.5l4-5c0.4-0.5,1.2-0.6,1.7-0.2
+		c0.5,0.4,0.6,1.2,0.2,1.7L29.3,72l3.4,4.3c0.4,0.5,0.3,1.3-0.2,1.7C32.3,78.1,32.1,78.2,31.8,78.2z"/>
+	<path class="nadi-music-st2" d="M408.2,78.2c-0.3,0-0.5-0.1-0.7-0.3c-0.5-0.4-0.6-1.2-0.2-1.7l3.4-4.3l-3.4-4.3c-0.4-0.5-0.3-1.3,0.2-1.7
+		c0.5-0.4,1.3-0.3,1.7,0.2l4,5c0.4,0.4,0.4,1.1,0,1.5l-4,5C408.9,78,408.6,78.2,408.2,78.2z"/>
+	<g>
+		<circle class="nadi-music-st4" cx="192.5" cy="20" r="6.3"/>
+		<text transform="matrix(1 0 0 1 213.4783 23.3203)" class="nadi-music-st5 nadi-music-st6 nadi-music-st7" id="nadi-music-header-clock">Sun 08 Nov 2026 07:46</text>
+		<path class="nadi-music-st8" d="M194.2,16c0.2,0.1,0.2,0.4,0.2,0.6l-1.2,3h2.2c0.2,0,0.4,0.1,0.5,0.3s0,0.4-0.1,0.5l-4.4,3.6
+			c-0.2,0.1-0.4,0.2-0.6,0c-0.2-0.1-0.2-0.4-0.2-0.6l1.2-3h-2.2c-0.2,0-0.4-0.1-0.5-0.3s0-0.4,0.1-0.5l4.4-3.6
+			C193.8,15.8,194,15.8,194.2,16z"/>
+	</g>
+	<path class="nadi-music-st9" d="M118.3,97.5h217c0.8,0,1.5,0.7,1.5,1.5l0,0c0,0.8-0.7,1.5-1.5,1.5h-217c-0.8,0-1.5-0.7-1.5-1.5l0,0
+		C116.8,98.1,117.5,97.5,118.3,97.5z"/>
+	<rect id="nadi-music-progress-fill" x="116.83" y="97.46" width="166" height="3" rx="1.5" fill="#F4F6FB"/>
+	<text transform="matrix(1 0 0 1 141.9519 55.459)" class="nadi-music-st2 nadi-music-st11 nadi-music-st12">Paper Sky</text>
+	<text transform="matrix(1 0 0 1 141.9519 75.459)" class="nadi-music-st13 nadi-music-st6 nadi-music-st7">Lumen Coast - Summer Flows</text>
+	<text transform="matrix(1 0 0 1 57.3284 102.3284)" class="nadi-music-st14 nadi-music-st6 nadi-music-st15" id="nadi-music-time-elapsed">03:13</text>
+	<text transform="matrix(1 0 0 1 352.3284 102.3284)" class="nadi-music-st14 nadi-music-st6 nadi-music-st15" id="nadi-music-time-remaining">-01:03</text>
+	<g>
+		<g id="Album_Artwork_Editable_00000124865306133380931980000007021821400831647113_">
+			<path class="nadi-music-st9" d="M63.8,20h56.3c3.2,0,5.8,2.6,5.8,5.8v56.3c0,3.2-2.6,5.8-5.8,5.8H63.8c-3.2,0-5.8-2.6-5.8-5.8V25.8
+				C58,22.6,60.6,20,63.8,20z"/>
+		</g>
+		<path class="nadi-music-st10" d="M81.8,43.2c-0.6,0-1,0.4-1,1v19.6c0,0.5,0.5,1,1,1h20.4c0.6,0,1-0.4,1-1V44.2c0-0.5-0.5-1-1-1H81.8z
+			 M77.7,44.2c0-2.2,1.8-3.9,4.1-3.9h20.4c2.3,0,4.1,1.8,4.1,3.9v19.6c0,2.2-1.8,3.9-4.1,3.9H81.8c-2.3,0-4.1-1.8-4.1-3.9V44.2z
+			 M85.9,46.2c1.1,0,2,0.9,2,2c0,1.1-0.9,2-2,2s-2-0.9-2-2C83.8,47,84.7,46.2,85.9,46.2z M94.6,50.6c0.5,0,1,0.3,1.3,0.7l5.1,8.3
+			c0.3,0.5,0.3,1,0,1.5c-0.3,0.5-0.8,0.7-1.3,0.7H84.3c-0.6,0-1.1-0.3-1.4-0.8c-0.3-0.5-0.2-1.1,0.1-1.5l3.6-4.9
+			c0.3-0.4,0.8-0.6,1.3-0.6s1,0.2,1.3,0.6l1.1,1.5l3-4.8C93.5,50.9,94,50.6,94.6,50.6L94.6,50.6z"/>
+	</g>
+	<path class="nadi-music-st2" d="M170.8,110.3c0.3-0.3,0.8-0.4,1.3-0.2s0.7,0.6,0.7,1.1v4l5-4.8c0.3-0.3,0.8-0.4,1.3-0.2s0.7,0.6,0.7,1.1v10.8
+		c0,0.5-0.3,0.9-0.7,1.1c-0.4,0.2-0.9,0.1-1.3-0.2l-5-4.8v4c0,0.5-0.3,0.9-0.7,1.1c-0.4,0.2-0.9,0.1-1.3-0.2l-5.6-5.4
+		c-0.2-0.2-0.4-0.5-0.4-0.8s0.1-0.6,0.4-0.8L170.8,110.3z"/>
+	<path class="nadi-music-st2" d="M266.4,122.7c-0.3,0.3-0.8,0.4-1.3,0.2s-0.7-0.6-0.7-1.1v-4l-5,4.8c-0.3,0.3-0.8,0.4-1.3,0.2s-0.7-0.6-0.7-1.1
+		v-10.8c0-0.5,0.3-0.9,0.7-1.1s0.9-0.1,1.3,0.2l5,4.8v-4c0-0.5,0.3-0.9,0.7-1.1s0.9-0.1,1.3,0.2l5.6,5.4c0.2,0.2,0.4,0.5,0.4,0.8
+		s-0.1,0.6-0.4,0.8L266.4,122.7z"/>
+	<path id="nadi-music-pause-icon" class="nadi-music-st2" d="M215.1,109.9c-0.8,0-1.4,0.6-1.4,1.4v10.3c0,0.8,0.6,1.4,1.4,1.4h1.9c0.8,0,1.4-0.6,1.4-1.4v-10.3
+		c0-0.8-0.6-1.4-1.4-1.4H215.1z M221.7,109.9c-0.8,0-1.4,0.6-1.4,1.4v10.3c0,0.8,0.6,1.4,1.4,1.4h1.9c0.8,0,1.4-0.6,1.4-1.4v-10.3
+		c0-0.8-0.6-1.4-1.4-1.4H221.7z"/><path id="nadi-music-play-icon" d="M214.3 110.3 Q214.3 109.2 215.4 109.8 L226.1 116.1 Q227.0 116.6 226.1 117.2 L215.4 123.3 Q214.3 124 214.3 122.8Z" fill="#F7F7FB" style="display:none"/>
+	<path class="nadi-music-st9" d="M361.7,118.1h-66.2c-0.8,0-1.5-0.7-1.5-1.5l0,0c0-0.8,0.7-1.5,1.5-1.5h66.2c0.8,0,1.5,0.7,1.5,1.5l0,0
+		C363.2,117.5,362.6,118.1,361.7,118.1z"/>
+	<rect id="nadi-music-volume-fill" x="294.01" y="115.14" width="69.22" height="3" rx="1.5" fill="#FFFFFF"/>
+	<g>
+		<path class="nadi-music-st10" d="M66.8,113.8c0,0.1,0,0.1,0,0.2c0,2,0,3.9,0,5.9c0,0.4-0.1,0.9-0.2,1.3c-0.3,1.1-1.1,1.7-2.2,1.9
+			c-0.5,0.1-0.9,0-1.4-0.1c-1.3-0.4-1.8-1.6-1.3-2.9c0.4-0.9,1.2-1.4,2.2-1.6c0.4-0.1,0.8,0,1.3,0.1c0.3,0.1,0.4,0.1,0.6,0.3
+			c0-0.1,0-0.1,0-0.2c0-2.7,0-5.5,0-8.2c0-0.1,0-0.1,0-0.2c0.2-0.4,0.5-0.5,0.8-0.2c0.1,0.1,0.1,0.2,0.2,0.3
+			c0.2,0.2,0.3,0.5,0.5,0.7c0.2,0.3,0.5,0.6,0.9,0.9c0.8,0.5,1.5,1.2,2.1,2c0.6,0.8,0.8,1.8,0.5,2.8c-0.2,0.7-0.5,1.3-1,1.8
+			c-0.1,0.1-0.2,0.2-0.4,0.3c-0.1,0-0.2,0-0.3-0.1c-0.2-0.2-0.2-0.4-0.1-0.6c0.5-0.7,0.6-2-0.2-2.8
+			C68.2,114.7,67.5,114.2,66.8,113.8C66.8,113.8,66.8,113.8,66.8,113.8z"/>
+		<path class="nadi-music-st10" d="M63.4,112.6h-4c-0.2,0-0.3-0.1-0.3-0.3l0,0c0-0.2,0.1-0.3,0.3-0.3h4c0.2,0,0.3,0.1,0.3,0.3l0,0
+			C63.7,112.5,63.6,112.6,63.4,112.6z"/>
+		<path class="nadi-music-st10" d="M63.4,114.3h-4c-0.2,0-0.3-0.1-0.3-0.3l0,0c0-0.2,0.1-0.3,0.3-0.3h4c0.2,0,0.3,0.1,0.3,0.3l0,0
+			C63.7,114.1,63.6,114.3,63.4,114.3z"/>
+		<path class="nadi-music-st10" d="M63.4,116h-4c-0.2,0-0.3-0.1-0.3-0.3l0,0c0-0.2,0.1-0.3,0.3-0.3h4c0.2,0,0.3,0.1,0.3,0.3l0,0
+			C63.7,115.8,63.6,116,63.4,116z"/>
+	</g>
+	<path id="nadi-music-waves" class="nadi-music-st3" d="M367.1,116.6c0,2.2,1,4.2,2.6,5.5c0.3,0.2,0.6,0.2,0.8-0.1s0.2-0.6-0.1-0.8c-1.3-1.1-2.2-2.7-2.2-4.6
+		s0.9-3.5,2.2-4.6c0.3-0.2,0.3-0.6,0.1-0.8c-0.2-0.3-0.6-0.3-0.8-0.1C368.1,112.4,367.1,114.4,367.1,116.6z M371.2,112.9
+		c-1.1,0.9-1.7,2.2-1.7,3.7c0,1.5,0.7,2.8,1.7,3.7c0.3,0.2,0.6,0.2,0.8-0.1s0.2-0.6-0.1-0.8c-0.8-0.7-1.3-1.6-1.3-2.8
+		s0.5-2.1,1.3-2.8c0.3-0.2,0.3-0.6,0.1-0.8S371.5,112.7,371.2,112.9L371.2,112.9z M371.8,116.6c0,0.7,0.3,1.4,0.9,1.8
+		c0.3,0.2,0.6,0.2,0.8-0.1c0.2-0.3,0.2-0.6-0.1-0.8c-0.3-0.2-0.4-0.6-0.4-0.9s0.2-0.7,0.4-0.9c0.3-0.2,0.3-0.6,0.1-0.8
+		c-0.2-0.3-0.6-0.3-0.8-0.1C372.2,115.2,371.8,115.9,371.8,116.6z M382.1,117.8v-2.4c0-0.7-0.5-1.2-1.2-1.2h-1.2l-3.3-2.9
+		c-0.2-0.1-0.4-0.2-0.6-0.2c-0.5,0-0.9,0.4-0.9,0.9v9.3c0,0.5,0.4,0.9,0.9,0.9c0.2,0,0.4-0.1,0.6-0.2l3.3-2.9h1.2
+		C381.5,119,382.1,118.5,382.1,117.8z"/>
+</g>
+<g id="nadi-music-press-targets" fill="transparent">
+ <rect id="nadi-music-seek-hit" x="113" y="89" width="227" height="20" tabindex="0" role="slider" aria-label="Song position" aria-valuemin="0" aria-valuemax="256" aria-valuenow="193" style="cursor:pointer;touch-action:none"/>
+ <rect id="nadi-music-play-hit" x="205" y="106" width="29" height="22" tabindex="0" role="button" aria-label="Pause demo playback" style="cursor:pointer"/>
+ <rect id="nadi-music-volume-hit" x="290" y="106" width="77" height="24" tabindex="0" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="cursor:pointer;touch-action:none"/>
+ <rect id="nadi-music-mute-hit" x="366" y="105" width="26" height="25" tabindex="0" role="button" aria-label="Mute volume" style="cursor:pointer"/>
 </g>
 </svg>
           <div class="wall" aria-hidden="true">
@@ -1830,6 +1979,166 @@ if("IntersectionObserver" in window){
 }
 document.addEventListener("visibilitychange",nadiPauseCompact);
 
+
+// Music: one vector UI, with editable volume/seek and a demo playback clock.
+// No audio is played or fetched; progress is an accurately timed website simulation.
+const nadiMusicSVG=document.getElementById("nadi-music-live");
+const nadiMusicUI={
+ progress:document.getElementById("nadi-music-progress-fill"),
+ volume:document.getElementById("nadi-music-volume-fill"),
+ elapsed:document.getElementById("nadi-music-time-elapsed"),
+ remaining:document.getElementById("nadi-music-time-remaining"),
+ header:document.getElementById("nadi-music-header-clock"),
+ waves:document.getElementById("nadi-music-waves"),
+ play:document.getElementById("nadi-music-play-icon"),
+ pause:document.getElementById("nadi-music-pause-icon"),
+ seek:document.getElementById("nadi-music-seek-hit"),
+ volumeHit:document.getElementById("nadi-music-volume-hit"),
+ playHit:document.getElementById("nadi-music-play-hit"),
+ muteHit:document.getElementById("nadi-music-mute-hit")
+};
+const nadiMusicDuration=256;
+let nadiMusicElapsed=193,nadiMusicVolume=1,nadiMusicPreviousVolume=1,nadiMusicPlaying=true;
+let nadiMusicFrame=0,nadiMusicLastFrame=0,nadiMusicLastPaint=0,nadiMusicHeaderMinute=-1;
+const nadiMusicClamp=(x,min=0,max=1)=>Math.max(min,Math.min(max,x));
+const nadiMusicTime=(seconds)=>{
+ const t=Math.max(0,Math.floor(seconds));
+ return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0");
+};
+function nadiMusicHeader(){
+ const d=new Date(),minute=Math.floor(d.getTime()/60000);
+ if(minute===nadiMusicHeaderMinute)return;
+ nadiMusicHeaderMinute=minute;
+ const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+ const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+ nadiMusicUI.header.textContent=days[d.getDay()]+" "+String(d.getDate()).padStart(2,"0")+" "+
+  months[d.getMonth()]+" "+d.getFullYear()+" "+String(d.getHours()).padStart(2,"0")+":"+
+  String(d.getMinutes()).padStart(2,"0");
+}
+function nadiMusicPaint(){
+ const fraction=nadiMusicClamp(nadiMusicElapsed/nadiMusicDuration);
+ nadiMusicUI.progress.setAttribute("width",(220*fraction).toFixed(3));
+ nadiMusicUI.volume.setAttribute("width",(69.22*nadiMusicVolume).toFixed(3));
+ nadiMusicUI.elapsed.textContent=nadiMusicTime(nadiMusicElapsed);
+ nadiMusicUI.remaining.textContent="-"+nadiMusicTime(nadiMusicDuration-nadiMusicElapsed);
+ nadiMusicUI.waves.style.opacity=nadiMusicVolume>.001?"1":"0";
+ nadiMusicSVG.classList.toggle("is-playing",nadiMusicPlaying&&nadiMusicElapsed<nadiMusicDuration);
+ nadiMusicSVG.classList.toggle("is-muted",nadiMusicVolume<=.001);
+ nadiMusicUI.play.style.display=nadiMusicPlaying?"none":"";
+ nadiMusicUI.pause.style.display=nadiMusicPlaying?"":"none";
+ nadiMusicUI.seek.setAttribute("aria-valuenow",String(Math.floor(nadiMusicElapsed)));
+ nadiMusicUI.seek.setAttribute("aria-valuetext",nadiMusicTime(nadiMusicElapsed)+" of "+nadiMusicTime(nadiMusicDuration));
+ nadiMusicUI.volumeHit.setAttribute("aria-valuenow",String(Math.round(nadiMusicVolume*100)));
+ nadiMusicUI.playHit.setAttribute("aria-label",nadiMusicPlaying?"Pause demo playback":"Resume demo playback");
+ nadiMusicUI.muteHit.setAttribute("aria-label",nadiMusicVolume<=.001?"Unmute volume":"Mute volume");
+ nadiMusicHeader();
+}
+function nadiMusicStop(){
+ if(nadiMusicFrame)cancelAnimationFrame(nadiMusicFrame);
+ nadiMusicFrame=0;
+ nadiMusicLastFrame=0;
+}
+function nadiMusicTick(now){
+ nadiMusicFrame=0;
+ if(mn.dataset.s!=="music"||!nadiPreviewInView||document.hidden||!nadiMusicPlaying)return;
+ if(nadiMusicLastFrame){
+  // Discard large tab-suspension gaps: preview time runs only while visible.
+  nadiMusicElapsed=Math.min(nadiMusicDuration,nadiMusicElapsed+Math.min(.08,(now-nadiMusicLastFrame)/1000));
+ }
+ nadiMusicLastFrame=now;
+ if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+ if(now-nadiMusicLastPaint>40||!nadiMusicPlaying){
+  nadiMusicPaint();nadiMusicLastPaint=now;
+ }
+ if(nadiMusicPlaying)nadiMusicFrame=requestAnimationFrame(nadiMusicTick);
+}
+function nadiMusicResume(){
+ nadiMusicStop();
+ nadiMusicPaint();
+ if(nadiMusicPlaying&&mn.dataset.s==="music"&&!document.hidden&&nadiPreviewInView)
+  nadiMusicFrame=requestAnimationFrame(nadiMusicTick);
+}
+function nadiMusicShow(state){
+ pv.classList.toggle("music-live",state==="music");
+ if(state==="music")nadiMusicResume();
+ else nadiMusicStop();
+}
+function nadiMusicSVGX(event){
+ const pt=nadiMusicSVG.createSVGPoint();
+ pt.x=event.clientX;pt.y=event.clientY;
+ const ctm=nadiMusicSVG.getScreenCTM();
+ return ctm?pt.matrixTransform(ctm.inverse()).x:0;
+}
+function nadiMusicSeekTo(event){
+ nadiMusicElapsed=nadiMusicDuration*nadiMusicClamp((nadiMusicSVGX(event)-116.83)/220);
+ if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+ nadiMusicResume();
+}
+function nadiMusicSetVolume(amount){
+ nadiMusicVolume=nadiMusicClamp(amount);
+ if(nadiMusicVolume>.001)nadiMusicPreviousVolume=nadiMusicVolume;
+ nadiMusicPaint();
+}
+function nadiMusicVolumeTo(event){
+ nadiMusicSetVolume((nadiMusicSVGX(event)-294.01)/69.22);
+}
+function nadiMusicWireSlider(target,action,increment){
+ target.addEventListener("pointerdown",event=>{
+  event.preventDefault();target.setPointerCapture(event.pointerId);action(event);
+ });
+ target.addEventListener("pointermove",event=>{
+  if(target.hasPointerCapture(event.pointerId))action(event);
+ });
+ target.addEventListener("keydown",event=>{
+  let delta=0;
+  if(["ArrowRight","ArrowUp"].includes(event.key))delta=increment;
+  if(["ArrowLeft","ArrowDown"].includes(event.key))delta=-increment;
+  if(event.key==="Home"||event.key==="End"){
+   event.preventDefault();
+   if(target===nadiMusicUI.seek){nadiMusicElapsed=event.key==="Home"?0:nadiMusicDuration;nadiMusicPlaying=nadiMusicElapsed<nadiMusicDuration;nadiMusicResume();}
+   else nadiMusicSetVolume(event.key==="Home"?0:1);
+   return;
+  }
+  if(!delta)return;
+  event.preventDefault();
+  if(target===nadiMusicUI.seek){
+   nadiMusicElapsed=nadiMusicClamp(nadiMusicElapsed+delta,0,nadiMusicDuration);
+   if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+   nadiMusicResume();
+  }else nadiMusicSetVolume(nadiMusicVolume+delta);
+ });
+}
+nadiMusicWireSlider(nadiMusicUI.seek,nadiMusicSeekTo,5);
+nadiMusicWireSlider(nadiMusicUI.volumeHit,nadiMusicVolumeTo,.05);
+function nadiMusicTogglePlay(){
+ if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicElapsed=0;
+ nadiMusicPlaying=!nadiMusicPlaying;
+ nadiMusicResume();
+}
+function nadiMusicToggleMute(){
+ nadiMusicSetVolume(nadiMusicVolume>.001?0:(nadiMusicPreviousVolume||1));
+}
+function nadiMusicWireButton(el,fn){
+ el.addEventListener("click",fn);
+ el.addEventListener("keydown",event=>{
+  if(event.key!=="Enter"&&event.key!==" ")return;
+  event.preventDefault();fn();
+ });
+}
+nadiMusicWireButton(nadiMusicUI.playHit,nadiMusicTogglePlay);
+nadiMusicWireButton(nadiMusicUI.muteHit,nadiMusicToggleMute);
+document.addEventListener("visibilitychange",()=>{
+ if(document.hidden)nadiMusicStop();else if(mn.dataset.s==="music")nadiMusicResume();
+});
+if("IntersectionObserver" in window){
+ new IntersectionObserver(entries=>{
+  if(!entries[0]?.isIntersecting)nadiMusicStop();
+  else if(mn.dataset.s==="music")nadiMusicResume();
+ },{threshold:.01}).observe(document.getElementById("laptop"));
+}
+setInterval(()=>{if(mn.dataset.s==="music"&&!document.hidden&&nadiPreviewInView)nadiMusicHeader()},15000);
+nadiMusicPaint();
+
 const captions = {
   pet: "Leave Nadi alone for a moment, and the eyes come out.",
   idle: "Closed mode keeps the essentials in a small space.",
@@ -1866,6 +2175,7 @@ function show(s, keepBtn) {
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
   nadiSetCompactState(s);
+  nadiMusicShow(s);
   const ly = mn.querySelector(".l-" + s);
   if (ly && prev !== s) { ly.classList.remove("play"); void ly.offsetWidth; ly.classList.add("play"); } // animasi isi diputar ulang
   clearTimeout(remindT);
