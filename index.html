@@ -151,7 +151,7 @@ a { color: inherit; }
 /* ===== Notch tiruan (ukuran dalam dp, diskalakan --u) ================================== */
 .mn-holder { position: absolute; top: 0; left: 50%; transform: translateX(-50%) scale(var(--u)); transform-origin: top center; }
 .mn {
-  --w: 150px; --h: 30px; --r: 14px; --e: 10px;
+  --w: 156px; --h: 32px; --r: 14px; --e: 10px;
   position: relative; width: var(--w); height: var(--h); transform-origin: 50% 0;
   background: #000; border-radius: 0 0 var(--r) var(--r);
   transition: width .62s var(--spring), height .62s var(--spring), border-radius .45s ease;
@@ -507,7 +507,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 /* Nadi arrival: a soft, one-shot light sweep along the closed notch's lower edge.
    The actual notch remains solid black; this overlay is invisible after the intro. */
 .nadi-arrival-rim {
-  position: absolute; inset: 0 auto auto 0; width: 150px; height: 32px;
+  position: absolute; inset: 0 auto auto 0; width: 156px; height: 32px;
   overflow: visible; pointer-events: none; z-index: 9; opacity: 0;
 }
 .nadi-arrival-rim path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
@@ -1685,7 +1685,7 @@ function waterGrow() {
   bars.forEach(b => { b.style.transition = ""; b.style.height = b.dataset.h; });
   wbar.style.transition = ""; wbar.style.width = "152px";
 }
-const MN_SIZE = { pet: 150 * 30, idle: 150 * 30, music: 420 * 140, lyrics: 520 * 140, pomo: 420 * 140, prayer: 420 * 140, remind: 310 * 60,
+const MN_SIZE = { pet: 156 * 32, idle: 156 * 32, music: 420 * 140, lyrics: 520 * 140, pomo: 420 * 140, prayer: 420 * 140, remind: 310 * 60,
   water: 420 * 140, shelf: 420 * 140, clip: 420 * 140, todo: 420 * 140, notif: 310 * 60, widgets: 420 * 140, bt: 310 * 60, charge: 310 * 60 };
 let remindT = 0;
 function show(s, keepBtn) {
