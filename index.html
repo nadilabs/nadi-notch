@@ -618,9 +618,9 @@ opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease}
 .preview.pre .nadi-compact-live{opacity:0}
 .preview .mn-holder{transition:opacity .25s ease}
 .preview.compact-mode .mn-holder{opacity:0;pointer-events:none}
-#nadi-compact-closed-content,#nadi-resting-art{opacity:0;transition:opacity .19s ease}
-.preview.compact-closed #nadi-compact-closed-content{opacity:1}
-.preview.compact-resting #nadi-resting-art{opacity:1}
+#nadi-compact-closed-content,#nadi-resting-art{opacity:0;transition:opacity .14s ease}
+.preview.compact-closed #nadi-compact-closed-content{opacity:1;transition:opacity .20s ease .065s}
+.preview.compact-resting #nadi-resting-art{opacity:1;transition:opacity .20s ease .065s}
 .nadi-compact-live.paused #nadi-closed-bars path,
 .nadi-compact-live.paused #nadi-closed-energy{animation-play-state:paused}
 @media(prefers-reduced-motion:reduce){.nadi-compact-live,
@@ -1769,9 +1769,11 @@ function nadiMorphTo(target){
   nadiCompactAmount=target;nadiCompactShape.setAttribute("d",nadiCompactPath(target));return;
  }
  const initial=nadiCompactAmount,started=performance.now();
+ // Reverse from the current shape, shortening tiny interrupted transitions.
+ const duration=Math.max(170,520*Math.abs(target-initial));
  function step(now){
   nadiCompactFrame=0;
-  const p=Math.min(1,(now-started)/520);
+  const p=Math.min(1,(now-started)/duration);
   const e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
   nadiCompactAmount=initial+(target-initial)*e;
   nadiCompactShape.setAttribute("d",nadiCompactPath(nadiCompactAmount));
@@ -1787,6 +1789,10 @@ function nadiSetCompactState(state){
  pv.classList.toggle("compact-resting",state==="pet");
  pv.classList.toggle("compact-closed",state==="idle");
  pv.classList.toggle("compact-minimal",state==="minimal");
+ if(active) nadiCompact.setAttribute("aria-label",
+   state==="pet"?"Nadi Resting, original animated mascot eyes":
+   state==="idle"?"Nadi Closed, animated audio status and local time":
+   "Nadi Minimal, 44 by 4 pixel notch");
  if(active)nadiMorphTo(state==="minimal"?0:1);else nadiStopCompactFrame();
  if(state==="idle")nadiUpdateClosedTime();
 }
@@ -2237,6 +2243,7 @@ fit(); addEventListener("resize", fit);
   ID["Pray Reminder"] = "Pray Reminder";
   ID["Water Reminder"] = "Water Reminder";
   ID["Expanded lyrics beside the album and media controls."] = "Lirik Expanded di samping sampul album dan kontrol musik.";
+  ID["Minimal"] = "Minimal";
   const SKIP = "script,style,svg,code,textarea,#laptop,.sw-art";
   const ATTRS = ["placeholder", "aria-label", "alt", "title"];
   const enTitle = document.title;
