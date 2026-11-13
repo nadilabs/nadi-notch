@@ -617,7 +617,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
   pointer-events:none;overflow:visible;opacity:0;visibility:hidden;
   transition:opacity .14s ease,visibility .14s}
 .preview.compact-mode .nadi-compact-live {opacity:1;visibility:visible;
-  transition:opacity .24s ease .09s}
+  transition:opacity .22s ease .16s}
 .preview.pre .nadi-compact-live{opacity:0}
 .mn[data-s="minimal"]{--w:44px;--h:4px;--r:2px;--e:1.2px}
 .mn[data-s="music"]{--w:440px;--h:144px;--r:32px;--e:22px}
@@ -1923,7 +1923,7 @@ function nadiStartResting(restart){
   nadiRestingTick(performance.now());
 }
 
-let nadiClosedMinute=-1,nadiPreviewInView=true,nadiCompactAmount=1,nadiCompactTarget=1,nadiCompactFrame=0;
+let nadiClosedMinute=-1,nadiPreviewInView=true,nadiCompactTarget=1;
 const nadiCompactReduced=window.matchMedia("(prefers-reduced-motion: reduce)");
 function nadiUpdateClosedTime(){
  const now=new Date(),key=now.getHours()*60+now.getMinutes();
@@ -1942,26 +1942,12 @@ function nadiCompactPath(t){
  "H"+m(96.8,139)+"C"+m(97.9,144.5)+" "+h+" "+re+" "+corner+" "+re+" "+low+
  "V"+top+"C"+re+" "+m(.1,.84375)+" "+m(99.7,154)+" 0 "+r+" 0H"+l+"Z";
 }
-function nadiStopCompactFrame(){if(nadiCompactFrame)cancelAnimationFrame(nadiCompactFrame);nadiCompactFrame=0}
-function nadiMorphTo(target){
- nadiCompactTarget=target;
- nadiStopCompactFrame();
- if(nadiCompactReduced.matches||document.hidden||!nadiPreviewInView||Math.abs(target-nadiCompactAmount)<.0001){
-  nadiCompactAmount=target;nadiCompactShape.setAttribute("d",nadiCompactPath(target));return;
+// Nusa uses ONE spring-driven shell (.mn) to animate dimensions.
+ // The SVG path is the final shape reference, not a second geometry animation.
+ function nadiMorphTo(target){
+  nadiCompactTarget=target;
+  nadiCompactShape.setAttribute("d",nadiCompactPath(target));
  }
- const initial=nadiCompactAmount,started=performance.now();
- // Reverse from the current shape, shortening tiny interrupted transitions.
- const duration=Math.max(170,520*Math.abs(target-initial));
- function step(now){
-  nadiCompactFrame=0;
-  const p=Math.min(1,(now-started)/duration);
-  const e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
-  nadiCompactAmount=initial+(target-initial)*e;
-  nadiCompactShape.setAttribute("d",nadiCompactPath(nadiCompactAmount));
-  if(p<1)nadiCompactFrame=requestAnimationFrame(step);
- }
- nadiCompactFrame=requestAnimationFrame(step);
-}
 function nadiSetCompactState(state){
  const active=state==="pet"||state==="idle"||state==="minimal";
  if(state==="pet") nadiStartResting(true);
@@ -1974,7 +1960,7 @@ function nadiSetCompactState(state){
    state==="pet"?"Nadi Resting, original animated mascot eyes":
    state==="idle"?"Nadi Closed, animated audio status and local time":
    "Nadi Minimal, 44 by 4 pixel notch");
- if(active)nadiMorphTo(state==="minimal"?0:1);else nadiStopCompactFrame();
+ if(active)nadiMorphTo(state==="minimal"?0:1);
  if(state==="idle")nadiUpdateClosedTime();
 }
 pv.classList.add("compact-mode","compact-resting");
@@ -1984,9 +1970,6 @@ function nadiPauseCompact(){
  nadiCompact.classList.toggle("paused",pause);
  if(pause){
    nadiStopRestingMotion();
-   nadiStopCompactFrame();
-   nadiCompactAmount=nadiCompactTarget;
-   nadiCompactShape.setAttribute("d",nadiCompactPath(nadiCompactAmount));
  }else if(mn.dataset.s==="pet") nadiStartResting(false);
 }
 if("IntersectionObserver" in window){
