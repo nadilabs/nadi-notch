@@ -1,0 +1,13 @@
+name: Preview notch motion smoke
+on:
+  push:
+    paths: [index.html, scripts/verify-preview-motion.mjs, .github/workflows/preview-motion-smoke.yml]
+  pull_request:
+    paths: [index.html, scripts/verify-preview-motion.mjs, .github/workflows/preview-motion-smoke.yml]
+jobs:
+  verify-motion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate inline JavaScript and deterministic notch motion
+        run: node scripts/verify-preview-motion.mjs
