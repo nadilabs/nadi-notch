@@ -1982,6 +1982,10 @@ function nadiStartShellMorph(){
  const width=parseFloat(css.getPropertyValue("--w"));
  const height=parseFloat(css.getPropertyValue("--h"));
  if(!(width>0&&height>0))return;
+ // Do not carry velocity away from a new target after a rapid reversal.
+ // Keep the current size, but release the opposing impulse smoothly.
+ if((width-nadiShell.width)*nadiShell.velocityWidth<0) nadiShell.velocityWidth=0;
+ if((height-nadiShell.height)*nadiShell.velocityHeight<0) nadiShell.velocityHeight=0;
  nadiShell.targetWidth=width;nadiShell.targetHeight=height;
  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
     document.hidden){nadiFinishShellMorph();return;}
