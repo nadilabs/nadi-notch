@@ -610,6 +610,21 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .try button[aria-pressed="true"] { background: var(--ink); color: #05060c; border-color: var(--ink); }
 .cap { text-align: center; color: var(--mist); font-size: 15px; margin: 14px 0 0; min-height: 1.6em; }
 
+/* Nadi adaptive silhouette. Keep the original CSS width/height spring, but
+   clip the *single* HTML notch against its live interpolated SVG-like path.
+   This removes the rectangular stages and out-of-sync pseudo shoulders seen
+   when shrinking to the authentic 44x4 Minimal strip. */
+.mn.nadi-curve-shell {
+  border-radius:0 !important;
+  -webkit-mask:none;
+  box-shadow:none;
+}
+.mn.nadi-curve-shell::before,
+.mn.nadi-curve-shell::after {display:none !important}
+.mn.nadi-curve-shell .nadi-visual-viewport {border-radius:0}
+@media (prefers-reduced-motion:reduce){
+  .mn.nadi-curve-shell,.mn.nadi-curve-shell.shrink {transition:none !important}
+}
 /* Native Nusa-style spring: .mn is the single black shell for EVERY mode.
    SVG contents are mounted inside it, clipped to the animated shell size. */
 /* Do not paint a second silhouette from either SVG. The animated .mn is
@@ -1872,6 +1887,67 @@ function runIntro() {
 
 // ---- Pratinjau notch ---------------------------------------------------------------------
 const mn = document.getElementById("mn");
+// Animate one continuous vector silhouette rather than interpolating box corners.
+// Geometry is fitted to the three actual Nadi SVG reference silhouettes:
+// Minimal 44x4, Resting/Closed 156x30, Music 440x144.
+const nadiCanCurve=typeof CSS!=="undefined"&&CSS.supports(
+ "clip-path",'path("M0 0 H44 V4 H0 Z")');
+let nadiShellRaf=0;
+function nadiShellGeometry(w,h){
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const mix=(a,b,t)=>a+(b-a)*t;
+  const little=clamp((h-4)/26,0,1);
+  const large=clamp((h-30)/114,0,1);
+  const insetRatio=mix(.027272727,.044999999,little);
+  const inset=clamp(w*insetRatio,.5,w*.40);
+  const corner=Math.min(h*.72,(h<=30?mix(2,10,little):mix(10,33.1,large)),
+    (w-2*inset)/2);
+  const rise=Math.min(h-corner-.1,(h<=30?mix(1.1,8.34375,little):
+    mix(8.34375,25.1,large)));
+  const f=x=>Number(x.toFixed(3));
+  const right=w-inset;
+  const bottomLeft=inset+corner,bottomRight=right-corner;
+  return "M0 0H"+f(w)+
+   "C"+f(w-inset*.285)+" 0 "+f(right)+" "+f(rise*.1)+" "+f(right)+" "+f(rise)+
+   "V"+f(h-corner)+
+   "C"+f(right)+" "+f(h-corner*.42)+" "+f(right-corner*.45)+" "+f(h)+
+   " "+f(bottomRight)+" "+f(h)+
+   "H"+f(bottomLeft)+
+   "C"+f(inset+corner*.45)+" "+f(h)+" "+f(inset)+" "+f(h-corner*.42)+
+   " "+f(inset)+" "+f(h-corner)+
+   "V"+f(rise)+
+   "C"+f(inset)+" "+f(rise*.1)+" "+f(inset*.285)+" 0 0 0Z";
+}
+function nadiPaintShell(){
+  if(!nadiCanCurve)return;
+  const style=getComputedStyle(mn);
+  const width=parseFloat(style.width),height=parseFloat(style.height);
+  if(!(width>0&&height>0))return;
+  const curve='path("'+nadiShellGeometry(width,height)+'")';
+  mn.style.clipPath=curve;
+  mn.style.webkitClipPath=curve;
+}
+function nadiStartShellMorph(){
+  if(!nadiCanCurve)return;
+  if(nadiShellRaf)cancelAnimationFrame(nadiShellRaf);
+  const started=performance.now();
+  const duration=mn.classList.contains("shrink")?590:730;
+  const step=now=>{
+    nadiShellRaf=0;
+    nadiPaintShell();
+    if(now-started<duration)nadiShellRaf=requestAnimationFrame(step);
+  };
+  nadiPaintShell();
+  nadiShellRaf=requestAnimationFrame(step);
+}
+if(nadiCanCurve){
+  mn.classList.add("nadi-curve-shell");
+  nadiPaintShell();
+  window.addEventListener("resize",nadiPaintShell,{passive:true});
+  document.addEventListener("visibilitychange",()=>{
+    if(!document.hidden)nadiStartShellMorph();
+  });
+}
 const cap = document.getElementById("cap");
 const btns = document.querySelectorAll(".try button");
 // Animated compact states: authentic 156x30 Resting eye atlas, user 44x4 Minimal SVG.
@@ -2210,6 +2286,7 @@ function show(s, keepBtn) {
   const prev = mn.dataset.s;
   mn.classList.toggle("shrink", (MN_SIZE[s] || 0) < (MN_SIZE[prev] || 0)); // menyusut halus tanpa pantulan
   mn.dataset.s = s;
+  nadiStartShellMorph();
   nadiSetCompactState(s);
   nadiMusicShow(s);
   const ly = mn.querySelector(".l-" + s);
