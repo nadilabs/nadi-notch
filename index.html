@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-11-mobile-overflow-sha-v2">
+<meta name="nadi-site-revision" content="2026-11-13-preview-monotonic-motion-v3">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -154,7 +154,7 @@ a { color: inherit; }
   --w: 156px; --h: 30px; --r: 14px; --e: 10px;
   position: relative; width: var(--w); height: var(--h); transform-origin: 50% 0;
   background: #050609; border-radius: 0 0 var(--r) var(--r);
-  transition: width .62s var(--spring), height .62s var(--spring),
+  transition: width .54s cubic-bezier(.22,.75,.28,1), height .54s cubic-bezier(.22,.75,.28,1),
     border-radius .45s ease, box-shadow .20s ease;
   font-family: var(--ui); color: #fff; font-size: 13px; line-height: 1;
   box-shadow: 0 14px 34px -16px rgba(0,0,0,.95);
@@ -1922,13 +1922,15 @@ function nadiShellGeometry(w,h){
    "V"+f(rise)+
    "C"+f(inset)+" "+f(rise*.1)+" "+f(inset*.285)+" 0 0 0Z";
 }
+// Keep the black notch, silhouette and layout on ONE monotonic clock.
+// A retarget starts from the currently painted box: no inherited momentum,
+// overshoot, hidden spring tail, or end-of-transition bounce.
 const nadiShell={
  width:156,height:30,targetWidth:156,targetHeight:30,
- velocityWidth:0,velocityHeight:0,frame:0,lastTime:0
+ startWidth:156,startHeight:30,startTime:0,duration:540,frame:0
 };
 function nadiPaintShell(){
  if(!nadiCanCurve)return;
- // Atomic paint: clip-path dimensions always match the box in this frame.
  const w=+nadiShell.width.toFixed(3),h=+nadiShell.height.toFixed(3);
  mn.style.width=w+"px";
  mn.style.height=h+"px";
@@ -1936,63 +1938,53 @@ function nadiPaintShell(){
  mn.style.clipPath=curve;
  mn.style.webkitClipPath=curve;
 }
-function nadiShellSpring(value,velocity,target,dt,omega){
- const offset=value-target,decay=Math.exp(-omega*dt);
- const impulse=velocity+omega*offset;
- return [target+(offset+impulse*dt)*decay,
-         (velocity-omega*impulse*dt)*decay];
-}
 function nadiStopShellMorph(){
  if(nadiShell.frame)cancelAnimationFrame(nadiShell.frame);
- nadiShell.frame=0;nadiShell.lastTime=0;
+ nadiShell.frame=0;
+ nadiShell.startTime=0;
 }
 function nadiFinishShellMorph(){
  nadiStopShellMorph();
  nadiShell.width=nadiShell.targetWidth;
  nadiShell.height=nadiShell.targetHeight;
- nadiShell.velocityWidth=0;nadiShell.velocityHeight=0;
  nadiPaintShell();
+ mn.classList.remove("nadi-morphing");
 }
 function nadiShellTick(now){
  nadiShell.frame=0;
  if(document.hidden){nadiFinishShellMorph();return;}
- if(!nadiShell.lastTime){nadiShell.lastTime=now;}
- // Exact damped integration is frame-rate independent; cap suspension gaps.
- const dt=Math.min(.05,Math.max(0,(now-nadiShell.lastTime)/1000));
- nadiShell.lastTime=now;
- const omega=nadiShell.targetWidth<nadiShell.width?17:14;
- [nadiShell.width,nadiShell.velocityWidth]=nadiShellSpring(
-  nadiShell.width,nadiShell.velocityWidth,nadiShell.targetWidth,dt,omega);
- [nadiShell.height,nadiShell.velocityHeight]=nadiShellSpring(
-  nadiShell.height,nadiShell.velocityHeight,nadiShell.targetHeight,dt,omega);
- if(Math.abs(nadiShell.width-nadiShell.targetWidth)<.08 &&
-    Math.abs(nadiShell.height-nadiShell.targetHeight)<.08 &&
-    Math.abs(nadiShell.velocityWidth)<.7 &&
-    Math.abs(nadiShell.velocityHeight)<.7){
-   nadiFinishShellMorph();return;
- }
+ if(!nadiShell.startTime)nadiShell.startTime=now;
+ const t=Math.min(1,(now-nadiShell.startTime)/nadiShell.duration);
+ // Quintic smootherstep has zero speed at BOTH ends and no bounce.
+ const progress=t*t*t*(t*(t*6-15)+10);
+ nadiShell.width=nadiShell.startWidth+
+   (nadiShell.targetWidth-nadiShell.startWidth)*progress;
+ nadiShell.height=nadiShell.startHeight+
+   (nadiShell.targetHeight-nadiShell.startHeight)*progress;
  nadiPaintShell();
+ if(t>=1){nadiFinishShellMorph();return;}
  nadiShell.frame=requestAnimationFrame(nadiShellTick);
 }
 function nadiStartShellMorph(){
  if(!nadiCanCurve)return;
- // Read state targets once. The single animation loop owns the live box size
- // and its silhouette, even when another mode is selected mid-transition.
  const css=getComputedStyle(mn);
  const width=parseFloat(css.getPropertyValue("--w"));
  const height=parseFloat(css.getPropertyValue("--h"));
  if(!(width>0&&height>0))return;
- // Do not carry velocity away from a new target after a rapid reversal.
- // Keep the current size, but release the opposing impulse smoothly.
- if((width-nadiShell.width)*nadiShell.velocityWidth<0) nadiShell.velocityWidth=0;
- if((height-nadiShell.height)*nadiShell.velocityHeight<0) nadiShell.velocityHeight=0;
- nadiShell.targetWidth=width;nadiShell.targetHeight=height;
- if(window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+ // Interrupting a transition never snaps back to its previous start.
+ nadiStopShellMorph();
+ nadiShell.startWidth=nadiShell.width;
+ nadiShell.startHeight=nadiShell.height;
+ nadiShell.targetWidth=width;
+ nadiShell.targetHeight=height;
+ const dw=Math.abs(width-nadiShell.width),dh=Math.abs(height-nadiShell.height);
+ if(dw<.001&&dh<.001||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches||
     document.hidden){nadiFinishShellMorph();return;}
- if(!nadiShell.frame){
-   nadiShell.lastTime=0;
-   nadiShell.frame=requestAnimationFrame(nadiShellTick);
- }
+ // Long moves retain the full motion; neighboring expanded modes switch faster.
+ nadiShell.duration=280+Math.min(260,Math.max(dw/284,dh/114)*260);
+ mn.classList.add("nadi-morphing");
+ nadiShell.frame=requestAnimationFrame(nadiShellTick);
 }
 if(nadiCanCurve){
  mn.classList.add("nadi-curve-shell");
@@ -2435,7 +2427,9 @@ function shFrame(now) {
   shGv += (-60 * shG - 6 * shGv) * dt; shG += shGv * dt;
   if (shDropT >= 0) { shDropT += dt * SH_SPEED; if (shDropT >= 2) shDropT = -1; }
   shDraw();
-  mn.style.transform = `scale(${1 + .018 * shHov + .035 * shG}, ${1 + .035 * shHov - .06 * shG})`;
+  // Never multiply a moving shell by a second scale animation.
+  mn.style.transform = mn.classList.contains("nadi-morphing") ? "" :
+    `scale(${1 + .018 * shHov + .035 * shG}, ${1 + .035 * shHov - .06 * shG})`;
   const busy = shHot || shHov > .002 || shDropT >= 0 || Math.abs(shG) > .001 || Math.abs(shGv) > .01;
   if (busy || mn.dataset.s === "shelf") shRaf = requestAnimationFrame(shFrame);
   else { shRaf = 0; mn.style.transform = ""; }
