@@ -861,6 +861,10 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .nadi-pomo-t-native #nadi-pomo-t-elapsed-fill,
 .nadi-pomo-t-native [id^="nadi-pomo-t-stage-fill-"],
 .nadi-pomo-c-native #nadi-pomo-c-ring-progress{transition:width .14s linear,stroke-dashoffset .14s linear}
+.nadi-pomo-c-native #nadi-pomo-c-pause-icon{display:none}
+.nadi-pomo-c-native[data-running="true"] #nadi-pomo-c-Icon_play{opacity:0}
+.nadi-pomo-c-native[data-running="true"] #nadi-pomo-c-pause-icon{display:inline}
+.nadi-pomo-t-native #nadi-pomo-t-start-text{text-anchor:middle}
 .nadi-pomo-native [data-pomo-eq]{
  transform-box:fill-box;transform-origin:center;
  animation:nadi-pomo-eq .85s ease-in-out infinite alternate;
@@ -1692,11 +1696,11 @@ footer a:hover { color: var(--ink); }
     </g>
   </g>
 <g id="nadi-pomo-t-animated-progress">
- <rect id="nadi-pomo-t-elapsed-fill" x="39.7" y="108" width="0" height="3.21" rx="1.61" fill="#A855F7"/>
- <rect id="nadi-pomo-t-stage-fill-1" x="218.04" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
- <rect id="nadi-pomo-t-stage-fill-2" x="254.7" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
- <rect id="nadi-pomo-t-stage-fill-3" x="291.37" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
- <rect id="nadi-pomo-t-stage-fill-4" x="328.04" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
+ <rect id="nadi-pomo-t-elapsed-fill" x="39.7" y="108" width="0" height="3.21" rx="1.61" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
+ <rect id="nadi-pomo-t-stage-fill-1" x="218.04" y="86.83" width="0" height="5.06" rx="2.53" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
+ <rect id="nadi-pomo-t-stage-fill-2" x="254.7" y="86.83" width="0" height="5.06" rx="2.53" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
+ <rect id="nadi-pomo-t-stage-fill-3" x="291.37" y="86.83" width="0" height="5.06" rx="2.53" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
+ <rect id="nadi-pomo-t-stage-fill-4" x="328.04" y="86.83" width="0" height="5.06" rx="2.53" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
  <circle id="nadi-pomo-t-stage-dot" cx="218.04" cy="89.36" r="2.53" fill="#51FF00"/>
  </g>
  <g id="nadi-pomo-t-controls">
@@ -1913,9 +1917,13 @@ footer a:hover { color: var(--ink); }
     </g>
   </g>
 <g id="nadi-pomo-c-animation">
- <circle id="nadi-pomo-c-ring-progress" cx="92.54" cy="74.5" r="34" stroke="#FF2C50" stroke-width="4.2" fill="none"
+ <circle id="nadi-pomo-c-ring-progress" cx="92.54" cy="74.5" r="34" stroke="url(#nadi-pomo-c-linear-gradient)" stroke-width="4.2" fill="none"
     stroke-linecap="round" stroke-dasharray="213.6283" stroke-dashoffset="0" transform="rotate(-90 92.54 74.5)"/>
  </g>
+ <g id="nadi-pomo-c-pause-icon" aria-hidden="true">
+ <rect x="266.0" y="103.1" width="3.6" height="12" rx="1.0" fill="#FFFFFF"/>
+ <rect x="275.8" y="103.1" width="3.6" height="12" rx="1.0" fill="#FFFFFF"/>
+</g>
  <g id="nadi-pomo-c-controls">
   <circle cx="344.13" cy="48.45" r="12.5" fill="transparent" data-pomo-action="reset" role="button" tabindex="0" aria-label="Reset Pomodoro"/>
   <rect x="248" y="97" width="48" height="25" rx="12" fill="transparent" data-pomo-action="toggle" role="button" tabindex="0" aria-label="Start or pause Pomodoro"/>
