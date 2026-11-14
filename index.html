@@ -3237,6 +3237,10 @@ const nadiPomoUI={
  cring:document.getElementById("nadi-pomo-c-ring-progress"),
  headers:[document.getElementById("nadi-pomo-t-header"),document.getElementById("nadi-pomo-c-header")]
 };
+// The uploaded Start label uses individually positioned tspans. Replace
+// them once with a single text node before centering a dynamic Start/Pause/
+// Resume label; otherwise text-anchor would shift each letter separately.
+nadiPomoUI.tstart.textContent="Start";
 // Optional preview-only accelerated clock: ?pomoSpeed=30 makes the
 // timeline and ring motion visible quickly. Default stays real-time 1x.
 const nadiPomoSpeed=(typeof window!=="undefined"&&window.location&&
