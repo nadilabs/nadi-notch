@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-14-preview-expanded-lyrics-native-560-v7">
+<meta name="nadi-site-revision" content="2026-11-14-preview-expanded-lyrics-synced-animation-v8">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -797,6 +797,37 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
  .nadi-lyrics-live #nadi-lyrics-progress-fill{transition:none}
 }
 
+/* Expanded Lyrics: the three displayed lyric lines are now a continuous
+   60fps vertical track, centered at x=366 as in the supplied vector.
+   Each cue has a static medium-weight copy and a bold active copy. Their
+   opacity crossfade avoids font re-rasterization or horizontal wobble. */
+.nadi-lyrics-live #nadi-lyrics-lines text {
+ text-anchor:middle;
+ font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;
+ pointer-events:none;
+}
+.nadi-lyrics-live .nadi-lyrics-line-muted {
+ fill:#717D91;font-weight:500;font-size:10px;
+}
+.nadi-lyrics-live .nadi-lyrics-line-active {
+ fill:#F2F2FA;font-weight:700;font-size:16px;
+}
+.nadi-lyrics-live #nadi-lyrics-equalizer path {
+ transform-box:fill-box;transform-origin:center;
+ animation:nadi-lyrics-eq .72s ease-in-out infinite alternate;
+ animation-play-state:paused;
+}
+.nadi-lyrics-live.is-playing #nadi-lyrics-equalizer path {animation-play-state:running}
+.nadi-lyrics-live #nadi-lyrics-equalizer path:nth-child(2){animation-duration:.85s;animation-delay:-.34s}
+.nadi-lyrics-live #nadi-lyrics-equalizer path:nth-child(3){animation-duration:.68s;animation-delay:-.52s}
+.nadi-lyrics-live #nadi-lyrics-equalizer path:nth-child(4){animation-duration:1.03s;animation-delay:-.13s}
+.nadi-lyrics-live #nadi-lyrics-equalizer path:nth-child(5){animation-duration:.78s;animation-delay:-.41s}
+.nadi-lyrics-live #nadi-lyrics-equalizer path:nth-child(6){animation-duration:.92s;animation-delay:-.23s}
+@keyframes nadi-lyrics-eq {from{transform:scaleY(.48)}to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){
+ .nadi-lyrics-live #nadi-lyrics-equalizer path{animation:none!important}
+}
+
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
 .sec-title { font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.03em; font-weight: 800; margin: 0 0 14px; max-width: 16ch; }
@@ -1271,9 +1302,10 @@ footer a:hover { color: var(--ink); }
 		C49,86.7,49.7,86,50.5,86z"/>
 	<text transform="matrix(1 0 0 1 94.0002 56.9999)" class="nadi-lyrics-st3 nadi-lyrics-st4 nadi-lyrics-st5">Paper Sky</text>
 	<text transform="matrix(1 0 0 1 94.0002 72.9999)" class="nadi-lyrics-st6 nadi-lyrics-st7 nadi-lyrics-st8">Lumen Coast - Summ...</text>
-	<text transform="matrix(1 0 0 1 258.0481 56.9999)" class="nadi-lyrics-st9 nadi-lyrics-st10 nadi-lyrics-st11">After some time, I&apos;ve finally made up my mind</text>
-	<text transform="matrix(1 0 0 1 252.3809 82.6776)" class="nadi-lyrics-st12 nadi-lyrics-st13 nadi-lyrics-st14">when the quiet sky turns blue</text>
-	<text transform="matrix(1 0 0 1 314.2776 107.7416)" class="nadi-lyrics-st15 nadi-lyrics-st10 nadi-lyrics-st11">to find you by the sea</text>
+	<!-- Same three source lyric lines, now populated and vertically scrolled by
+     the shared demo playback clock. The uploaded standalone SVG is unchanged. -->
+	<defs><clipPath id="nadi-lyrics-lines-clip"><rect x="245" y="31" width="289" height="99"/></clipPath></defs>
+	<g id="nadi-lyrics-lines" clip-path="url(#nadi-lyrics-lines-clip)" role="group" aria-label="Synchronized demo lyrics"></g>
 	<g id="Album_Artwork_Editable_00000098942388965785690480000006624623414855702663_">
 		<path class="nadi-lyrics-st16" d="M51.3,32h31.2c2.8,0,5,2.2,5,5v33c0,2.8-2.2,5-5,5H51.3c-2.8,0-5-2.2-5-5V37C46.3,34.2,48.5,32,51.3,32z"/>
 	</g>
@@ -1283,7 +1315,7 @@ footer a:hover { color: var(--ink); }
 		 M68.4,51.3c0.3,0,0.6,0.2,0.8,0.5l3.1,5.3c0.2,0.3,0.2,0.6,0,0.9c-0.2,0.3-0.5,0.5-0.8,0.5h-9.3c-0.3,0-0.7-0.2-0.8-0.5
 		s-0.1-0.7,0.1-1l2.2-3.1c0.2-0.2,0.5-0.4,0.8-0.4c0.3,0,0.6,0.1,0.8,0.4l0.7,1l1.8-3.1C67.8,51.5,68.1,51.3,68.4,51.3L68.4,51.3z"
 		/>
-	<g>
+	<g id="nadi-lyrics-equalizer">
 		<path class="nadi-lyrics-st18" d="M511.2,19.7L511.2,19.7c-0.5,0-1-0.4-1-1v-2.1c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v2.1
 			C512.2,19.3,511.8,19.7,511.2,19.7z"/>
 		<path class="nadi-lyrics-st18" d="M507.4,22.7L507.4,22.7c-0.5,0-1-0.4-1-1v-8.1c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v8.1
@@ -2352,6 +2384,87 @@ const nadiLyricsUI={
  seek:document.querySelector('#nadi-lyrics-live [data-nadi-lyrics-action="seek"]'),
  toggle:document.querySelector('#nadi-lyrics-live [data-nadi-lyrics-action="toggle"]')
 };
+
+/* User SVG starts with three static lyric lines. Animate those positions
+   using timed cues and the existing Music demo clock, not a second timer. */
+const nadiLyricsCues=[
+ {at:0,text:"we fold the summer light"},
+ {at:24,text:"into paper birds tonight"},
+ {at:52,text:"and send them through the sky"},
+ {at:81,text:"to find you by the sea"},
+ {at:109,text:"every wing a little song"},
+ {at:142,text:"that carries us along"},
+ {at:181,text:"After some time, I've finally made up my mind"},
+ {at:191,text:"when the quiet sky turns blue"},
+ {at:196,text:"to find you by the sea"},
+ {at:202,text:"we fold the summer light"},
+ {at:208,text:"into paper birds tonight"},
+ {at:214,text:"and send them through the sky"},
+ {at:220,text:"to find you by the sea"},
+ {at:228,text:"every wing a little song"},
+ {at:236,text:"that carries us along"},
+ {at:244,text:"we fold the summer light"}
+];
+const nadiLyricsReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
+const nadiLyricsTrack=document.getElementById("nadi-lyrics-lines");
+const nadiLyricsRows=nadiLyricsCues.map(cue=>{
+ const ns="http://www.w3.org/2000/svg";
+ const row=document.createElementNS(ns,"g");
+ const muted=document.createElementNS(ns,"text");
+ const active=document.createElementNS(ns,"text");
+ muted.setAttribute("x","366");active.setAttribute("x","366");
+ muted.setAttribute("y","0");active.setAttribute("y","0");
+ muted.setAttribute("class","nadi-lyrics-line-muted");
+ active.setAttribute("class","nadi-lyrics-line-active");
+ muted.textContent=cue.text;active.textContent=cue.text;
+ if(cue.text.length>38)active.style.fontSize="11.8px";
+ else if(cue.text.length>32)active.style.fontSize="14px";
+ row.append(muted,active);nadiLyricsTrack.append(row);
+ return {row,muted,active};
+});
+function nadiLyricsCueIndex(seconds){
+ let lo=0,hi=nadiLyricsCues.length-1;
+ while(lo<hi){
+  const mid=Math.ceil((lo+hi)/2);
+  if(nadiLyricsCues[mid].at<=seconds)lo=mid;
+  else hi=mid-1;
+ }
+ return lo;
+}
+let nadiLyricsPosition=-1,nadiLyricsFrom=0,nadiLyricsTo=-1,nadiLyricsStart=0;
+function nadiLyricsPaint(now=performance.now()){
+ const current=nadiLyricsCueIndex(nadiMusicElapsed);
+ const visible=mn.dataset.s==="lyrics"&&!document.hidden&&nadiMusicInView;
+ const canAnimate=visible&&nadiMusicPlaying&&!nadiLyricsReducedMotion.matches;
+ if(nadiLyricsTo!==current){
+  const previous=nadiLyricsPosition<0?current:nadiLyricsPosition;
+  nadiLyricsTo=current;
+  if(canAnimate&&Math.abs(current-previous)<=1.01&&current!==previous){
+   nadiLyricsFrom=previous;nadiLyricsStart=now;
+  }else{
+   nadiLyricsPosition=current;nadiLyricsFrom=current;nadiLyricsStart=0;
+  }
+ }
+ if(!canAnimate){
+  nadiLyricsPosition=current;nadiLyricsStart=0;
+ }else if(nadiLyricsStart){
+  const t=Math.min(1,Math.max(0,(now-nadiLyricsStart)/630));
+  const eased=1-Math.pow(1-t,3);
+  nadiLyricsPosition=nadiLyricsFrom+(nadiLyricsTo-nadiLyricsFrom)*eased;
+  if(t>=1){nadiLyricsPosition=nadiLyricsTo;nadiLyricsStart=0;}
+ }
+ const position=nadiLyricsPosition;
+ for(let i=0;i<nadiLyricsRows.length;i++){
+  const item=nadiLyricsRows[i],rel=i-position;
+  const y=82.6776+rel*25.4;
+  const focus=Math.max(0,1-Math.abs(rel));
+  const visibility=Math.max(0,Math.min(1,2-Math.abs(rel)));
+  item.row.setAttribute("transform","translate(0 "+y.toFixed(3)+")");
+  item.muted.style.opacity=((1-focus)*visibility*(rel<0?.94:.72)).toFixed(3);
+  item.active.style.opacity=(focus*visibility).toFixed(3);
+ }
+}
+
 const nadiMusicDuration=256;
 let nadiMusicElapsed=193,nadiMusicVolume=1,nadiMusicPreviousVolume=1,nadiMusicPlaying=true;
 let nadiMusicFrame=0,nadiMusicLastFrame=0,nadiMusicLastPaint=0,nadiMusicHeaderMinute=-1,nadiMusicInView=true;
@@ -2382,6 +2495,8 @@ function nadiMusicPaint(){
  nadiMusicUI.remaining.textContent="-"+nadiMusicTime(Math.ceil(nadiMusicDuration-nadiMusicElapsed));
  nadiMusicUI.waves.style.opacity=nadiMusicVolume>.001?"1":"0";
  nadiMusicSVG.classList.toggle("is-playing",nadiMusicPlaying&&nadiMusicElapsed<nadiMusicDuration);
+ nadiLyricsUI.svg.classList.toggle("is-playing",nadiMusicPlaying&&nadiMusicElapsed<nadiMusicDuration);
+ nadiLyricsPaint();
  nadiMusicSVG.classList.toggle("is-muted",nadiMusicVolume<=.001);
  nadiMusicUI.play.style.display=nadiMusicPlaying?"none":"";
  nadiMusicUI.pause.style.display=nadiMusicPlaying?"":"none";
@@ -2409,6 +2524,7 @@ function nadiMusicTick(now){
  }
  nadiMusicLastFrame=now;
  if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+ nadiLyricsPaint(now);
  if(now-nadiMusicLastPaint>40||!nadiMusicPlaying){
   nadiMusicPaint();nadiMusicLastPaint=now;
  }
@@ -2708,15 +2824,8 @@ const chart = document.getElementById("chart");
 });
 
 // Lirik bergulir: baris aktif menyala, daftar bergeser ke atas
-const lyr = document.getElementById("lyr"), lines = lyr.querySelectorAll("li");
-let cur = 2;
-function lyric() {
-  lines.forEach((li, i) => li.classList.toggle("on", i === cur));
-  const li = lines[cur];
-  lyr.style.transform = `translateY(${56 - li.offsetTop - li.offsetHeight / 2}px)`;
-  cur = (cur + 1) % lines.length;
-}
-lyric(); setInterval(() => { if (mn.dataset.s === "lyrics") lyric(); }, 2600);
+// Legacy lyrics HTML and its independent 2600ms timer are disabled.
+// Native SVG lyrics follow the shared Music playback rAF clock above.
 
 // Skala notch mengikuti lebar layar (native Lyrics Expanded 560x144 harus muat)
 function fit() {
