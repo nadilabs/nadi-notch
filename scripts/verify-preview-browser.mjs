@@ -149,7 +149,37 @@ try{
   "Root viewport must not be fully blacked out while resizing expanded modes");
  assert.equal(transition.exitingVisibility,"visible",
   "Old native SVG must remain visible during exit animation");
- await sleep(560);
+ // Sample actual computed opacity over the crossfade, not just CSS class
+ // presence. Also verify the animated shell keeps its center fixed in CSS
+ // pixels while shrinking 560px -> 440px.
+ const fadeSamples=[];
+ for(let i=0;i<5;i++){
+  fadeSamples.push(await evaluate(`(()=>{
+   const shell=document.getElementById("mn").getBoundingClientRect();
+   return {
+    outgoing:Number(getComputedStyle(document.getElementById("nadi-lyrics-live")).opacity),
+    incoming:Number(getComputedStyle(document.getElementById("nadi-music-live")).opacity),
+    viewport:Number(getComputedStyle(document.querySelector(".nadi-visual-viewport")).opacity),
+    center:shell.left+shell.width/2
+   };
+  })()`));
+  if(i<4)await sleep(65);
+ }
+ assert.ok(fadeSamples[0].outgoing>fadeSamples[4].outgoing+.25,
+  "Actual outgoing Lyrics SVG opacity must decrease, not snap invisible");
+ assert.ok(fadeSamples[4].incoming>fadeSamples[0].incoming+.14,
+  "Actual incoming Music SVG opacity must increase smoothly");
+ assert.ok(fadeSamples.every(x=>x.viewport>.9),
+  "Root viewport must stay visible for the entire Lyrics-to-Music blend");
+ for(let i=1;i<fadeSamples.length;i++){
+  assert.ok(fadeSamples[i].outgoing<=fadeSamples[i-1].outgoing+.06,
+   "Lyrics opacity must not oscillate or reverse");
+  assert.ok(fadeSamples[i].incoming>=fadeSamples[i-1].incoming-.06,
+   "Music opacity must not oscillate or reverse");
+  assert.ok(Math.abs(fadeSamples[i].center-fadeSamples[0].center)<1.1,
+   "The notch center must not wobble while crossfading 560 to 440px");
+ }
+ await sleep(310);
  const settled=await evaluate(`({
   mode:mn.dataset.s,
   cross:mn.classList.contains("nadi-native-crossfade"),
