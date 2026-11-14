@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-14-preview-svg-text-stability-v6">
+<meta name="nadi-site-revision" content="2026-11-14-preview-expanded-lyrics-native-560-v7">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -168,7 +168,7 @@ a { color: inherit; }
 .mn::before { right: 100%; background: radial-gradient(circle at 0 100%, transparent calc(var(--e) - .5px), #050609 var(--e)); }
 .mn::after { left: 100%; background: radial-gradient(circle at 100% 100%, transparent calc(var(--e) - .5px), #050609 var(--e)); }
 .mn[data-s="music"], .mn[data-s="pomo"], .mn[data-s="water"], .mn[data-s="shelf"], .mn[data-s="todo"], .mn[data-s="prayer"], .mn[data-s="clip"], .mn[data-s="widgets"] { --w: 420px; --h: 140px; --r: 32px; --e: 22px; }
-.mn[data-s="lyrics"] { --w: 520px; --h: 140px; --r: 32px; --e: 22px; }
+.mn[data-s="lyrics"] { --w: 560px; --h: 144px; --r: 33.1px; --e: 25.2px; }
 .mn[data-s="bt"], .mn[data-s="charge"], .mn[data-s="remind"], .mn[data-s="notif"] { --w: 310px; --h: 60px; --r: 19px; --e: 13px; }
 
 .ly { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; opacity: 0; pointer-events: none;
@@ -764,6 +764,39 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
  .nadi-music-live #nadi-music-waves,
  .nadi-music-live #nadi-music-volume-fill{transition:none}}
 
+/* User-provided 560 × 144 Nadi Expanded Lyrics. The black .mn is the
+   SINGLE silhouette, exactly as for Closed and Music. Native SVG children
+   have fixed coordinates and must never inherit the resizing transform. */
+.nadi-lyrics-live {
+ position:absolute;top:0;left:0;z-index:3;
+ width:560px;height:144px;max-width:none;
+ transform:none;opacity:0;visibility:hidden;
+ pointer-events:none;overflow:visible;transition:none!important;
+ font-variant-numeric:tabular-nums;
+}
+.mn[data-s="lyrics"] .nadi-lyrics-live {
+ opacity:1;visibility:visible;pointer-events:auto;
+}
+.mn[data-s="lyrics"] .nadi-visual-viewport{pointer-events:auto}
+.mn[data-s="lyrics"] > .l-lyrics{display:none!important}
+.mn .nadi-lyrics-live .nadi-lyrics-st0{fill:transparent!important}
+.nadi-lyrics-live .nadi-lyrics-st4 {font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;font-weight:600}
+.nadi-lyrics-live .nadi-lyrics-st7 {font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;font-weight:400}
+.nadi-lyrics-live .nadi-lyrics-st10{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;font-weight:500}
+.nadi-lyrics-live .nadi-lyrics-st13{font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;font-weight:700}
+.nadi-lyrics-live #nadi-lyrics-header-clock{font-variant-numeric:tabular-nums}
+.nadi-lyrics-live #nadi-lyrics-progress-fill {
+ transform-box:view-box;transform-origin:49px 87.5px;
+ transition:transform .10s linear;
+}
+.nadi-lyrics-live [data-nadi-lyrics-action]{cursor:pointer}
+.nadi-lyrics-live [data-nadi-lyrics-action]:focus-visible {
+ stroke:#48b6ff;stroke-width:1;outline:none;
+}
+@media(prefers-reduced-motion:reduce){
+ .nadi-lyrics-live #nadi-lyrics-progress-fill{transition:none}
+}
+
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
 .sec-title { font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.03em; font-weight: 800; margin: 0 0 14px; max-width: 16ch; }
@@ -1198,6 +1231,115 @@ footer a:hover { color: var(--ink); }
  <rect id="nadi-music-play-hit" x="205" y="106" width="29" height="22" tabindex="0" role="button" aria-label="Pause demo playback" style="cursor:pointer"/>
  <rect id="nadi-music-volume-hit" x="290" y="106" width="77" height="24" tabindex="0" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="cursor:pointer;touch-action:none"/>
  <rect id="nadi-music-mute-hit" x="366" y="105" width="26" height="25" tabindex="0" role="button" aria-label="Mute volume" style="cursor:pointer"/>
+</g>
+</svg>
+                <svg class="nadi-lyrics-live" id="nadi-lyrics-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 144" width="560" height="144" role="group" aria-label="Expanded lyrics interactive preview">
+<style type="text/css">
+	.nadi-lyrics-st0{fill:#050609;}
+	.nadi-lyrics-st1{fill:#424551;}
+	.nadi-lyrics-st2{fill:#F7F7F9;}
+	.nadi-lyrics-st3{fill:#F7F7FB;}
+	.nadi-lyrics-st4{font-family:'PlusJakartaSans-SemiBold';}
+	.nadi-lyrics-st5{font-size:11.5px;}
+	.nadi-lyrics-st6{fill:#91929B;}
+	.nadi-lyrics-st7{font-family:'PlusJakartaSans-Regular';}
+	.nadi-lyrics-st8{font-size:9.5px;}
+	.nadi-lyrics-st9{fill:#717D91;}
+	.nadi-lyrics-st10{font-family:'PlusJakartaSans-Medium';}
+	.nadi-lyrics-st11{font-size:10px;}
+	.nadi-lyrics-st12{fill:#F2F2FA;}
+	.nadi-lyrics-st13{font-family:'PlusJakartaSans-Bold';}
+	.nadi-lyrics-st14{font-size:16px;}
+	.nadi-lyrics-st15{fill:#647084;}
+	.nadi-lyrics-st16{fill:#454850;}
+	.nadi-lyrics-st17{fill:#F4F6FB;}
+	.nadi-lyrics-st18{fill:#FFFFFF;}
+	.nadi-lyrics-st19{fill:#51FF00;}
+	.nadi-lyrics-st20{fill:#B0B0B9;}
+	.nadi-lyrics-st21{font-size:10.5px;}
+	.nadi-lyrics-st22{font-size:14px;}
+	.nadi-lyrics-st23{fill:#129AFF;}
+</style>
+<g id="Lyric_Expanded">
+	<g id="_x30_1_x5F_Notch_x5F_Shell_x5F_Bezier_00000084512946667811401550000004947994540953677460_">
+		<path id="Shell_Outline_00000006695426318757438330000005530952586339948698_" class="nadi-lyrics-st0" d="M0,0h560c-7.1,0-25.2,3.2-25.2,32
+			v78.9c0,18.3-14.8,33.1-33.1,33.1H58.3c-18.3,0-33.1-14.8-33.1-33.1V32C25.2,3.2,7.1,0,0,0z"/>
+	</g>
+	<path class="nadi-lyrics-st1" d="M50.5,86h143c0.8,0,1.5,0.7,1.5,1.5l0,0c0,0.8-0.7,1.5-1.5,1.5h-143c-0.8,0-1.5-0.7-1.5-1.5l0,0
+		C49,86.7,49.7,86,50.5,86z"/>
+	<path id="nadi-lyrics-progress-fill" class="nadi-lyrics-st2" d="M50.5,86h93c0.8,0,1.5,0.7,1.5,1.5l0,0c0,0.8-0.7,1.5-1.5,1.5h-93c-0.8,0-1.5-0.7-1.5-1.5l0,0
+		C49,86.7,49.7,86,50.5,86z"/>
+	<text transform="matrix(1 0 0 1 94.0002 56.9999)" class="nadi-lyrics-st3 nadi-lyrics-st4 nadi-lyrics-st5">Paper Sky</text>
+	<text transform="matrix(1 0 0 1 94.0002 72.9999)" class="nadi-lyrics-st6 nadi-lyrics-st7 nadi-lyrics-st8">Lumen Coast - Summ...</text>
+	<text transform="matrix(1 0 0 1 258.0481 56.9999)" class="nadi-lyrics-st9 nadi-lyrics-st10 nadi-lyrics-st11">After some time, I&apos;ve finally made up my mind</text>
+	<text transform="matrix(1 0 0 1 252.3809 82.6776)" class="nadi-lyrics-st12 nadi-lyrics-st13 nadi-lyrics-st14">when the quiet sky turns blue</text>
+	<text transform="matrix(1 0 0 1 314.2776 107.7416)" class="nadi-lyrics-st15 nadi-lyrics-st10 nadi-lyrics-st11">to find you by the sea</text>
+	<g id="Album_Artwork_Editable_00000098942388965785690480000006624623414855702663_">
+		<path class="nadi-lyrics-st16" d="M51.3,32h31.2c2.8,0,5,2.2,5,5v33c0,2.8-2.2,5-5,5H51.3c-2.8,0-5-2.2-5-5V37C46.3,34.2,48.5,32,51.3,32z"/>
+	</g>
+	<path class="nadi-lyrics-st17" d="M60.7,46.7c-0.3,0-0.6,0.3-0.6,0.6v12.4c0,0.3,0.3,0.6,0.6,0.6h12.4c0.3,0,0.6-0.3,0.6-0.6V47.3
+		c0-0.3-0.3-0.6-0.6-0.6H60.7z M58.2,47.3c0-1.4,1.1-2.5,2.5-2.5h12.4c1.4,0,2.5,1.1,2.5,2.5v12.4c0,1.4-1.1,2.5-2.5,2.5H60.7
+		c-1.4,0-2.5-1.1-2.5-2.5V47.3z M63.2,48.5c0.7,0,1.2,0.6,1.2,1.2S63.9,51,63.2,51c-0.7,0-1.2-0.6-1.2-1.2S62.5,48.5,63.2,48.5z
+		 M68.4,51.3c0.3,0,0.6,0.2,0.8,0.5l3.1,5.3c0.2,0.3,0.2,0.6,0,0.9c-0.2,0.3-0.5,0.5-0.8,0.5h-9.3c-0.3,0-0.7-0.2-0.8-0.5
+		s-0.1-0.7,0.1-1l2.2-3.1c0.2-0.2,0.5-0.4,0.8-0.4c0.3,0,0.6,0.1,0.8,0.4l0.7,1l1.8-3.1C67.8,51.5,68.1,51.3,68.4,51.3L68.4,51.3z"
+		/>
+	<g>
+		<path class="nadi-lyrics-st18" d="M511.2,19.7L511.2,19.7c-0.5,0-1-0.4-1-1v-2.1c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v2.1
+			C512.2,19.3,511.8,19.7,511.2,19.7z"/>
+		<path class="nadi-lyrics-st18" d="M507.4,22.7L507.4,22.7c-0.5,0-1-0.4-1-1v-8.1c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v8.1
+			C508.4,22.3,507.9,22.7,507.4,22.7z"/>
+		<path class="nadi-lyrics-st18" d="M503.6,21.7L503.6,21.7c-0.5,0-1-0.4-1-1v-6.1c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v6.1
+			C504.6,21.3,504.1,21.7,503.6,21.7z"/>
+		<path class="nadi-lyrics-st18" d="M499.8,24.7L499.8,24.7c-0.5,0-1-0.4-1-1V11.6c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v12.1
+			C500.7,24.3,500.3,24.7,499.8,24.7z"/>
+		<path class="nadi-lyrics-st18" d="M496,23.7L496,23.7c-0.5,0-1-0.4-1-1V12.6c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v10.1
+			C496.9,23.3,496.5,23.7,496,23.7z"/>
+		<path class="nadi-lyrics-st18" d="M492.2,20.7L492.2,20.7c-0.5,0-1-0.4-1-1v-4.1c0-0.5,0.4-1,1-1l0,0c0.5,0,1,0.4,1,1v4.1
+			C493.1,20.3,492.7,20.7,492.2,20.7z"/>
+	</g>
+	<g>
+		<path class="nadi-lyrics-st19" d="M192.5,24.7c-3.9,0-7-3.1-7-7c0-3.9,3.1-7,7-7s7,3.1,7,7C199.5,21.5,196.3,24.7,192.5,24.7z M192.5,12.1
+			c-3.1,0-5.6,2.5-5.6,5.6s2.5,5.6,5.6,5.6s5.6-2.5,5.6-5.6S195.6,12.1,192.5,12.1z"/>
+		<text transform="matrix(1 0 0 1 213.4783 21.0006)" id="nadi-lyrics-header-clock" class="nadi-lyrics-st20 nadi-lyrics-st7 nadi-lyrics-st21">Sun 08 Nov 2026 07:46</text>
+		<path class="nadi-lyrics-st19" d="M194.2,13.6c0.2,0.1,0.2,0.4,0.2,0.6l-1.2,3h2.2c0.2,0,0.4,0.1,0.5,0.3s0,0.4-0.1,0.5l-4.4,3.6
+			c-0.2,0.1-0.4,0.2-0.6,0c-0.2-0.1-0.2-0.4-0.2-0.6l1.2-3h-2.2c-0.2,0-0.4-0.1-0.5-0.3s0-0.4,0.1-0.5l4.4-3.6
+			C193.8,13.5,194,13.5,194.2,13.6z"/>
+	</g>
+	<g>
+		<path class="nadi-lyrics-st3" d="M114.9,107.1c0.3-0.3,0.8-0.4,1.3-0.2s0.7,0.6,0.7,1.1v4l5-4.8c0.3-0.3,0.8-0.4,1.3-0.2s0.7,0.6,0.7,1.1v10.8
+			c0,0.5-0.3,0.9-0.7,1.1s-0.9,0.1-1.3-0.2l-5-4.8v4c0,0.5-0.3,0.9-0.7,1.1s-0.9,0.1-1.3-0.2l-5.6-5.4c-0.2-0.2-0.4-0.5-0.4-0.8
+			s0.1-0.6,0.4-0.8L114.9,107.1z"/>
+		<path class="nadi-lyrics-st3" d="M189,119.5c-0.3,0.3-0.8,0.4-1.3,0.2s-0.7-0.6-0.7-1.1v-4l-5,4.8c-0.3,0.3-0.8,0.4-1.3,0.2s-0.7-0.6-0.7-1.1
+			v-10.8c0-0.5,0.3-0.9,0.7-1.1s0.9-0.1,1.3,0.2l5,4.8v-4c0-0.5,0.3-0.9,0.7-1.1s0.9-0.1,1.3,0.2l5.6,5.4c0.2,0.2,0.4,0.5,0.4,0.8
+			s-0.1,0.6-0.4,0.8L189,119.5z"/>
+		<g>
+			<path class="nadi-lyrics-st17" d="M54.9,110.6c0,0.1,0,0.1,0,0.2c0,2,0,3.9,0,5.9c0,0.4-0.1,0.9-0.2,1.3c-0.3,1.1-1.1,1.7-2.2,1.9
+				c-0.5,0.1-0.9,0-1.4-0.1c-1.3-0.4-1.8-1.6-1.3-2.9c0.4-0.9,1.2-1.4,2.2-1.6c0.4-0.1,0.8,0,1.3,0.1c0.3,0.1,0.4,0.1,0.6,0.3
+				c0-0.1,0-0.1,0-0.2c0-2.7,0-5.5,0-8.2c0-0.1,0-0.1,0-0.2c0.2-0.4,0.5-0.5,0.8-0.2c0.1,0.1,0.1,0.2,0.2,0.3
+				c0.2,0.2,0.3,0.5,0.5,0.7c0.2,0.3,0.5,0.6,0.9,0.9c0.8,0.5,1.5,1.2,2.1,2c0.6,0.8,0.8,1.8,0.5,2.8c-0.2,0.7-0.5,1.3-1,1.8
+				c-0.1,0.1-0.2,0.2-0.4,0.3c-0.1,0-0.2,0-0.3-0.1c-0.2-0.2-0.2-0.4-0.1-0.6c0.5-0.7,0.6-2-0.2-2.8C56.3,111.5,55.7,111,54.9,110.6
+				C55,110.6,54.9,110.6,54.9,110.6z"/>
+			<path class="nadi-lyrics-st17" d="M51.5,109.4h-4c-0.2,0-0.3-0.1-0.3-0.3l0,0c0-0.2,0.1-0.3,0.3-0.3h4c0.2,0,0.3,0.1,0.3,0.3l0,0
+				C51.9,109.3,51.7,109.4,51.5,109.4z"/>
+			<path class="nadi-lyrics-st17" d="M51.5,111.1h-4c-0.2,0-0.3-0.1-0.3-0.3v0c0-0.2,0.1-0.3,0.3-0.3h4c0.2,0,0.3,0.1,0.3,0.3v0
+				C51.9,111,51.7,111.1,51.5,111.1z"/>
+			<path class="nadi-lyrics-st17" d="M51.5,112.8h-4c-0.2,0-0.3-0.1-0.3-0.3l0,0c0-0.2,0.1-0.3,0.3-0.3h4c0.2,0,0.3,0.1,0.3,0.3l0,0
+				C51.9,112.6,51.7,112.8,51.5,112.8z"/>
+		</g>
+		<path id="nadi-lyrics-pause-icon" class="nadi-lyrics-st3" d="M148.3,106.7c-0.8,0-1.4,0.6-1.4,1.4v10.3c0,0.8,0.6,1.4,1.4,1.4h1.9c0.8,0,1.4-0.6,1.4-1.4v-10.3
+			c0-0.8-0.6-1.4-1.4-1.4H148.3z M154.9,106.7c-0.8,0-1.4,0.6-1.4,1.4v10.3c0,0.8,0.6,1.4,1.4,1.4h1.9c0.8,0,1.4-0.6,1.4-1.4v-10.3
+			c0-0.8-0.6-1.4-1.4-1.4H154.9z"/>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 45.2236 24.1572)"><tspan x="0" y="0" class="nadi-lyrics-st18 nadi-lyrics-st13 nadi-lyrics-st22">Music</tspan><tspan x="41.1" y="0" class="nadi-lyrics-st23 nadi-lyrics-st13 nadi-lyrics-st22"> Player</tspan></text>
+	</g>
+</g>
+<path id="nadi-lyrics-play-icon" d="M147.3 107.5 Q147.3 106.3 148.6 107 L159.6 113.1 Q160.6 113.6 159.6 114.2 L148.6 120.1 Q147.3 120.8 147.3 119.5Z" fill="#F7F7FB" style="display:none"/>
+<g id="nadi-lyrics-interactions">
+ <rect x="100" y="103" width="33" height="24" rx="6" fill="transparent" role="button" tabindex="0" aria-label="Skip 15 seconds backward" data-nadi-lyrics-action="previous"/>
+ <rect x="141" y="103" width="26" height="24" rx="6" fill="transparent" role="button" tabindex="0" aria-label="Pause demo playback" data-nadi-lyrics-action="toggle"/>
+ <rect x="173" y="103" width="33" height="24" rx="6" fill="transparent" role="button" tabindex="0" aria-label="Skip 15 seconds forward" data-nadi-lyrics-action="next"/>
+ <rect x="49" y="82" width="146" height="13" rx="5" fill="transparent" role="slider" tabindex="0" aria-label="Seek lyric demo" aria-valuemin="0" aria-valuemax="256" aria-valuenow="193" data-nadi-lyrics-action="seek"/>
 </g>
 </svg>
               </div>
@@ -2371,7 +2513,7 @@ function waterGrow() {
   bars.forEach(b => { b.style.transition = ""; b.style.height = b.dataset.h; });
   wbar.style.transition = ""; wbar.style.width = "152px";
 }
-const MN_SIZE = { pet: 156 * 30, idle: 156 * 30, minimal: 44 * 4, music: 440 * 144, lyrics: 520 * 140, pomo: 420 * 140, prayer: 420 * 140, remind: 310 * 60,
+const MN_SIZE = { pet: 156 * 30, idle: 156 * 30, minimal: 44 * 4, music: 440 * 144, lyrics: 560 * 144, pomo: 420 * 140, prayer: 420 * 140, remind: 310 * 60,
   water: 420 * 140, shelf: 420 * 140, clip: 420 * 140, todo: 420 * 140, notif: 310 * 60, widgets: 420 * 140, bt: 310 * 60, charge: 310 * 60 };
 let remindT = 0;
 function show(s, keepBtn) {
@@ -2522,7 +2664,7 @@ function lyric() {
 }
 lyric(); setInterval(() => { if (mn.dataset.s === "lyrics") lyric(); }, 2600);
 
-// Skala notch mengikuti lebar layar (notch lirik 520 dp + telinga harus muat)
+// Skala notch mengikuti lebar layar (native Lyrics Expanded 560x144 harus muat)
 function fit() {
   const w = document.getElementById("laptop").clientWidth;
   const u = Math.max(0.55, Math.min(1.3, (w - 30) / 570));
