@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-14-preview-pomodoro-two-themes-v9">
+<meta name="nadi-site-revision" content="2026-11-14-preview-pomodoro-visible-motion-centered-v10">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -885,6 +885,72 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
  .nadi-pomo-t-native #nadi-pomo-t-stage-dot{transition:none!important}
 }
 
+/* Motion fixes for the authentic Pomodoro vectors, scoped to INTERNAL elements.
+   Keep both 440x144 SVG roots and their parent shell completely stationary. */
+.nadi-pomo-t-native #nadi-pomo-t-start-text{
+ text-anchor:middle;
+ dominant-baseline:auto;
+ font-variant-numeric:tabular-nums;
+ pointer-events:none;
+}
+.nadi-pomo-t-native #nadi-pomo-t-start-background{
+ transform:none;
+ filter:drop-shadow(0 0 0 transparent);
+}
+.nadi-pomo-t-native[data-running="true"] #nadi-pomo-t-start-background{
+ filter:drop-shadow(0 0 2px rgba(163,83,255,.4));
+}
+.nadi-pomo-t-native #nadi-pomo-t-stage-dot{
+ animation:nadi-pomo-dot-breathe 1.75s ease-in-out infinite;
+}
+@keyframes nadi-pomo-dot-breathe{
+ 0%,100%{filter:drop-shadow(0 0 1px rgba(81,255,0,.3));opacity:.87}
+ 50%{filter:drop-shadow(0 0 3.5px rgba(81,255,0,.9));opacity:1}
+}
+.nadi-pomo-t-native #nadi-pomo-t-progress-sheen{
+ opacity:.38;
+ animation:nadi-pomo-segment-sheen 2.8s ease-in-out infinite;
+}
+.nadi-pomo-t-native[data-running="true"] #nadi-pomo-t-progress-sheen{
+ opacity:.85;animation-duration:1.65s;
+}
+@keyframes nadi-pomo-segment-sheen{
+ 0%{transform:translateX(0px)}
+ 100%{transform:translateX(48px)}
+}
+.nadi-pomo-t-native #nadi-pomo-t-left-sheen{
+ opacity:0;animation:nadi-pomo-left-sheen 2.6s ease-in-out infinite;
+}
+.nadi-pomo-t-native[data-running="true"] #nadi-pomo-t-left-sheen{opacity:.42}
+@keyframes nadi-pomo-left-sheen{
+ 0%{transform:translateX(0px)}100%{transform:translateX(160.38px)}
+}
+.nadi-pomo-c-native:not([data-running="true"]) #nadi-pomo-c-ring-progress{
+ animation:nadi-pomo-ring-breathe 2.4s ease-in-out infinite;
+}
+@keyframes nadi-pomo-ring-breathe{
+ 0%,100%{filter:drop-shadow(0 0 0 rgba(255,44,80,0))}
+ 50%{filter:drop-shadow(0 0 2px rgba(255,44,80,.5))}
+}
+.nadi-pomo-c-native #nadi-pomo-c-ring-orbit{
+ animation:nadi-pomo-ring-orbit 4.2s linear infinite;
+ animation-play-state:paused;
+}
+.nadi-pomo-c-native[data-running="true"] #nadi-pomo-c-ring-orbit{
+ opacity:.78;animation-play-state:running;
+}
+@keyframes nadi-pomo-ring-orbit{
+ from{stroke-dashoffset:0}to{stroke-dashoffset:-213.6283}
+}
+@media(prefers-reduced-motion:reduce){
+ .nadi-pomo-t-native #nadi-pomo-t-stage-dot,
+ .nadi-pomo-t-native #nadi-pomo-t-progress-sheen,
+ .nadi-pomo-t-native #nadi-pomo-t-left-sheen,
+ .nadi-pomo-c-native #nadi-pomo-c-ring-progress,
+ .nadi-pomo-c-native #nadi-pomo-c-ring-orbit{animation:none!important}
+ .nadi-pomo-c-native #nadi-pomo-c-ring-orbit,
+ .nadi-pomo-t-native #nadi-pomo-t-left-sheen{opacity:0!important}
+}
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
 .sec-title { font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.03em; font-weight: 800; margin: 0 0 14px; max-width: 16ch; }
@@ -1670,8 +1736,8 @@ footer a:hover { color: var(--ink); }
     <g>
       <g id="nadi-pomo-t-_05_Right_Control" data-name="05_Right_Control">
         <text class="nadi-pomo-t-cls-14" transform="translate(215.51 48.65)"><tspan x="0" y="0">This round</tspan></text>
-        <path class="nadi-pomo-t-cls-35" d="m292.62,38.92h34.34c6.72,0,12.16,5.45,12.16,12.16h0c0,6.72-5.45,12.16-12.16,12.16h-34.34c-6.72,0-12.16-5.45-12.16-12.16h0c0-6.72,5.45-12.16,12.16-12.16Z"/>
-        <text id="nadi-pomo-t-start-text" class="nadi-pomo-t-cls-9" transform="translate(297.95 54.73)"><tspan class="nadi-pomo-t-cls-27" x="0" y="0">S</tspan><tspan class="nadi-pomo-t-cls-17" x="6.35" y="0">t</tspan><tspan class="nadi-pomo-t-cls-27" x="10.3" y="0">a</tspan><tspan class="nadi-pomo-t-cls-31" x="15.99" y="0">r</tspan><tspan class="nadi-pomo-t-cls-38" x="19.66" y="0">t</tspan></text>
+        <path id="nadi-pomo-t-start-background" class="nadi-pomo-t-cls-35" d="m292.62,38.92h34.34c6.72,0,12.16,5.45,12.16,12.16h0c0,6.72-5.45,12.16-12.16,12.16h-34.34c-6.72,0-12.16-5.45-12.16-12.16h0c0-6.72,5.45-12.16,12.16-12.16Z"/>
+        <text id="nadi-pomo-t-start-text" class="nadi-pomo-t-cls-9" x="309.79" y="54.73" text-anchor="middle">Start</text>
         <circle class="nadi-pomo-t-cls-32" cx="357.98" cy="51.08" r="10.51"/>
         <path class="nadi-pomo-t-cls-20" d="m352.07,50.17h-.24c-.38,0-.68-.31-.68-.68v-3.65c0-.28.17-.53.42-.63s.55-.05.75.15l1.19,1.19c2.5-2.47,6.52-2.46,9,.03,2.49,2.49,2.49,6.54,0,9.03-2.49,2.49-6.54,2.49-9.03,0-.36-.36-.36-.93,0-1.29s.93-.36,1.29,0c1.78,1.78,4.67,1.78,6.45,0,1.78-1.78,1.78-4.67,0-6.45-1.77-1.77-4.64-1.78-6.42-.03l1.17,1.17c.2.2.25.49.15.75s-.36.42-.63.42h-3.41Z"/>
         <text class="nadi-pomo-t-cls-3" transform="translate(215.51 73.95)"><tspan x="0" y="0">2h 10m · 4 sessions</tspan></text>
@@ -1695,6 +1761,16 @@ footer a:hover { color: var(--ink); }
       </g>
     </g>
   </g>
+<defs>
+ <linearGradient id="nadi-pomo-t-running-sheen" x1="0" x2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+  <stop offset=".5" stop-color="#fff" stop-opacity=".82"/>
+  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+ </linearGradient>
+ <clipPath id="nadi-pomo-t-running-clip">
+  <rect id="nadi-pomo-t-running-clip-rect" x="218.04" y="86.83" width="23.66" height="5.06" rx="2.53"/>
+ </clipPath>
+</defs>
 <g id="nadi-pomo-t-animated-progress">
  <rect id="nadi-pomo-t-elapsed-fill" x="39.7" y="108" width="0" height="3.21" rx="1.61" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
  <rect id="nadi-pomo-t-stage-fill-1" x="218.04" y="86.83" width="0" height="5.06" rx="2.53" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
@@ -1702,9 +1778,15 @@ footer a:hover { color: var(--ink); }
  <rect id="nadi-pomo-t-stage-fill-3" x="291.37" y="86.83" width="0" height="5.06" rx="2.53" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
  <rect id="nadi-pomo-t-stage-fill-4" x="328.04" y="86.83" width="0" height="5.06" rx="2.53" fill="url(#nadi-pomo-t-linear-gradient-2)"/>
  <circle id="nadi-pomo-t-stage-dot" cx="218.04" cy="89.36" r="2.53" fill="#51FF00"/>
+ <g clip-path="url(#nadi-pomo-t-running-clip)">
+  <rect id="nadi-pomo-t-progress-sheen" x="198.04" y="86.83" width="18" height="5.06"
+   rx="2.53" fill="url(#nadi-pomo-t-running-sheen)" pointer-events="none"/>
+ </g>
+ <rect id="nadi-pomo-t-left-sheen" x="19.7" y="108" width="20" height="3.21" rx="1.61"
+  fill="url(#nadi-pomo-t-running-sheen)" pointer-events="none"/>
  </g>
  <g id="nadi-pomo-t-controls">
-  <rect x="291.5" y="38.5" width="48" height="25" rx="12" fill="transparent" data-pomo-action="toggle" role="button" tabindex="0" aria-label="Start Pomodoro"/>
+  <rect x="280.46" y="38.92" width="58.66" height="24.32" rx="12.16" fill="transparent" data-pomo-action="toggle" role="button" tabindex="0" aria-label="Start Pomodoro"/>
   <circle cx="358" cy="51.08" r="11.5" fill="transparent" data-pomo-action="reset" role="button" tabindex="0" aria-label="Reset Pomodoro"/>
   <rect x="215.1" y="98" width="27" height="19" rx="4" fill="transparent" data-pomo-action="session-1" role="button" tabindex="0" aria-label="Preview focus session 1"/>
   <rect x="251.8" y="98" width="27" height="19" rx="4" fill="transparent" data-pomo-action="session-2" role="button" tabindex="0" aria-label="Preview focus session 2"/>
@@ -1919,6 +2001,10 @@ footer a:hover { color: var(--ink); }
 <g id="nadi-pomo-c-animation">
  <circle id="nadi-pomo-c-ring-progress" cx="92.54" cy="74.5" r="34" stroke="url(#nadi-pomo-c-linear-gradient)" stroke-width="4.2" fill="none"
     stroke-linecap="round" stroke-dasharray="213.6283" stroke-dashoffset="0" transform="rotate(-90 92.54 74.5)"/>
+ <circle id="nadi-pomo-c-ring-orbit" cx="92.54" cy="74.5" r="34" stroke="#FFFFFF"
+  stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0"
+  stroke-dasharray="8 205.6283" stroke-dashoffset="0"
+  transform="rotate(-90 92.54 74.5)" pointer-events="none"/>
  </g>
  <g id="nadi-pomo-c-pause-icon" aria-hidden="true">
  <rect x="266.0" y="103.1" width="3.6" height="12" rx="1.0" fill="#FFFFFF"/>
@@ -3234,13 +3320,11 @@ const nadiPomoUI={
  trunningbar:document.getElementById("nadi-pomo-t-elapsed-fill"),
  tdot:document.getElementById("nadi-pomo-t-stage-dot"),
  tstage:[1,2,3,4].map(n=>document.getElementById("nadi-pomo-t-stage-fill-"+n)),
+ tclip:document.getElementById("nadi-pomo-t-running-clip-rect"),
+ tsheen:document.getElementById("nadi-pomo-t-progress-sheen"),
  cring:document.getElementById("nadi-pomo-c-ring-progress"),
  headers:[document.getElementById("nadi-pomo-t-header"),document.getElementById("nadi-pomo-c-header")]
 };
-// The uploaded Start label uses individually positioned tspans. Replace
-// them once with a single text node before centering a dynamic Start/Pause/
-// Resume label; otherwise text-anchor would shift each letter separately.
-nadiPomoUI.tstart.textContent="Start";
 // Optional preview-only accelerated clock: ?pomoSpeed=30 makes the
 // timeline and ring motion visible quickly. Default stays real-time 1x.
 const nadiPomoSpeed=(typeof window!=="undefined"&&window.location&&
@@ -3298,8 +3382,6 @@ function nadiPomoPaint(){
   clock.phase==="short"?"Short break":"Long break");
  const startLabel=clock.running?"Pause":remaining<duration?"Resume":"Start";
  nadiPomoText(nadiPomoUI.tstart,startLabel);
- if(nadiPomoUI.tstart.style.textAnchor!=="middle")nadiPomoUI.tstart.style.textAnchor="middle";
- nadiPomoAttr(nadiPomoUI.tstart,"transform","translate(315.8 54.73)");
  nadiPomoAttr(nadiPomoUI.trunningbar,"width",(140.38*elapsed).toFixed(3));
  const xs=[218.04,254.70,291.37,328.04],segment=23.66;
  for(let i=0;i<4;i++){
@@ -3311,6 +3393,12 @@ function nadiPomoPaint(){
  const dotX=clock.phase==="long"?379.55:
    xs[clock.session-1]+segment*(clock.phase==="focus"?leftRatio:1)+3.58;
  nadiPomoAttr(nadiPomoUI.tdot,"cx",dotX.toFixed(3));
+ // Only the currently filled native vector segment receives the moving light.
+ const activeStageX=xs[clock.session-1];
+ const activeWidth=segment*(clock.phase==="focus"?leftRatio:1);
+ nadiPomoAttr(nadiPomoUI.tclip,"x",activeStageX.toFixed(2));
+ nadiPomoAttr(nadiPomoUI.tclip,"width",activeWidth.toFixed(3));
+ nadiPomoAttr(nadiPomoUI.tsheen,"x",(activeStageX-20).toFixed(2));
  nadiPomoAttr(nadiPomoUI.cring,"stroke-dashoffset",(213.6283*elapsed).toFixed(3));
  for(const svg of [nadiPomoUI.timeline,nadiPomoUI.classic]){
   if(svg.dataset.running!==String(clock.running))svg.dataset.running=String(clock.running);
