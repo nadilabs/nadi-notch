@@ -143,8 +143,8 @@ for(const [kind,prefix,source] of pomoAssets){
  assert.ok(html.includes('class="nadi-pomo-native '+prefix+'-native"'),
    'SVG theme must retain stable 0,0 origin');
 }
-assert.ok(html.includes('data-s="pomo">Pomodoro Timeline</button>'));
-assert.ok(html.includes('data-s="pomoClassic">Pomodoro Classic</button>'));
+assert.ok(html.includes('data-s="pomo" aria-pressed="false">Pomodoro Timeline</button>'));
+assert.ok(html.includes('data-s="pomoClassic" aria-pressed="false">Pomodoro Classic</button>'));
 assert.ok(html.includes('pomo: 440 * 144, pomoClassic: 440 * 144'));
 assert.ok(html.includes('.mn[data-s="pomo"],.mn[data-s="pomoClassic"]{--w:440px;--h:144px;'),
   'both SVG designs require exact native shell geometry');
