@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-14-preview-pomodoro-visible-motion-centered-v10">
+<meta name="nadi-site-revision" content="2026-11-14-preview-native-crossfade-shared-audio-v11">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -748,7 +748,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .nadi-music-live #nadi-music-bar-4{animation-duration:1.05s;animation-delay:-.24s}
 .nadi-music-live #nadi-music-bar-5{animation-duration:.72s;animation-delay:-.51s}
 .nadi-music-live #nadi-music-bar-6{animation-duration:.81s;animation-delay:-.17s}
-@keyframes nadi-music-equalizer{0%{transform:scaleY(.48)}100%{transform:scaleY(1)}}
+@keyframes nadi-music-equalizer{0%{transform:scaleY(.22)}100%{transform:scaleY(1.12)}}
 .nadi-music-live #nadi-music-volume-fill{transition:width .20s cubic-bezier(.2,.8,.2,1)}
 .nadi-music-live #nadi-music-waves{transition:opacity .20s ease;
  transform-box:fill-box;transform-origin:0% 50%}
@@ -814,7 +814,7 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 }
 .nadi-lyrics-live #nadi-lyrics-equalizer path {
  transform-box:fill-box;transform-origin:center;
- animation:nadi-lyrics-eq .72s ease-in-out infinite alternate;
+ animation:nadi-music-equalizer .72s ease-in-out infinite alternate;
  animation-play-state:paused;
 }
 .nadi-lyrics-live.is-playing #nadi-lyrics-equalizer path {animation-play-state:running}
@@ -867,11 +867,14 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .nadi-pomo-t-native #nadi-pomo-t-start-text{text-anchor:middle}
 .nadi-pomo-native [data-pomo-eq]{
  transform-box:fill-box;transform-origin:center;
- animation:nadi-pomo-eq .85s ease-in-out infinite alternate;
+ animation:nadi-music-equalizer .85s ease-in-out infinite alternate;
  animation-play-state:paused;
 }
-.nadi-pomo-native[data-running="true"] [data-pomo-eq]{animation-play-state:running}
-@keyframes nadi-pomo-eq{0%{transform:scaleY(.4)}100%{transform:scaleY(1)}}
+.mn[data-s="pomo"] .nadi-pomo-t-native[data-audio-active="true"] [data-pomo-eq],
+.mn[data-s="pomoClassic"] .nadi-pomo-c-native[data-audio-active="true"] [data-pomo-eq]{
+ animation-play-state:running;
+}
+/* Music, Lyrics and Pomodoro now share nadi-music-equalizer (same real waveform). */
 .nadi-pomo-native [data-pomo-action]{cursor:pointer}
 .nadi-pomo-native [data-pomo-action]:focus-visible{
  stroke:#48B6FF;stroke-width:1;outline:none;
@@ -950,6 +953,63 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
  .nadi-pomo-c-native #nadi-pomo-c-ring-orbit{animation:none!important}
  .nadi-pomo-c-native #nadi-pomo-c-ring-orbit,
  .nadi-pomo-t-native #nadi-pomo-t-left-sheen{opacity:0!important}
+}
+/* Shared transition compositor: one shell continues its monotonic morph;
+   native SVG contents crossfade with opacity ONLY (never transform/center the
+   roots). The previous global viewport blackout produced a dead 390ms gap. */
+.mn.nadi-curve-shell.nadi-morphing.nadi-native-crossfade .nadi-visual-viewport{
+ opacity:1!important;
+ pointer-events:none!important;
+}
+.mn.nadi-native-crossfade .nadi-native-exit,
+.mn.nadi-native-crossfade .nadi-native-enter{
+ visibility:visible!important;
+ pointer-events:none!important;
+ left:0!important;
+ transform:none!important;
+}
+.mn.nadi-native-crossfade .nadi-native-exit{
+ animation:nadi-native-out .19s cubic-bezier(.42,0,.95,.5) both!important;
+}
+.mn.nadi-native-crossfade .nadi-native-enter{
+ animation:nadi-native-in .31s cubic-bezier(.16,.72,.22,1) .115s both!important;
+}
+@keyframes nadi-native-out{from{opacity:var(--nadi-exit-opacity,1)}to{opacity:0}}
+@keyframes nadi-native-in{from{opacity:var(--nadi-enter-opacity,0)}to{opacity:1}}
+/* The six upper-right activity bars are AUDIO, not focus-timer progress.
+   Their shared waveform must play while the simulated music is active,
+   even when Pomodoro still says Ready or Paused. */
+.nadi-pomo-native [data-pomo-eq]{
+ transform-box:fill-box;transform-origin:center;
+}
+.mn[data-s="pomo"] .nadi-pomo-t-native [data-pomo-eq],
+.mn[data-s="pomoClassic"] .nadi-pomo-c-native [data-pomo-eq]{
+ animation-timing-function:ease-in-out;
+}
+.mn[data-s="pomo"] .nadi-pomo-t-native #nadi-pomo-t-intro-trace{
+ animation:nadi-pomo-intro-trace 1.36s cubic-bezier(.18,.65,.2,1) both;
+}
+@keyframes nadi-pomo-intro-trace{
+ 0%{opacity:0;transform:translateX(0)}
+ 12%{opacity:.74}
+ 80%{opacity:.49}
+ 100%{opacity:0;transform:translateX(144px)}
+}
+/* Classic has a readable slow orbit even before Start, with increased
+   brightness after Start. It does NOT alter the real remaining-time ring. */
+.mn[data-s="pomoClassic"] .nadi-pomo-c-native #nadi-pomo-c-ring-orbit{
+ opacity:.42;
+ animation-play-state:running;
+}
+.mn[data-s="pomoClassic"] .nadi-pomo-c-native[data-running="true"] #nadi-pomo-c-ring-orbit{
+ opacity:.84;
+ animation-play-state:running;
+}
+@media(prefers-reduced-motion:reduce){
+ .mn.nadi-native-crossfade .nadi-native-exit,
+ .mn.nadi-native-crossfade .nadi-native-enter,
+ .mn[data-s="pomo"] #nadi-pomo-t-intro-trace{animation:none!important}
+ .mn[data-s="pomoClassic"] #nadi-pomo-c-ring-orbit{animation:none!important}
 }
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
@@ -1784,6 +1844,8 @@ footer a:hover { color: var(--ink); }
  </g>
  <rect id="nadi-pomo-t-left-sheen" x="19.7" y="108" width="20" height="3.21" rx="1.61"
   fill="url(#nadi-pomo-t-running-sheen)" pointer-events="none"/>
+ <rect id="nadi-pomo-t-intro-trace" x="218.04" y="86.83" width="15" height="5.06"
+  rx="2.53" fill="#F7F7FB" opacity="0" pointer-events="none"/>
  </g>
  <g id="nadi-pomo-t-controls">
   <rect x="280.46" y="38.92" width="58.66" height="24.32" rx="12.16" fill="transparent" data-pomo-action="toggle" role="button" tabindex="0" aria-label="Start Pomodoro"/>
