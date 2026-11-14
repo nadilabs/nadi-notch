@@ -151,6 +151,8 @@ assert.ok(html.includes('.mn[data-s="pomo"],.mn[data-s="pomoClassic"]{--w:440px;
 assert.ok(html.includes('nadiPomoShow(s,prev);'),'mode transition must stop/resume shared timer');
 assert.ok(html.includes('const nadiPomoText=(el,value)=>{if(el.textContent!==value)'),
   'per-frame text changes can reintroduce horizontal shimmer');
+assert.ok(html.includes('get("pomoSpeed")==="30"'),
+  'accelerated demo must require an explicit URL parameter; default timer is 1x');
 assert.ok(html.includes('now-nadiPomoClock.lastPaint>=90'),
   'timer UI must not repaint SVG labels every animation frame');
 assert.ok(html.includes('nadi-pomo-c-ring-progress'),'classic countdown ring must animate');
