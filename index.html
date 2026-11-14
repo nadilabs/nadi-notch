@@ -3237,6 +3237,10 @@ const nadiPomoUI={
  cring:document.getElementById("nadi-pomo-c-ring-progress"),
  headers:[document.getElementById("nadi-pomo-t-header"),document.getElementById("nadi-pomo-c-header")]
 };
+// Optional preview-only accelerated clock: ?pomoSpeed=30 makes the
+// timeline and ring motion visible quickly. Default stays real-time 1x.
+const nadiPomoSpeed=(typeof window!=="undefined"&&window.location&&
+ new URLSearchParams(window.location.search).get("pomoSpeed")==="30")?30:1;
 const nadiPomoClock={phase:"focus",session:1,remaining:1500,running:false,last:0,frame:0,lastPaint:0};
 const nadiPomoDuration=phase=>phase==="short"?300:phase==="long"?900:1500;
 const nadiPomoActive=()=>["pomo","pomoClassic"].includes(mn.dataset.s);
@@ -3331,7 +3335,7 @@ function nadiPomoTick(now){
  if(nadiPomoClock.last){
   // Ignore background-tab jumps; the preview must not fast-forward while
   // throttled. At normal frame rates real time advances at exactly 1x.
-  let delta=nadiPomoClamp((now-nadiPomoClock.last)/1000,0,.25);
+  let delta=nadiPomoClamp((now-nadiPomoClock.last)/1000,0,.25)*nadiPomoSpeed;
   while(delta>0){
    if(delta>=nadiPomoClock.remaining){
     delta-=nadiPomoClock.remaining;
