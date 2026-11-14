@@ -3237,10 +3237,12 @@ const nadiPomoUI={
  cring:document.getElementById("nadi-pomo-c-ring-progress"),
  headers:[document.getElementById("nadi-pomo-t-header"),document.getElementById("nadi-pomo-c-header")]
 };
-const nadiPomoClock={phase:"focus",session:1,remaining:1500,running:false,last:0,frame:0};
+const nadiPomoClock={phase:"focus",session:1,remaining:1500,running:false,last:0,frame:0,lastPaint:0};
 const nadiPomoDuration=phase=>phase==="short"?300:phase==="long"?900:1500;
 const nadiPomoActive=()=>["pomo","pomoClassic"].includes(mn.dataset.s);
 const nadiPomoClamp=(n,a,b)=>Math.min(b,Math.max(a,n));
+const nadiPomoText=(el,value)=>{if(el.textContent!==value)el.textContent=value;};
+const nadiPomoAttr=(el,name,value)=>{if(el.getAttribute(name)!==String(value))el.setAttribute(name,value);};
 function nadiPomoFormatted(seconds){
  const total=Math.max(0,Math.ceil(seconds));
  return String(Math.floor(total/60)).padStart(2,"0")+":"+
@@ -3268,7 +3270,7 @@ function nadiPomoHeader(){
  const label=days[d.getDay()]+" "+String(d.getDate()).padStart(2,"0")+" "+
   months[d.getMonth()]+" "+d.getFullYear()+" "+
   String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
- nadiPomoUI.headers.forEach(x=>x.textContent=label);
+ nadiPomoUI.headers.forEach(x=>nadiPomoText(x,label));
 }
 function nadiPomoPaint(){
  const clock=nadiPomoClock;
@@ -3277,44 +3279,44 @@ function nadiPomoPaint(){
  const leftRatio=remaining/duration;
  const elapsed=1-leftRatio;
  const text=nadiPomoFormatted(remaining);
- nadiPomoUI.ttime.textContent=text;
- nadiPomoUI.ctime.textContent=text;
- nadiPomoUI.tround.textContent=(clock.phase==="focus"?"Focus":clock.phase==="short"?"Break":"Long break")+
-  " · "+clock.session+" of 4";
- nadiPomoUI.tduration.textContent=clock.phase==="focus"?"25 min":clock.phase==="short"?"5 min":"15 min";
- nadiPomoUI.tstatus.textContent=clock.running?"Running":
-  remaining===duration?"Ready":"Paused";
- nadiPomoUI.cphase.textContent=clock.phase==="focus"?"Focus time":
-  clock.phase==="short"?"Short break":"Long break";
+ nadiPomoText(nadiPomoUI.ttime,text);
+ nadiPomoText(nadiPomoUI.ctime,text);
+ nadiPomoText(nadiPomoUI.tround,(clock.phase==="focus"?"Focus":clock.phase==="short"?"Break":"Long break")+
+  " · "+clock.session+" of 4");
+ nadiPomoText(nadiPomoUI.tduration,clock.phase==="focus"?"25 min":clock.phase==="short"?"5 min":"15 min");
+ nadiPomoText(nadiPomoUI.tstatus,clock.running?"Running":
+  remaining===duration?"Ready":"Paused");
+ nadiPomoText(nadiPomoUI.cphase,clock.phase==="focus"?"Focus time":
+  clock.phase==="short"?"Short break":"Long break");
  const startLabel=clock.running?"Pause":remaining<duration?"Resume":"Start";
- nadiPomoUI.tstart.textContent=startLabel;
- nadiPomoUI.tstart.style.textAnchor="middle";
- nadiPomoUI.tstart.setAttribute("transform","translate(315.8 54.73)");
- nadiPomoUI.trunningbar.setAttribute("width",(140.38*elapsed).toFixed(3));
+ nadiPomoText(nadiPomoUI.tstart,startLabel);
+ if(nadiPomoUI.tstart.style.textAnchor!=="middle")nadiPomoUI.tstart.style.textAnchor="middle";
+ nadiPomoAttr(nadiPomoUI.tstart,"transform","translate(315.8 54.73)");
+ nadiPomoAttr(nadiPomoUI.trunningbar,"width",(140.38*elapsed).toFixed(3));
  const xs=[218.04,254.70,291.37,328.04],segment=23.66;
  for(let i=0;i<4;i++){
   const stage=i+1;
   const ratio=stage<clock.session?1:stage>clock.session?0:
     clock.phase==="focus"?leftRatio:1;
-  nadiPomoUI.tstage[i].setAttribute("width",(segment*ratio).toFixed(3));
+  nadiPomoAttr(nadiPomoUI.tstage[i],"width",(segment*ratio).toFixed(3));
  }
  const dotX=clock.phase==="long"?379.55:
    xs[clock.session-1]+segment*(clock.phase==="focus"?leftRatio:1)+3.58;
- nadiPomoUI.tdot.setAttribute("cx",dotX.toFixed(3));
- nadiPomoUI.cring.setAttribute("stroke-dashoffset",(213.6283*elapsed).toFixed(3));
+ nadiPomoAttr(nadiPomoUI.tdot,"cx",dotX.toFixed(3));
+ nadiPomoAttr(nadiPomoUI.cring,"stroke-dashoffset",(213.6283*elapsed).toFixed(3));
  for(const svg of [nadiPomoUI.timeline,nadiPomoUI.classic]){
-  svg.dataset.running=String(clock.running);
-  svg.setAttribute("aria-label","Nadi Pomodoro "+
+  if(svg.dataset.running!==String(clock.running))svg.dataset.running=String(clock.running);
+  nadiPomoAttr(svg,"aria-label","Nadi Pomodoro "+
     (svg===nadiPomoUI.classic?"Classic":"Timeline")+
     "; "+text+" remaining; "+(clock.running?"running":"paused or ready"));
   svg.querySelectorAll('[data-pomo-action="toggle"]').forEach(el=>
-   el.setAttribute("aria-label",clock.running?"Pause Pomodoro":remaining<duration?"Resume Pomodoro":"Start Pomodoro"));
+   nadiPomoAttr(el,"aria-label",clock.running?"Pause Pomodoro":remaining<duration?"Resume Pomodoro":"Start Pomodoro"));
  }
  nadiPomoHeader();
 }
 function nadiPomoStopFrame(){
  if(nadiPomoClock.frame)cancelAnimationFrame(nadiPomoClock.frame);
- nadiPomoClock.frame=0;nadiPomoClock.last=0;
+ nadiPomoClock.frame=0;nadiPomoClock.last=0;nadiPomoClock.lastPaint=0;
 }
 function nadiPomoPause(){
  nadiPomoClock.running=false;
@@ -3340,7 +3342,9 @@ function nadiPomoTick(now){
   }
  }
  nadiPomoClock.last=now;
- nadiPomoPaint();
+ if(!nadiPomoClock.lastPaint||now-nadiPomoClock.lastPaint>=90){
+  nadiPomoPaint();nadiPomoClock.lastPaint=now;
+ }
  nadiPomoClock.frame=requestAnimationFrame(nadiPomoTick);
 }
 function nadiPomoResume(){
