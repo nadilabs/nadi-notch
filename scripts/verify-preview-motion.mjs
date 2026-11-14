@@ -36,11 +36,24 @@ assert.match(shell,/position:\s*absolute/,'animated shell must not resize its pa
 assert.match(shell,/left:\s*50%/,'animated shell must use centered positioning');
 assert.match(shell,/translate:\s*-50%\s+0/,'animated shell must offset its own center');
 
+const suppliedLyrics=readFileSync(new URL('../assets/nadi-lyrics-expanded-560x144.svg',import.meta.url),'utf8');
+assert.match(suppliedLyrics,/viewBox="0 0 560 144"/,'uploaded expanded lyric dimensions changed');
+assert.ok(suppliedLyrics.includes('id="Lyric_Expanded"'),'uploaded native artwork must stay intact');
+assert.ok(html.includes('id="nadi-lyrics-live"'),'native Expanded Lyrics svg not mounted');
+assert.ok(html.includes('viewBox="0 0 560 144"'),'expanded lyrics viewBox wrong');
+assert.ok(html.includes('.mn[data-s="lyrics"] { --w: 560px; --h: 144px;'),'live shell dimensions do not match supplied asset');
+assert.ok(html.includes('lyrics: 560 * 144'),'state area check must use native dimensions');
+assert.ok(html.includes('.mn .nadi-lyrics-live .nadi-lyrics-st0{fill:transparent!important}'),'duplicate SVG black shell would cause two silhouettes');
+assert.ok(html.includes('.mn[data-s="lyrics"] > .l-lyrics{display:none!important}'),'old legacy lyrics would overlap native design');
+assert.ok(html.includes('id="nadi-lyrics-header-clock"'),'native lyrics timestamp must be editable');
+assert.ok(html.includes('function nadiLyricsSeek('),'native lyrics progress control not wired');
+assert.ok(html.includes('if(state==="music"||state==="lyrics")nadiMusicResume();'),'native Lyrics mode does not share media playback engine');
+
 const expr=js.match(/const progress=([^;]+);/);
 assert.ok(expr,'single-clock easing expression missing');
 const ease=vm.runInNewContext('(t)=>('+expr[1]+')');
 
-const sizes=[[156,30],[44,4],[440,144],[520,140],[420,140],[310,60]];
+const sizes=[[156,30],[44,4],[440,144],[560,144],[420,140],[310,60]];
 let checks=0;
 for(const fps of [20,30,60,120]){
  for(const from of sizes)for(const to of sizes){
@@ -63,4 +76,4 @@ for(const fps of [20,30,60,120]){
 }
 assert.equal(ease(0),0);
 assert.equal(ease(1),1);
-console.log('PASS: inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
+console.log('PASS: native 560x144 Expanded Lyrics, inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
