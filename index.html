@@ -2495,6 +2495,8 @@ function nadiMusicPaint(){
  nadiMusicUI.remaining.textContent="-"+nadiMusicTime(Math.ceil(nadiMusicDuration-nadiMusicElapsed));
  nadiMusicUI.waves.style.opacity=nadiMusicVolume>.001?"1":"0";
  nadiMusicSVG.classList.toggle("is-playing",nadiMusicPlaying&&nadiMusicElapsed<nadiMusicDuration);
+ nadiLyricsUI.svg.classList.toggle("is-playing",nadiMusicPlaying&&nadiMusicElapsed<nadiMusicDuration);
+ nadiLyricsPaint();
  nadiMusicSVG.classList.toggle("is-muted",nadiMusicVolume<=.001);
  nadiMusicUI.play.style.display=nadiMusicPlaying?"none":"";
  nadiMusicUI.pause.style.display=nadiMusicPlaying?"":"none";
@@ -2522,6 +2524,7 @@ function nadiMusicTick(now){
  }
  nadiMusicLastFrame=now;
  if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+ nadiLyricsPaint(now);
  if(now-nadiMusicLastPaint>40||!nadiMusicPlaying){
   nadiMusicPaint();nadiMusicLastPaint=now;
  }
@@ -2821,15 +2824,8 @@ const chart = document.getElementById("chart");
 });
 
 // Lirik bergulir: baris aktif menyala, daftar bergeser ke atas
-const lyr = document.getElementById("lyr"), lines = lyr.querySelectorAll("li");
-let cur = 2;
-function lyric() {
-  lines.forEach((li, i) => li.classList.toggle("on", i === cur));
-  const li = lines[cur];
-  lyr.style.transform = `translateY(${56 - li.offsetTop - li.offsetHeight / 2}px)`;
-  cur = (cur + 1) % lines.length;
-}
-lyric(); setInterval(() => { if (mn.dataset.s === "lyrics") lyric(); }, 2600);
+// Legacy lyrics HTML and its independent 2600ms timer are disabled.
+// Native SVG lyrics follow the shared Music playback rAF clock above.
 
 // Skala notch mengikuti lebar layar (native Lyrics Expanded 560x144 harus muat)
 function fit() {
