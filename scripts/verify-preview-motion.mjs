@@ -158,6 +158,36 @@ assert.ok(html.includes('now-nadiPomoClock.lastPaint>=90'),
 assert.ok(html.includes('nadi-pomo-c-ring-progress'),'classic countdown ring must animate');
 assert.ok(html.includes('nadi-pomo-t-stage-fill-4'),'timeline must render four focus stages');
 assert.ok(html.includes('nadi-pomo-c-pause-icon'),'classic play/pause icon must toggle');
+/* Real geometry from the uploaded Timeline SVG:
+   Start background X=280.46 ... 339.12; its text anchor must be the exact
+   geometric center (309.79), not the previous 315.8 shifted to the right. */
+const startText=html.match(/<text id="nadi-pomo-t-start-text"[^>]*>/)?.[0];
+assert.ok(startText,'centered native Start text missing');
+assert.ok(startText.includes('x="309.79"')&&startText.includes('text-anchor="middle"'),
+ 'Start/Pause/Resume must share the center of the original 58.66px pill');
+assert.ok(html.includes('x="280.46" y="38.92" width="58.66" height="24.32"'),
+ 'the whole original Start pill must be clickable');
+assert.ok(!html.includes('translate(315.8 54.73)'),
+ 'previous 6px rightward misalignment must be removed');
+for(const id of [
+ 'nadi-pomo-t-running-sheen','nadi-pomo-t-running-clip-rect',
+ 'nadi-pomo-t-progress-sheen','nadi-pomo-t-left-sheen',
+ 'nadi-pomo-c-ring-orbit'
+])assert.ok(html.includes('id="'+id+'"'),id+' animation element missing');
+assert.ok(html.includes('@keyframes nadi-pomo-segment-sheen'),
+ 'Timeline needs a visible ongoing shimmer even at normal 25-minute speed');
+assert.ok(html.includes('@keyframes nadi-pomo-left-sheen'),
+ 'Timeline left elapsed bar must show motion when started');
+assert.ok(html.includes('@keyframes nadi-pomo-ring-orbit'),
+ 'Classic needs a visible traveling ring indicator when started');
+assert.ok(html.includes('data-running="true"] #nadi-pomo-c-ring-orbit'),
+ 'Classic orbit must start/stop with the single Pomodoro timer');
+assert.ok(html.includes('nadiPomoAttr(nadiPomoUI.tclip,"width",activeWidth.toFixed(3));'),
+ 'Timeline shimmer clip must follow the actual remaining-time ratio');
+assert.ok(html.includes('nadiPomoAttr(nadiPomoUI.tsheen,"x",(activeStageX-20).toFixed(2));'),
+ 'Timeline clip and sheen must track selected focus session together');
+assert.ok(html.includes('prefers-reduced-motion:reduce'),
+ 'motion must be reducible');
 assert.ok(html.includes('data-pomo-eq="1"'),'both SVGs need six animating bars');
 
 const pomoBegin=js.indexOf('const nadiPomoUI={');
@@ -210,6 +240,10 @@ assert.equal(vm.runInContext('nadiPomoFormatted(299.3)',pomoContext),'05:00');
 assert.equal(pomoElement('nadi-pomo-t-time').textContent,'25:00');
 assert.equal(pomoElement('nadi-pomo-c-time').textContent,'25:00');
 assert.equal(pomoElement('nadi-pomo-t-stage-fill-1').getAttribute('width'),'23.660');
+assert.equal(pomoElement('nadi-pomo-t-running-clip-rect').getAttribute('width'),'23.660');
+assert.equal(pomoElement('nadi-pomo-t-running-clip-rect').getAttribute('x'),'218.04');
+assert.equal(pomoElement('nadi-pomo-t-progress-sheen').getAttribute('x'),'198.04');
+
 assert.equal(pomoElement('nadi-pomo-t-stage-fill-2').getAttribute('width'),'0.000');
 assert.equal(pomoElement('nadi-pomo-c-ring-progress').getAttribute('stroke-dashoffset'),'0.000');
 assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),false);
@@ -237,6 +271,11 @@ assert.equal(pomoElement('nadi-pomo-c-time').textContent,'05:00');
 vm.runInContext('nadiPomoAction("session-4")',pomoContext);
 assert.equal(vm.runInContext('nadiPomoClock.session',pomoContext),4);
 assert.equal(vm.runInContext('nadiPomoClock.remaining',pomoContext),1500);
+assert.equal(pomoElement('nadi-pomo-t-running-clip-rect').getAttribute('x'),'328.04',
+ 'animated sheen must follow session four rather than stay stuck on the first');
+vm.runInContext('nadiPomoClock.remaining=750;nadiPomoPaint()',pomoContext);
+assert.equal(pomoElement('nadi-pomo-t-running-clip-rect').getAttribute('width'),'11.830',
+ 'sheen clip must shrink with actual countdown fraction');
 vm.runInContext('nadiPomoNextPhase()',pomoContext);
 assert.equal(vm.runInContext('nadiPomoClock.phase',pomoContext),'long');
 assert.equal(vm.runInContext('nadiPomoClock.remaining',pomoContext),900);
@@ -275,4 +314,4 @@ for(const fps of [20,30,60,120]){
 }
 assert.equal(ease(0),0);
 assert.equal(ease(1),1);
-console.log('PASS: two interactive 440x144 Pomodoro themes + real countdown, verified lyric scroll/active-weight/pause/reduced-motion, native 560x144 SVG, inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
+console.log('PASS: visible vector Pomodoro animation + pixel-centered Start, two interactive 440x144 themes, real countdown, verified lyric scroll/active-weight/pause/reduced-motion, native 560x144 SVG, inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
