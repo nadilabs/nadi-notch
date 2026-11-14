@@ -153,6 +153,26 @@ assert.ok(html.includes('const nadiPomoText=(el,value)=>{if(el.textContent!==val
   'per-frame text changes can reintroduce horizontal shimmer');
 assert.ok(html.includes('get("pomoSpeed")==="30"'),
   'accelerated demo must require an explicit URL parameter; default timer is 1x');
+assert.ok(html.includes('function nadiBeginNativeCrossfade(previous,next)'),
+ 'cross-mode native SVG compositor must be installed');
+assert.ok(html.includes('nadiBeginNativeCrossfade(prev,s);'),
+ 'native crossfade must begin before the parent mode and shell dimensions change');
+assert.ok(html.includes('.mn.nadi-curve-shell.nadi-morphing.nadi-native-crossfade .nadi-visual-viewport'),
+ 'expanded transitions must override the old whole-viewport fade-to-black');
+assert.ok(html.includes('@keyframes nadi-native-in')&&html.includes('@keyframes nadi-native-out'),
+ 'expanded modes must crossfade their contents rather than snap visibility');
+assert.ok(!html.includes('.nadi-pomo-native[data-running="true"] [data-pomo-eq]{animation-play-state:running}'),
+ 'Pomodoro audio must never depend on focus countdown running');
+assert.ok(html.includes('data-audio-active="true"'),
+ 'native Pomodoro equalizer must follow simulated music activity');
+assert.ok(html.includes('animation:nadi-music-equalizer .85s'),
+ 'Pomodoro must reuse the same waveform animation as Music and Lyrics');
+assert.ok(html.includes('animation:nadi-music-equalizer .72s'),
+ 'Lyrics must reuse the Music waveform');
+assert.ok(html.includes('id="nadi-pomo-t-intro-trace"'),
+ 'Timeline needs immediate visible motion during the Ready state');
+assert.ok(html.includes('.mn[data-s="pomoClassic"] .nadi-pomo-c-native #nadi-pomo-c-ring-orbit'),
+ 'Classic idle mode must visibly animate without focus timer Start');
 assert.ok(html.includes('now-nadiPomoClock.lastPaint>=90'),
   'timer UI must not repaint SVG labels every animation frame');
 assert.ok(html.includes('nadi-pomo-c-ring-progress'),'classic countdown ring must animate');
@@ -223,6 +243,7 @@ for(const n of ['nadi-pomo-t-live','nadi-pomo-c-live']){
 }
 let animationSequence=0,shows=[];
 const pomoContext=vm.createContext({
+ nadiMusicPlaying:true,nadiMusicVolume:1,nadiMusicElapsed:193,nadiMusicDuration:256,
  document:{
   hidden:false,
   getElementById:pomoElement,
@@ -247,9 +268,13 @@ assert.equal(pomoElement('nadi-pomo-t-progress-sheen').getAttribute('x'),'198.04
 assert.equal(pomoElement('nadi-pomo-t-stage-fill-2').getAttribute('width'),'0.000');
 assert.equal(pomoElement('nadi-pomo-c-ring-progress').getAttribute('stroke-dashoffset'),'0.000');
 assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),false);
+assert.equal(pomoElement('nadi-pomo-t-live').dataset.audioActive,'true',
+ 'audio waveform must already be active while Pomodoro shows Ready');
 vm.runInContext('nadiPomoAction("toggle")',pomoContext);
 assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),true);
 assert.equal(pomoElement('nadi-pomo-t-live').dataset.running,'true');
+assert.equal(pomoElement('nadi-pomo-t-live').dataset.audioActive,'true');
+assert.equal(pomoElement('nadi-pomo-c-live').dataset.audioActive,'true');
 assert.equal(pomoElement('nadi-pomo-c-live').dataset.running,'true');
 vm.runInContext('nadiPomoTick(1250)',pomoContext);
 assert.ok(Math.abs(vm.runInContext('nadiPomoClock.remaining',pomoContext)-1499.75)<1e-8);
