@@ -121,6 +121,133 @@ assert.ok(rows.every(row=>row.row.lastTransform.startsWith('translate(0 ')),
   'lyric x positions must remain fixed during animation');
 
 
+/* Two authentic uploaded Pomodoro themes must be live, not flattened PNGs.
+   Their 440x144 geometry shares one source-driven timer and stays independent
+   of the native Windows application and its event scheduler. */
+const pomoAssets=[
+ ['timeline','nadi-pomo-t','nadi-pomodoro-timeline-ready-440x144.svg'],
+ ['classic','nadi-pomo-c','nadi-pomodoro-classic-440x144.svg']
+];
+for(const [kind,prefix,source] of pomoAssets){
+ const original=readFileSync(new URL('../assets/'+source,import.meta.url),'utf8');
+ assert.ok(original.includes('viewBox="0 0 440 144"'),'uploaded '+kind+' dimensions changed');
+ assert.ok(original.includes('id="Shell_Outline"'),'uploaded '+kind+' silhouette lost');
+ assert.ok(html.includes('id="'+prefix+'-live"'),'native '+kind+' vector missing from preview');
+ assert.ok(html.includes('id="'+prefix+'-Shell_Outline"'),'native '+kind+' shell path missing');
+ assert.ok(html.includes('.'+prefix+'-native #'+prefix+'-Shell_Outline'),
+   'native '+kind+' must participate in transparent single-shell CSS');
+ assert.ok(html.includes('#nadi-pomo-c-Shell_Outline{fill:transparent!important}'),
+   'the original native shell must be transparent in the shared preview');
+ assert.ok(html.includes('id="'+prefix+'-time"'),'native '+kind+' countdown text missing');
+ assert.ok(html.includes('id="'+prefix+'-header"'),'native '+kind+' header clock missing');
+ assert.ok(html.includes('class="nadi-pomo-native '+prefix+'-native"'),
+   'SVG theme must retain stable 0,0 origin');
+}
+assert.ok(html.includes('data-s="pomo" aria-pressed="false">Pomodoro Timeline</button>'));
+assert.ok(html.includes('data-s="pomoClassic" aria-pressed="false">Pomodoro Classic</button>'));
+assert.ok(html.includes('pomo: 440 * 144, pomoClassic: 440 * 144'));
+assert.ok(html.includes('.mn[data-s="pomo"],.mn[data-s="pomoClassic"]{--w:440px;--h:144px;'),
+  'both SVG designs require exact native shell geometry');
+assert.ok(html.includes('nadiPomoShow(s,prev);'),'mode transition must stop/resume shared timer');
+assert.ok(html.includes('const nadiPomoText=(el,value)=>{if(el.textContent!==value)'),
+  'per-frame text changes can reintroduce horizontal shimmer');
+assert.ok(html.includes('get("pomoSpeed")==="30"'),
+  'accelerated demo must require an explicit URL parameter; default timer is 1x');
+assert.ok(html.includes('now-nadiPomoClock.lastPaint>=90'),
+  'timer UI must not repaint SVG labels every animation frame');
+assert.ok(html.includes('nadi-pomo-c-ring-progress'),'classic countdown ring must animate');
+assert.ok(html.includes('nadi-pomo-t-stage-fill-4'),'timeline must render four focus stages');
+assert.ok(html.includes('nadi-pomo-c-pause-icon'),'classic play/pause icon must toggle');
+assert.ok(html.includes('data-pomo-eq="1"'),'both SVGs need six animating bars');
+
+const pomoBegin=js.indexOf('const nadiPomoUI={');
+const pomoEnd=js.indexOf('const captions = {',pomoBegin);
+assert.ok(pomoBegin>=0&&pomoEnd>pomoBegin,'Pomodoro shared runtime missing');
+const pomoCode=js.slice(pomoBegin,pomoEnd);
+const elements=new Map();
+const handlers=new Map();
+function pomoElement(name){
+ if(elements.has(name))return elements.get(name);
+ const attrs=new Map(),controls=[];
+ const element={
+  name,style:{},dataset:{},textContent:'',
+  getAttribute:(n)=>attrs.has(n)?attrs.get(n):null,
+  setAttribute:(n,v)=>{attrs.set(n,String(v));},
+  querySelectorAll:(selector)=>{
+   if(selector==='[data-pomo-action="toggle"]')return controls.filter(x=>x.kind==='toggle');
+   return controls;
+  },
+  addEventListener:(type,fn)=>{handlers.set(name+'_'+type,fn);},
+  get controls(){return controls;}
+ };
+ elements.set(name,element);
+ return element;
+}
+for(const n of ['nadi-pomo-t-live','nadi-pomo-c-live']){
+ const node=pomoElement(n);
+ for(const kind of ['toggle','reset','theme']){
+  const control=pomoElement(n+'-'+kind);
+  control.kind=kind;control.dataset.pomoAction=kind;
+  node.controls.push(control);
+ }
+}
+let animationSequence=0,shows=[];
+const pomoContext=vm.createContext({
+ document:{
+  hidden:false,
+  getElementById:pomoElement,
+  addEventListener:()=>{}
+ },
+ mn:{dataset:{s:'pomo'}},
+ requestAnimationFrame:()=>++animationSequence,
+ cancelAnimationFrame:()=>{},
+ performance:{now:()=>1000},
+ show:(s)=>{shows.push(s)}
+});
+vm.runInContext(pomoCode,pomoContext);
+assert.equal(vm.runInContext('nadiPomoFormatted(1500)',pomoContext),'25:00');
+assert.equal(vm.runInContext('nadiPomoFormatted(299.3)',pomoContext),'05:00');
+assert.equal(pomoElement('nadi-pomo-t-time').textContent,'25:00');
+assert.equal(pomoElement('nadi-pomo-c-time').textContent,'25:00');
+assert.equal(pomoElement('nadi-pomo-t-stage-fill-1').getAttribute('width'),'23.660');
+assert.equal(pomoElement('nadi-pomo-t-stage-fill-2').getAttribute('width'),'0.000');
+assert.equal(pomoElement('nadi-pomo-c-ring-progress').getAttribute('stroke-dashoffset'),'0.000');
+assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),false);
+vm.runInContext('nadiPomoAction("toggle")',pomoContext);
+assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),true);
+assert.equal(pomoElement('nadi-pomo-t-live').dataset.running,'true');
+assert.equal(pomoElement('nadi-pomo-c-live').dataset.running,'true');
+vm.runInContext('nadiPomoTick(1250)',pomoContext);
+assert.ok(Math.abs(vm.runInContext('nadiPomoClock.remaining',pomoContext)-1499.75)<1e-8);
+assert.equal(pomoElement('nadi-pomo-t-time').textContent,'25:00',
+  'countdown should display ceil seconds and avoid text shimmer');
+vm.runInContext('nadiPomoTick(2250)',pomoContext);
+assert.ok(Math.abs(vm.runInContext('nadiPomoClock.remaining',pomoContext)-1499.5)<1e-8,
+ 'large throttled frame should cap jump after suspension');
+assert.equal(pomoElement('nadi-pomo-t-time').textContent,'25:00');
+vm.runInContext('nadiPomoAction("theme")',pomoContext);
+assert.deepEqual(shows,['pomoClassic']);
+assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),true,
+ 'switching Pomodoro SVG should preserve timer');
+vm.runInContext('nadiPomoAction("short")',pomoContext);
+assert.equal(vm.runInContext('nadiPomoClock.remaining',pomoContext),300);
+assert.equal(vm.runInContext('nadiPomoClock.phase',pomoContext),'short');
+assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),false);
+assert.equal(pomoElement('nadi-pomo-c-time').textContent,'05:00');
+vm.runInContext('nadiPomoAction("session-4")',pomoContext);
+assert.equal(vm.runInContext('nadiPomoClock.session',pomoContext),4);
+assert.equal(vm.runInContext('nadiPomoClock.remaining',pomoContext),1500);
+vm.runInContext('nadiPomoNextPhase()',pomoContext);
+assert.equal(vm.runInContext('nadiPomoClock.phase',pomoContext),'long');
+assert.equal(vm.runInContext('nadiPomoClock.remaining',pomoContext),900);
+vm.runInContext('nadiPomoNextPhase()',pomoContext);
+assert.equal(vm.runInContext('nadiPomoClock.phase',pomoContext),'focus');
+assert.equal(vm.runInContext('nadiPomoClock.session',pomoContext),1);
+vm.runInContext('nadiPomoAction("reset")',pomoContext);
+assert.equal(vm.runInContext('nadiPomoClock.remaining',pomoContext),1500);
+assert.equal(vm.runInContext('nadiPomoClock.running',pomoContext),false);
+assert.equal(pomoElement('nadi-pomo-c-ring-progress').getAttribute('stroke-dashoffset'),'0.000');
+
 const expr=js.match(/const progress=([^;]+);/);
 assert.ok(expr,'single-clock easing expression missing');
 const ease=vm.runInNewContext('(t)=>('+expr[1]+')');
@@ -148,4 +275,4 @@ for(const fps of [20,30,60,120]){
 }
 assert.equal(ease(0),0);
 assert.equal(ease(1),1);
-console.log('PASS: verified lyric scroll/active-weight/pause/reduced-motion, native 560x144 SVG, inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
+console.log('PASS: two interactive 440x144 Pomodoro themes + real countdown, verified lyric scroll/active-weight/pause/reduced-motion, native 560x144 SVG, inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');

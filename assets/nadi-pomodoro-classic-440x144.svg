@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 440 144">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-size: 7.6px;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7 {
+        isolation: isolate;
+      }
+
+      .cls-2, .cls-8, .cls-4, .cls-9, .cls-7, .cls-10 {
+        fill: #f7f7fb;
+      }
+
+      .cls-2, .cls-7 {
+        font-family: PlusJakartaSans-SemiBold, 'Plus Jakarta Sans';
+        font-weight: 600;
+      }
+
+      .cls-3 {
+        font-size: 14px;
+      }
+
+      .cls-3, .cls-4 {
+        font-family: PlusJakartaSans-Bold, 'Plus Jakarta Sans';
+        font-weight: 700;
+      }
+
+      .cls-11, .cls-12 {
+        fill: #ff2c50;
+      }
+
+      .cls-11, .cls-10 {
+        letter-spacing: .01em;
+      }
+
+      .cls-13 {
+        fill: #050609;
+      }
+
+      .cls-14 {
+        letter-spacing: 0em;
+      }
+
+      .cls-15 {
+        fill: #2b2d34;
+      }
+
+      .cls-4 {
+        font-size: 40px;
+      }
+
+      .cls-16 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-5 {
+        fill: #91929b;
+        font-size: 9.5px;
+      }
+
+      .cls-5, .cls-6 {
+        font-family: PlusJakartaSans-Regular, 'Plus Jakarta Sans';
+      }
+
+      .cls-17 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-18 {
+        fill: #c2c6d0;
+      }
+
+      .cls-9 {
+        letter-spacing: 0em;
+      }
+
+      .cls-19 {
+        letter-spacing: 0em;
+      }
+
+      .cls-20 {
+        fill: #493139;
+      }
+
+      .cls-6 {
+        fill: #b0b0b9;
+        font-size: 10.5px;
+      }
+
+      .cls-21 {
+        stroke: url(#linear-gradient);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4.2px;
+      }
+
+      .cls-21, .cls-22 {
+        fill: none;
+      }
+
+      .cls-23 {
+        fill: #272931;
+      }
+
+      .cls-22 {
+        stroke: #373943;
+        stroke-width: 4.2px;
+      }
+
+      .cls-7 {
+        font-size: 7.34px;
+      }
+
+      .cls-24 {
+        fill: #545761;
+      }
+
+      .cls-25 {
+        letter-spacing: .01em;
+      }
+
+      .cls-26 {
+        fill: #51ff00;
+      }
+
+      .cls-27 {
+        letter-spacing: 0em;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="56.45" y1="74.5" x2="128.64" y2="74.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff2c50"/>
+      <stop offset="1" stop-color="#f94f6d"/>
+    </linearGradient>
+  </defs>
+  <g id="Pomodoro_Classic" data-name="Pomodoro Classic">
+    <g id="_01_Notch_Shell_Bezier" data-name="01_Notch_Shell_Bezier">
+      <path id="Shell_Outline" data-name="Shell Outline" class="cls-13" d="m0,0h440c-5.54,0-19.8,2.52-19.8,25.15v85.73c0,18.29-14.83,33.12-33.12,33.12H52.92c-18.29,0-33.12-14.83-33.12-33.12V25.15C19.8,2.52,5.54,0,0,0Z"/>
+    </g>
+    <g>
+      <rect class="cls-1" x="384.17" y="18" width="1.91" height="4" rx=".95" ry=".95"/>
+      <rect class="cls-1" x="380.36" y="15" width="1.91" height="10" rx=".95" ry=".95"/>
+      <rect class="cls-1" x="376.55" y="16" width="1.91" height="8" rx=".95" ry=".95"/>
+      <rect class="cls-1" x="372.74" y="13" width="1.91" height="14" rx=".95" ry=".95"/>
+      <rect class="cls-1" x="368.93" y="14" width="1.91" height="12" rx=".95" ry=".95"/>
+      <rect class="cls-1" x="365.12" y="17" width="1.91" height="6" rx=".95" ry=".95"/>
+    </g>
+    <path class="cls-8" d="m31.8,78.2c-.35,0-.7-.15-.94-.45l-4-5c-.35-.44-.35-1.06,0-1.5l4-5c.41-.52,1.17-.6,1.69-.19.52.41.6,1.17.19,1.69l-3.4,4.25,3.4,4.25c.41.52.33,1.27-.19,1.69-.22.18-.49.26-.75.26Z"/>
+    <path class="cls-8" d="m408.2,78.2c-.26,0-.53-.09-.75-.26-.52-.41-.6-1.17-.19-1.69l3.4-4.25-3.4-4.25c-.41-.52-.33-1.27.19-1.69.52-.42,1.27-.33,1.69.19l4,5c.35.44.35,1.06,0,1.5l-4,5c-.24.3-.59.45-.94.45Z"/>
+    <g>
+      <path class="cls-26" d="m192.48,27c-3.86,0-7-3.14-7-7s3.14-7,7-7,7,3.14,7,7-3.14,7-7,7Zm0-12.6c-3.09,0-5.6,2.51-5.6,5.6s2.51,5.6,5.6,5.6,5.6-2.51,5.6-5.6-2.51-5.6-5.6-5.6Z"/>
+      <text class="cls-6" transform="translate(213.48 23.32)"><tspan class="cls-14" x="0" y="0">Sun 08 N</tspan><tspan class="cls-19" x="45.15" y="0">o</tspan><tspan class="cls-14" x="52.02" y="0">v 2026 07:46</tspan></text>
+      <path class="cls-26" d="m194.22,15.97c.18.13.25.37.17.57l-1.19,2.97h2.19c.2,0,.39.13.46.32.07.19.01.41-.15.54l-4.37,3.64c-.17.14-.42.15-.6.02-.18-.13-.25-.37-.17-.57l1.19-2.97h-2.19c-.2,0-.39-.13-.46-.32-.07-.19-.01-.41.15-.54l4.37-3.64c.17-.14.42-.15.6-.02Z"/>
+    </g>
+    <g>
+      <circle class="cls-22" cx="92.54" cy="74.5" r="34"/>
+      <path class="cls-21" d="m96.81,40.77c16.99,2.15,29.73,16.61,29.73,33.74,0,18.78-15.23,34-34,34-18.78,0-34-15.23-33.99-34,0-18.78,15.23-34,34-34"/>
+      <g id="Icon_stopwatch" data-name="Icon stopwatch">
+        <path class="cls-8" d="m90.03,61.12c-.92,0-1.67.75-1.67,1.67s.75,1.67,1.67,1.67h.84v1.8c-5.21.8-9.2,5.31-9.2,10.74,0,6,4.86,10.87,10.87,10.87s10.87-4.86,10.87-10.87c0-2.18-.64-4.22-1.75-5.92l1.26-1.26c.65-.65.65-1.71,0-2.37s-1.71-.65-2.37,0l-1.13,1.13c-1.47-1.2-3.25-2.03-5.21-2.33v-1.8h.84c.92,0,1.67-.75,1.67-1.67s-.75-1.67-1.67-1.67h-5.02Zm3.76,10.03v6.69c0,.69-.56,1.25-1.25,1.25s-1.25-.56-1.25-1.25v-6.69c0-.69.56-1.25,1.25-1.25s1.25.56,1.25,1.25Z"/>
+      </g>
+    </g>
+    <text class="cls-3" transform="translate(39.7 24.03)"><tspan class="cls-9" x="0" y="0">P</tspan><tspan class="cls-10" x="9" y="0">omodoro </tspan><tspan class="cls-11" x="77.27" y="0">Timer</tspan></text>
+    <g>
+      <g>
+        <circle class="cls-15" cx="344.13" cy="48.45" r="8"/>
+        <g id="Icon_rotate-left" data-name="Icon rotate-left">
+          <path class="cls-18" d="m340.6,47.91h-.14c-.23,0-.41-.18-.41-.41v-2.18c0-.17.1-.32.25-.38s.33-.03.45.09l.71.71c1.49-1.47,3.9-1.47,5.38.02,1.49,1.49,1.49,3.91,0,5.4s-3.91,1.49-5.4,0c-.21-.21-.21-.56,0-.77s.56-.21.77,0c1.07,1.07,2.79,1.07,3.86,0s1.07-2.79,0-3.86c-1.06-1.06-2.77-1.07-3.84-.02l.7.7c.12.12.15.29.09.45s-.21.25-.38.25h-2.04Z"/>
+        </g>
+      </g>
+      <text class="cls-4" transform="translate(207.94 74.42)"><tspan x="0" y="0">25:00</tspan></text>
+      <text class="cls-5" transform="translate(243.32 89.57)"><tspan class="cls-16" x="0" y="0">F</tspan><tspan x="5.33" y="0">ocus time</tspan></text>
+      <path class="cls-23" d="m170.88,98.05h52.69c5.96,0,10.8,4.83,10.8,10.8h0c0,5.96-4.83,10.8-10.8,10.8h-52.69c-5.96,0-10.8-4.83-10.8-10.8h0c0-5.96,4.83-10.8,10.8-10.8Z"/>
+      <text class="cls-7" transform="translate(176.72 111.96)"><tspan x="0" y="0">Sho</tspan><tspan class="cls-25" x="13.85" y="0">r</tspan><tspan x="16.58" y="0">t Br</tspan><tspan class="cls-27" x="28.58" y="0">e</tspan><tspan x="33.04" y="0">ak</tspan></text>
+      <path class="cls-12" d="m253.8,98.05h28.51c5.96,0,10.8,4.83,10.8,10.8h0c0,5.96-4.83,10.8-10.8,10.8h-28.51c-5.96,0-10.8-4.83-10.8-10.8h0c0-5.96,4.83-10.8,10.8-10.8Z"/>
+      <path class="cls-20" d="m311.68,98.05h59.6c5.96,0,10.8,4.83,10.8,10.8h0c0,5.96-4.83,10.8-10.8,10.8h-59.6c-5.96,0-10.8-4.83-10.8-10.8h0c0-5.96,4.83-10.8,10.8-10.8Z"/>
+      <text class="cls-2" transform="translate(321.06 111.96)"><tspan class="cls-17" x="0" y="0">F</tspan><tspan x="4.33" y="0">ocus Time</tspan></text>
+      <g id="Icon_play" data-name="Icon play">
+        <path class="cls-1" d="m265.24,103.73c-.35-.21-.79-.22-1.15-.02-.36.2-.58.58-.58.99v8.31c0,.41.22.79.58.99.36.2.8.19,1.15-.02l6.8-4.16c.34-.21.54-.57.54-.97s-.21-.76-.54-.97l-6.8-4.16Z"/>
+      </g>
+    </g>
+    <g id="_05_Footer_Navigation" data-name="05_Footer_Navigation">
+      <circle class="cls-24" cx="206.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="217.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="195.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="206.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="184.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="195.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="228.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="239.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="250.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="261.66" cy="134" r="1.65"/>
+      <circle class="cls-24" cx="195.66" cy="134" r="1.65"/>
+      <path class="cls-8" d="m193.18,132h17c1.1,0,2,.9,2,2h0c0,1.1-.9,2-2,2h-17c-1.1,0-2-.9-2-2h0c0-1.1.9-2,2-2Z"/>
+    </g>
+  </g>
+</svg>

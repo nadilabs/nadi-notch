@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 440 144">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2 {
+        fill: #373a40;
+      }
+
+      .cls-3 {
+        font-size: 8.08px;
+        letter-spacing: 0em;
+      }
+
+      .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13, .cls-14 {
+        isolation: isolate;
+      }
+
+      .cls-3, .cls-5, .cls-10, .cls-13, .cls-14 {
+        fill: #9da0a9;
+      }
+
+      .cls-3, .cls-11 {
+        font-family: PlusJakartaSans-Regular, 'Plus Jakarta Sans';
+      }
+
+      .cls-15 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-16 {
+        fill: #fff;
+      }
+
+      .cls-17 {
+        letter-spacing: 0em;
+      }
+
+      .cls-4 {
+        font-size: 14px;
+      }
+
+      .cls-4, .cls-7 {
+        font-family: PlusJakartaSans-Bold, 'Plus Jakarta Sans';
+        font-weight: 700;
+      }
+
+      .cls-18 {
+        fill: #ff2c50;
+      }
+
+      .cls-18, .cls-19 {
+        letter-spacing: .01em;
+      }
+
+      .cls-5 {
+        letter-spacing: .01em;
+      }
+
+      .cls-5, .cls-10, .cls-12, .cls-13, .cls-14 {
+        font-family: PlusJakartaSans-Medium, 'Plus Jakarta Sans';
+        font-weight: 500;
+      }
+
+      .cls-5, .cls-12, .cls-13 {
+        font-size: 8.27px;
+      }
+
+      .cls-6 {
+        font-size: 10.02px;
+        letter-spacing: 0em;
+      }
+
+      .cls-6, .cls-7, .cls-9, .cls-12, .cls-20 {
+        fill: #fdfdff;
+      }
+
+      .cls-6, .cls-8, .cls-9 {
+        font-family: PlusJakartaSans-SemiBold, 'Plus Jakarta Sans';
+        font-weight: 600;
+      }
+
+      .cls-7 {
+        font-size: 29.19px;
+        letter-spacing: 0em;
+      }
+
+      .cls-21 {
+        fill: #050609;
+      }
+
+      .cls-22 {
+        letter-spacing: 0em;
+      }
+
+      .cls-23 {
+        letter-spacing: .01em;
+      }
+
+      .cls-24, .cls-25, .cls-19 {
+        fill: #f7f7fb;
+      }
+
+      .cls-26 {
+        letter-spacing: 0em;
+      }
+
+      .cls-27 {
+        letter-spacing: 0em;
+      }
+
+      .cls-28 {
+        fill: #373a41;
+      }
+
+      .cls-8 {
+        fill: #ad6ef7;
+        font-size: 9.83px;
+      }
+
+      .cls-9, .cls-10 {
+        font-size: 9.73px;
+      }
+
+      .cls-29 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-25 {
+        letter-spacing: 0em;
+      }
+
+      .cls-30 {
+        letter-spacing: 0em;
+      }
+
+      .cls-11 {
+        fill: #b0b0b9;
+        font-size: 10.5px;
+      }
+
+      .cls-31 {
+        letter-spacing: .02em;
+      }
+
+      .cls-12, .cls-13 {
+        letter-spacing: 0em;
+      }
+
+      .cls-32 {
+        fill: #2e2f35;
+      }
+
+      .cls-33 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-34 {
+        fill: #34373e;
+      }
+
+      .cls-35 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-14 {
+        font-size: 9.05px;
+        letter-spacing: 0em;
+      }
+
+      .cls-36 {
+        fill: #545761;
+      }
+
+      .cls-37 {
+        fill: #51ff00;
+      }
+
+      .cls-38 {
+        letter-spacing: 0em;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="322.96" y1="75.91" x2="299.09" y2="30.91" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6710e2"/>
+      <stop offset="1" stop-color="#ad6ef7"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="215.51" y1="89.36" x2="241.7" y2="89.36" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="242.75" y1="89.36" x2="247.81" y2="89.36" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0cbc10"/>
+      <stop offset="1" stop-color="#51ff00"/>
+    </linearGradient>
+  </defs>
+  <g id="Pomodoro_Timeline" data-name="Pomodoro Timeline">
+    <g id="_01_Notch_Shell_Bezier" data-name="01_Notch_Shell_Bezier">
+      <path id="Shell_Outline" data-name="Shell Outline" class="cls-21" d="m0,0h440c-5.54,0-19.8,2.52-19.8,25.15v85.73c0,18.29-14.83,33.12-33.12,33.12H52.92c-18.29,0-33.12-14.83-33.12-33.12V25.15C19.8,2.52,5.54,0,0,0Z"/>
+    </g>
+    <g>
+      <rect class="cls-16" x="384.17" y="18" width="1.91" height="4" rx=".95" ry=".95"/>
+      <rect class="cls-16" x="380.36" y="15" width="1.91" height="10" rx=".95" ry=".95"/>
+      <rect class="cls-16" x="376.55" y="16" width="1.91" height="8" rx=".95" ry=".95"/>
+      <rect class="cls-16" x="372.74" y="13" width="1.91" height="14" rx=".95" ry=".95"/>
+      <rect class="cls-16" x="368.93" y="14" width="1.91" height="12" rx=".95" ry=".95"/>
+      <rect class="cls-16" x="365.12" y="17" width="1.91" height="6" rx=".95" ry=".95"/>
+    </g>
+    <path class="cls-24" d="m31.8,78.2c-.35,0-.7-.15-.94-.45l-4-5c-.35-.44-.35-1.06,0-1.5l4-5c.41-.52,1.17-.6,1.69-.19.52.41.6,1.17.19,1.69l-3.4,4.25,3.4,4.25c.41.52.33,1.27-.19,1.69-.22.18-.49.26-.75.26Z"/>
+    <path class="cls-24" d="m408.2,78.2c-.26,0-.53-.09-.75-.26-.52-.41-.6-1.17-.19-1.69l3.4-4.25-3.4-4.25c-.41-.52-.33-1.27.19-1.69.52-.42,1.27-.33,1.69.19l4,5c.35.44.35,1.06,0,1.5l-4,5c-.24.3-.59.45-.94.45Z"/>
+    <g>
+      <path class="cls-37" d="m192.48,27c-3.86,0-7-3.14-7-7s3.14-7,7-7,7,3.14,7,7-3.14,7-7,7Zm0-12.6c-3.09,0-5.6,2.51-5.6,5.6s2.51,5.6,5.6,5.6,5.6-2.51,5.6-5.6-2.51-5.6-5.6-5.6Z"/>
+      <text class="cls-11" transform="translate(213.48 23.32)"><tspan class="cls-22" x="0" y="0">Sun 08 N</tspan><tspan class="cls-30" x="45.15" y="0">o</tspan><tspan class="cls-22" x="52.02" y="0">v 2026 07:46</tspan></text>
+      <path class="cls-37" d="m194.22,15.97c.18.13.25.37.17.57l-1.19,2.97h2.19c.2,0,.39.13.46.32.07.19.01.41-.15.54l-4.37,3.64c-.17.14-.42.15-.6.02-.18-.13-.25-.37-.17-.57l1.19-2.97h-2.19c-.2,0-.39-.13-.46-.32-.07-.19-.01-.41.15-.54l4.37-3.64c.17-.14.42-.15.6-.02Z"/>
+    </g>
+    <text class="cls-4" transform="translate(39.7 24.03)"><tspan class="cls-25" x="0" y="0">P</tspan><tspan class="cls-19" x="9" y="0">omodoro </tspan><tspan class="cls-18" x="77.27" y="0">Timer</tspan></text>
+    <g id="_05_Footer_Navigation" data-name="05_Footer_Navigation">
+      <circle class="cls-36" cx="206.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="217.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="195.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="206.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="184.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="195.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="228.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="239.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="250.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="261.66" cy="134" r="1.65"/>
+      <circle class="cls-36" cx="195.66" cy="134" r="1.65"/>
+      <path class="cls-24" d="m193.18,132h17c1.1,0,2,.9,2,2h0c0,1.1-.9,2-2,2h-17c-1.1,0-2-.9-2-2h0c0-1.1.9-2,2-2Z"/>
+    </g>
+    <g id="_04_Left_Timing" data-name="04_Left_Timing">
+      <text class="cls-10" transform="translate(39.7 47.68)"><tspan class="cls-1" x="0" y="0">F</tspan><tspan class="cls-23" x="5.62" y="0">ocus · 1 </tspan><tspan class="cls-1" x="41.37" y="0">o</tspan><tspan class="cls-23" x="47.69" y="0">f 4</tspan></text>
+      <text class="cls-7" transform="translate(61.47 75.89)"><tspan x="0" y="0">25:00</tspan></text>
+      <text class="cls-6" transform="translate(39.7 100.22)"><tspan x="0" y="0">25 min</tspan></text>
+      <text class="cls-8" transform="translate(102.56 100.22)"><tspan class="cls-29" x="0" y="0">R</tspan><tspan x="6.18" y="0">e</tspan><tspan class="cls-26" x="12.21" y="0">ady</tspan></text>
+      <rect class="cls-2" x="39.7" y="108" width="140.38" height="3.21" rx="1.61" ry="1.61"/>
+    </g>
+    <path class="cls-34" d="m197.31,113.3c-.24,0-.44-.2-.44-.44V38.92c0-.24.2-.44.44-.44s.44.2.44.44v73.95c0,.24-.2.44-.44.44Z"/>
+    <g>
+      <g id="_05_Right_Control" data-name="05_Right_Control">
+        <text class="cls-14" transform="translate(215.51 48.65)"><tspan x="0" y="0">This round</tspan></text>
+        <path class="cls-35" d="m292.62,38.92h34.34c6.72,0,12.16,5.45,12.16,12.16h0c0,6.72-5.45,12.16-12.16,12.16h-34.34c-6.72,0-12.16-5.45-12.16-12.16h0c0-6.72,5.45-12.16,12.16-12.16Z"/>
+        <text class="cls-9" transform="translate(297.95 54.73)"><tspan class="cls-27" x="0" y="0">S</tspan><tspan class="cls-17" x="6.35" y="0">t</tspan><tspan class="cls-27" x="10.3" y="0">a</tspan><tspan class="cls-31" x="15.99" y="0">r</tspan><tspan class="cls-38" x="19.66" y="0">t</tspan></text>
+        <circle class="cls-32" cx="357.98" cy="51.08" r="10.51"/>
+        <path class="cls-20" d="m352.07,50.17h-.24c-.38,0-.68-.31-.68-.68v-3.65c0-.28.17-.53.42-.63s.55-.05.75.15l1.19,1.19c2.5-2.47,6.52-2.46,9,.03,2.49,2.49,2.49,6.54,0,9.03-2.49,2.49-6.54,2.49-9.03,0-.36-.36-.36-.93,0-1.29s.93-.36,1.29,0c1.78,1.78,4.67,1.78,6.45,0,1.78-1.78,1.78-4.67,0-6.45-1.77-1.77-4.64-1.78-6.42-.03l1.17,1.17c.2.2.25.49.15.75s-.36.42-.63.42h-3.41Z"/>
+        <text class="cls-3" transform="translate(215.51 73.95)"><tspan x="0" y="0">2h 10m · 4 sessions</tspan></text>
+      </g>
+      <g id="_06_Timeline_Segments" data-name="06_Timeline_Segments">
+        <path class="cls-28" d="m254.7,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path class="cls-28" d="m218.04,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path class="cls-15" d="m218.04,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="cls-12" transform="translate(226.98 111.89)"><tspan x="0" y="0">1</tspan></text>
+        <path class="cls-28" d="m245.28,86.83h3.32c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-3.32c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="cls-5" transform="translate(262.75 111.89)"><tspan x="0" y="0">2</tspan></text>
+        <path class="cls-28" d="m281.94,86.83h3.32c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-3.32c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path class="cls-28" d="m291.37,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="cls-5" transform="translate(299.37 111.89)"><tspan x="0" y="0">3</tspan></text>
+        <path class="cls-28" d="m318.61,86.83h3.32c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-3.32c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path class="cls-28" d="m328.04,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="cls-13" transform="translate(335.92 111.89)"><tspan x="0" y="0">4</tspan></text>
+        <path class="cls-28" d="m357.37,86.83h22.18c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-22.18c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="cls-13" transform="translate(358.25 111.89)"><tspan x="0" y="0">Long</tspan></text>
+        <circle class="cls-33" cx="245.28" cy="89.36" r="2.53"/>
+      </g>
+    </g>
+  </g>
+</svg>
