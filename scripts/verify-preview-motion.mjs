@@ -49,6 +49,36 @@ assert.ok(html.includes('id="nadi-lyrics-header-clock"'),'native lyrics timestam
 assert.ok(html.includes('function nadiLyricsSeek('),'native lyrics progress control not wired');
 assert.ok(html.includes('if(state==="music"||state==="lyrics")nadiMusicResume();'),'native Lyrics mode does not share media playback engine');
 
+
+/* Native lyric timeline must animate the visible SVG, not the old HTML mock. */
+const cuesMatch=js.match(/const nadiLyricsCues=\[([\s\S]*?)\];/);
+assert.ok(cuesMatch,"Expanded Lyrics cue timeline missing");
+const cues=vm.runInNewContext("["+cuesMatch[1]+"]");
+assert.ok(cues.length>=10,"need enough demo lyric changes to preview scrolling");
+assert.ok(cues.every((cue,i)=>typeof cue.at==="number"&&
+  typeof cue.text==="string"&&cue.text.length>0&&
+  (i===0||cue.at>cues[i-1].at)),"cue timestamps must strictly ascend");
+const currentAt=(t)=>cues.reduce((idx,cue,i)=>cue.at<=t?i:idx,0);
+assert.equal(cues[currentAt(193)].text,"when the quiet sky turns blue",
+  "initial 03:13 demo position should match user-provided SVG");
+assert.equal(cues[currentAt(198)].text,"to find you by the sea",
+  "the next visible lyric must change at the cue boundary");
+assert.ok(html.includes('id="nadi-lyrics-lines"'),'native lyric scrolling track missing');
+assert.ok(html.includes('id="nadi-lyrics-equalizer"'),'native lyric equalizer missing');
+assert.ok(html.includes('function nadiLyricsPaint(now=performance.now())'),
+  'native lyrics animation driver missing');
+assert.ok(html.includes('nadiLyricsPaint(now);'),'shared media clock must repaint lyrics');
+assert.ok(html.includes('nadiLyricsUI.svg.classList.toggle("is-playing"'),
+  'equalizer playing state must follow media state');
+assert.ok(!js.includes('setInterval(() => { if (mn.dataset.s === "lyrics") lyric()'),
+  'legacy hidden HTML animation must never run independently');
+assert.ok(html.includes('const focus=Math.max(0,1-Math.abs(rel));'),
+  'active lyric must crossfade weights rather than snap');
+assert.ok(html.includes('const y=82.6776+rel*25.4;'),
+  'lyric track must scroll vertically at the supplied SVG row spacing');
+assert.ok(html.includes('const canAnimate=visible&&nadiMusicPlaying&&!nadiLyricsReducedMotion.matches;'),
+  'lyric motion must pause with playback and respect reduced-motion');
+
 const expr=js.match(/const progress=([^;]+);/);
 assert.ok(expr,'single-clock easing expression missing');
 const ease=vm.runInNewContext('(t)=>('+expr[1]+')');
@@ -76,4 +106,4 @@ for(const fps of [20,30,60,120]){
 }
 assert.equal(ease(0),0);
 assert.equal(ease(1),1);
-console.log('PASS: native 560x144 Expanded Lyrics, inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
+console.log('PASS: synchronized Expanded Lyrics animation, native 560x144 SVG, inline JS syntax, fixed center anchor, one-clock shell, 144 mode/FPS pairs, '+checks+' monotonic frames');
