@@ -15,6 +15,11 @@ assert.ok(html.includes('transition:none !important'),'legacy transition must be
 assert.ok(html.includes('nadiShell.frame=requestAnimationFrame(nadiShellTick)'));
 assert.ok(html.includes('mn.style.transform = mn.classList.contains("nadi-morphing")'));
 assert.ok(!html.includes('function nadiShellSpring('),'old spring must not race the tween');
+assert.ok(html.includes('.mn.nadi-curve-shell.nadi-morphing .nadi-visual-viewport,'),'active content must be hidden while changing dimensions');
+assert.ok(html.includes('.mn.nadi-curve-shell.nadi-morphing > .ly'),'legacy feature layers must follow the staging rule');
+assert.ok(html.includes('get("notchMotion")==="off"'),'diagnostic no-motion URL switch missing');
+assert.ok(html.includes('if(dw<.001&&dh<.001||nadiNoMorph||'),'no-motion switch must bypass geometry animation');
+assert.ok(html.includes('mn.classList.remove("nadi-morphing")'),'content must be revealed when geometry settles');
 const anchor=html.match(/\.mn-holder\s*\{([^}]*)\}/)?.[1];
 const shell=html.match(/\.mn\s*\{([^}]*)\}/)?.[1];
 assert.ok(anchor&&shell,'notch anchor/shell CSS missing');
