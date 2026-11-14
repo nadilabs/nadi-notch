@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-13-preview-fixed-anchor-v4">
+<meta name="nadi-site-revision" content="2026-11-14-preview-reveal-after-morph-v5">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -640,6 +640,20 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .mn .nadi-music-live .nadi-music-st0 {fill:transparent;}
 .nadi-visual-viewport {position:absolute;inset:0;z-index:12;
   overflow:hidden;border-radius:inherit;pointer-events:none}
+/* While the mask is changing its width, the two native SVG layouts must not
+   enter the partially clipped viewport. Reveal content only on the fully
+   settled silhouette so it cannot appear to shake left/right. */
+.mn.nadi-curve-shell .nadi-visual-viewport {
+  opacity:1;
+  transition:opacity .18s ease-out;
+}
+.mn.nadi-curve-shell.nadi-morphing .nadi-visual-viewport,
+.mn.nadi-curve-shell.nadi-morphing > .ly {
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+.nadi-no-morph .mn,.nadi-no-morph .mn.shrink {transition:none !important}
+
 .nadi-compact-live {position:absolute;z-index:1;top:0;left:50%;
   width:156px;height:30px;max-width:none;transform:translateX(-50%);
   pointer-events:none;overflow:visible;opacity:0;visibility:hidden;
@@ -1901,6 +1915,10 @@ const mn = document.getElementById("mn");
 // browsers without path() clip support, but never run alongside the SVG shape.
 const nadiCanCurve=typeof CSS!=="undefined"&&CSS.supports(
  "clip-path",'path("M0 0 H44 V4 H0 Z")');
+// Diagnostic switch: ?notchMotion=off disables only the size transition.
+// Comparing this to the default preview isolates animation from SVG issues.
+const nadiNoMorph=new URLSearchParams(window.location.search).get("notchMotion")==="off";
+if(nadiNoMorph)document.documentElement.classList.add("nadi-no-morph");
 function nadiShellGeometry(w,h){
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const mix=(a,b,t)=>a+(b-a)*t;
@@ -1982,7 +2000,7 @@ function nadiStartShellMorph(){
  nadiShell.targetWidth=width;
  nadiShell.targetHeight=height;
  const dw=Math.abs(width-nadiShell.width),dh=Math.abs(height-nadiShell.height);
- if(dw<.001&&dh<.001||
+ if(dw<.001&&dh<.001||nadiNoMorph||
     window.matchMedia("(prefers-reduced-motion: reduce)").matches||
     document.hidden){nadiFinishShellMorph();return;}
  // Long moves retain the full motion; neighboring expanded modes switch faster.
