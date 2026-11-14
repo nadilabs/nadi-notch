@@ -2396,14 +2396,14 @@ const nadiLyricsCues=[
  {at:142,text:"that carries us along"},
  {at:181,text:"After some time, I've finally made up my mind"},
  {at:191,text:"when the quiet sky turns blue"},
- {at:198,text:"to find you by the sea"},
- {at:205,text:"we fold the summer light"},
- {at:212,text:"into paper birds tonight"},
- {at:219,text:"and send them through the sky"},
- {at:226,text:"to find you by the sea"},
- {at:233,text:"every wing a little song"},
- {at:240,text:"that carries us along"},
- {at:248,text:"we fold the summer light"}
+ {at:196,text:"to find you by the sea"},
+ {at:202,text:"we fold the summer light"},
+ {at:208,text:"into paper birds tonight"},
+ {at:214,text:"and send them through the sky"},
+ {at:220,text:"to find you by the sea"},
+ {at:228,text:"every wing a little song"},
+ {at:236,text:"that carries us along"},
+ {at:244,text:"we fold the summer light"}
 ];
 const nadiLyricsReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
 const nadiLyricsTrack=document.getElementById("nadi-lyrics-lines");
@@ -2458,7 +2458,7 @@ function nadiLyricsPaint(now=performance.now()){
   const item=nadiLyricsRows[i],rel=i-position;
   const y=82.6776+rel*25.4;
   const focus=Math.max(0,1-Math.abs(rel));
-  const visibility=Math.max(0,Math.min(1,3-Math.abs(rel)));
+  const visibility=Math.max(0,Math.min(1,2-Math.abs(rel)));
   item.row.setAttribute("transform","translate(0 "+y.toFixed(3)+")");
   item.muted.style.opacity=((1-focus)*visibility*(rel<0?.94:.72)).toFixed(3);
   item.active.style.opacity=(focus*visibility).toFixed(3);
