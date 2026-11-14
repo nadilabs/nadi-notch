@@ -2343,6 +2343,15 @@ const nadiMusicUI={
  playHit:document.getElementById("nadi-music-play-hit"),
  muteHit:document.getElementById("nadi-music-mute-hit")
 };
+const nadiLyricsUI={
+ svg:document.getElementById("nadi-lyrics-live"),
+ header:document.getElementById("nadi-lyrics-header-clock"),
+ progress:document.getElementById("nadi-lyrics-progress-fill"),
+ play:document.getElementById("nadi-lyrics-play-icon"),
+ pause:document.getElementById("nadi-lyrics-pause-icon"),
+ seek:document.querySelector('#nadi-lyrics-live [data-nadi-lyrics-action="seek"]'),
+ toggle:document.querySelector('#nadi-lyrics-live [data-nadi-lyrics-action="toggle"]')
+};
 const nadiMusicDuration=256;
 let nadiMusicElapsed=193,nadiMusicVolume=1,nadiMusicPreviousVolume=1,nadiMusicPlaying=true;
 let nadiMusicFrame=0,nadiMusicLastFrame=0,nadiMusicLastPaint=0,nadiMusicHeaderMinute=-1,nadiMusicInView=true;
@@ -2360,10 +2369,14 @@ function nadiMusicHeader(){
  nadiMusicUI.header.textContent=days[d.getDay()]+" "+String(d.getDate()).padStart(2,"0")+" "+
   months[d.getMonth()]+" "+d.getFullYear()+" "+String(d.getHours()).padStart(2,"0")+":"+
   String(d.getMinutes()).padStart(2,"0");
+ nadiLyricsUI.header.textContent=nadiMusicUI.header.textContent;
 }
 function nadiMusicPaint(){
  const fraction=nadiMusicClamp(nadiMusicElapsed/nadiMusicDuration);
  nadiMusicUI.progress.setAttribute("width",(220*fraction).toFixed(3));
+ // The supplied SVG progress path spans 93px of a 143px bar.
+ nadiLyricsUI.progress.style.transform="scaleX("+(143*fraction/93).toFixed(5)+")";
+ nadiLyricsUI.seek.setAttribute("aria-valuenow",String(Math.floor(nadiMusicElapsed)));
  nadiMusicUI.volume.setAttribute("width",(69.22*nadiMusicVolume).toFixed(3));
  nadiMusicUI.elapsed.textContent=nadiMusicTime(nadiMusicElapsed);
  nadiMusicUI.remaining.textContent="-"+nadiMusicTime(Math.ceil(nadiMusicDuration-nadiMusicElapsed));
@@ -2372,6 +2385,9 @@ function nadiMusicPaint(){
  nadiMusicSVG.classList.toggle("is-muted",nadiMusicVolume<=.001);
  nadiMusicUI.play.style.display=nadiMusicPlaying?"none":"";
  nadiMusicUI.pause.style.display=nadiMusicPlaying?"":"none";
+ nadiLyricsUI.play.style.display=nadiMusicPlaying?"none":"";
+ nadiLyricsUI.pause.style.display=nadiMusicPlaying?"":"none";
+ nadiLyricsUI.toggle.setAttribute("aria-label",nadiMusicPlaying?"Pause demo playback":"Resume demo playback");
  nadiMusicUI.seek.setAttribute("aria-valuenow",String(Math.floor(nadiMusicElapsed)));
  nadiMusicUI.seek.setAttribute("aria-valuetext",nadiMusicTime(nadiMusicElapsed)+" of "+nadiMusicTime(nadiMusicDuration));
  nadiMusicUI.volumeHit.setAttribute("aria-valuenow",String(Math.round(nadiMusicVolume*100)));
@@ -2386,7 +2402,7 @@ function nadiMusicStop(){
 }
 function nadiMusicTick(now){
  nadiMusicFrame=0;
- if(mn.dataset.s!=="music"||!nadiMusicInView||document.hidden||!nadiMusicPlaying)return;
+ if(!["music","lyrics"].includes(mn.dataset.s)||!nadiMusicInView||document.hidden||!nadiMusicPlaying)return;
  if(nadiMusicLastFrame){
   // Discard large tab-suspension gaps: preview time runs only while visible.
   nadiMusicElapsed=Math.min(nadiMusicDuration,nadiMusicElapsed+Math.min(.08,(now-nadiMusicLastFrame)/1000));
@@ -2401,12 +2417,12 @@ function nadiMusicTick(now){
 function nadiMusicResume(){
  nadiMusicStop();
  nadiMusicPaint();
- if(nadiMusicPlaying&&mn.dataset.s==="music"&&!document.hidden&&nadiMusicInView)
+ if(nadiMusicPlaying&&["music","lyrics"].includes(mn.dataset.s)&&!document.hidden&&nadiMusicInView)
   nadiMusicFrame=requestAnimationFrame(nadiMusicTick);
 }
 function nadiMusicShow(state){
  pv.classList.toggle("music-live",state==="music");
- if(state==="music")nadiMusicResume();
+ if(state==="music"||state==="lyrics")nadiMusicResume();
  else nadiMusicStop();
 }
 function nadiMusicSVGX(event){
@@ -2473,17 +2489,55 @@ function nadiMusicWireButton(el,fn){
 }
 nadiMusicWireButton(nadiMusicUI.playHit,nadiMusicTogglePlay);
 nadiMusicWireButton(nadiMusicUI.muteHit,nadiMusicToggleMute);
+/* Buttons in the user-provided Expanded Lyrics SVG reuse the exact
+   Music demo state, with keyboard access and coordinate-correct seeking. */
+function nadiLyricsSeek(event){
+ const point=nadiLyricsUI.svg.createSVGPoint();
+ point.x=event.clientX;point.y=event.clientY;
+ const matrix=nadiLyricsUI.svg.getScreenCTM();
+ if(!matrix)return;
+ const x=point.matrixTransform(matrix.inverse()).x;
+ nadiMusicElapsed=nadiMusicDuration*nadiMusicClamp((x-49)/146);
+ if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+ nadiMusicResume();
+}
+function nadiLyricsRun(action,event){
+ if(action==="toggle"){nadiMusicTogglePlay();return;}
+ if(action==="seek"){nadiLyricsSeek(event);return;}
+ const step=action==="previous"?-15:15;
+ nadiMusicElapsed=nadiMusicClamp(nadiMusicElapsed+step,0,nadiMusicDuration);
+ if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+ nadiMusicResume();
+}
+nadiLyricsUI.svg.querySelectorAll("[data-nadi-lyrics-action]").forEach(el=>{
+ const action=el.dataset.nadiLyricsAction;
+ el.addEventListener("click",event=>{event.stopPropagation();nadiLyricsRun(action,event);});
+ el.addEventListener("keydown",event=>{
+  if(action==="seek"){
+   if(!["ArrowLeft","ArrowRight","Home","End"].includes(event.key))return;
+   event.preventDefault();
+   if(event.key==="Home")nadiMusicElapsed=0;
+   else if(event.key==="End")nadiMusicElapsed=nadiMusicDuration;
+   else nadiMusicElapsed=nadiMusicClamp(nadiMusicElapsed+(event.key==="ArrowLeft"?-5:5),0,nadiMusicDuration);
+   if(nadiMusicElapsed>=nadiMusicDuration)nadiMusicPlaying=false;
+   nadiMusicResume();return;
+  }
+  if(!["Enter"," "].includes(event.key))return;
+  event.preventDefault();
+  nadiLyricsRun(action,event);
+ });
+});
 document.addEventListener("visibilitychange",()=>{
- if(document.hidden)nadiMusicStop();else if(mn.dataset.s==="music")nadiMusicResume();
+ if(document.hidden)nadiMusicStop();else if(["music","lyrics"].includes(mn.dataset.s))nadiMusicResume();
 });
 if("IntersectionObserver" in window){
  new IntersectionObserver(entries=>{
   nadiMusicInView=Boolean(entries[0]&&entries[0].isIntersecting);
   if(!nadiMusicInView)nadiMusicStop();
-  else if(mn.dataset.s==="music")nadiMusicResume();
+  else if(["music","lyrics"].includes(mn.dataset.s))nadiMusicResume();
  },{threshold:.01}).observe(document.getElementById("laptop"));
 }
-setInterval(()=>{if(mn.dataset.s==="music"&&!document.hidden&&nadiMusicInView)nadiMusicHeader()},15000);
+setInterval(()=>{if(["music","lyrics"].includes(mn.dataset.s)&&!document.hidden&&nadiMusicInView)nadiMusicHeader()},15000);
 nadiMusicPaint();
 
 const captions = {
