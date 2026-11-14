@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-14-preview-expanded-lyrics-synced-animation-v8">
+<meta name="nadi-site-revision" content="2026-11-14-preview-pomodoro-two-themes-v9">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -828,6 +828,59 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
  .nadi-lyrics-live #nadi-lyrics-equalizer path{animation:none!important}
 }
 
+/* Native SVG Pomodoro themes (440 × 144). Shared parent owns the silhouette,
+   size morph and content fade; these two vectors never center themselves via
+   a second transform. Uploaded original SVG files remain unchanged. */
+.mn[data-s="pomo"],.mn[data-s="pomoClassic"]{--w:440px;--h:144px;--r:33.1px;--e:25.2px}
+.nadi-pomo-native {
+ position:absolute;top:0;left:0;z-index:4;width:440px;height:144px;
+ max-width:none;transform:none;opacity:0;visibility:hidden;
+ pointer-events:none;overflow:visible;transition:none!important;
+ font-variant-numeric:tabular-nums;
+}
+.mn[data-s="pomo"] .nadi-pomo-t-native,
+.mn[data-s="pomoClassic"] .nadi-pomo-c-native{
+ opacity:1;visibility:visible;pointer-events:auto;
+}
+.mn[data-s="pomo"] .nadi-visual-viewport,
+.mn[data-s="pomoClassic"] .nadi-visual-viewport{pointer-events:auto}
+.mn[data-s="pomo"] > .l-pomo,
+.mn[data-s="pomo"] > .l-hdr,
+.mn[data-s="pomo"] > .l-dots,
+.mn[data-s="pomoClassic"] > .l-hdr,
+.mn[data-s="pomoClassic"] > .l-dots{display:none!important}
+.nadi-pomo-native text,.nadi-pomo-native tspan{
+ font-family:'Plus Jakarta Sans','Segoe UI',sans-serif!important;
+ font-variant-numeric:tabular-nums;
+}
+.nadi-pomo-t-native #nadi-pomo-t-Shell_Outline,
+.nadi-pomo-c-native #nadi-pomo-c-Shell_Outline{fill:transparent!important}
+.nadi-pomo-t-native #nadi-pomo-t-first-fill,
+.nadi-pomo-t-native #nadi-pomo-t-first-dot{opacity:0}
+.nadi-pomo-c-native #nadi-pomo-c-ring-base{opacity:.18}
+.nadi-pomo-t-native #nadi-pomo-t-elapsed-fill,
+.nadi-pomo-t-native [id^="nadi-pomo-t-stage-fill-"],
+.nadi-pomo-c-native #nadi-pomo-c-ring-progress{transition:width .14s linear,stroke-dashoffset .14s linear}
+.nadi-pomo-native [data-pomo-eq]{
+ transform-box:fill-box;transform-origin:center;
+ animation:nadi-pomo-eq .85s ease-in-out infinite alternate;
+ animation-play-state:paused;
+}
+.nadi-pomo-native[data-running="true"] [data-pomo-eq]{animation-play-state:running}
+@keyframes nadi-pomo-eq{0%{transform:scaleY(.4)}100%{transform:scaleY(1)}}
+.nadi-pomo-native [data-pomo-action]{cursor:pointer}
+.nadi-pomo-native [data-pomo-action]:focus-visible{
+ stroke:#48B6FF;stroke-width:1;outline:none;
+}
+.nadi-pomo-t-native #nadi-pomo-t-stage-dot{transition:cx .2s ease-out}
+@media(prefers-reduced-motion:reduce){
+ .nadi-pomo-native [data-pomo-eq]{animation:none!important}
+ .nadi-pomo-t-native #nadi-pomo-t-elapsed-fill,
+ .nadi-pomo-t-native [id^="nadi-pomo-t-stage-fill-"],
+ .nadi-pomo-c-native #nadi-pomo-c-ring-progress,
+ .nadi-pomo-t-native #nadi-pomo-t-stage-dot{transition:none!important}
+}
+
 /* ===== Fitur ======================================================================== */
 section { padding: 110px 0 0; }
 .sec-title { font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.03em; font-weight: 800; margin: 0 0 14px; max-width: 16ch; }
@@ -1374,6 +1427,506 @@ footer a:hover { color: var(--ink); }
  <rect x="49" y="82" width="146" height="13" rx="5" fill="transparent" role="slider" tabindex="0" aria-label="Seek lyric demo" aria-valuemin="0" aria-valuemax="256" aria-valuenow="193" data-nadi-lyrics-action="seek"/>
 </g>
 </svg>
+                <svg class="nadi-pomo-native nadi-pomo-t-native" id="nadi-pomo-t-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 144" width="440" height="144" role="group" aria-label="Nadi Pomodoro timeline interactive preview">
+  <defs>
+    <style>
+      .nadi-pomo-t-cls-1 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-2 {
+        fill: #373a40;
+      }
+
+      .nadi-pomo-t-cls-3 {
+        font-size: 8.08px;
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-3, .nadi-pomo-t-cls-4, .nadi-pomo-t-cls-5, .nadi-pomo-t-cls-6, .nadi-pomo-t-cls-7, .nadi-pomo-t-cls-8, .nadi-pomo-t-cls-9, .nadi-pomo-t-cls-10, .nadi-pomo-t-cls-11, .nadi-pomo-t-cls-12, .nadi-pomo-t-cls-13, .nadi-pomo-t-cls-14 {
+        isolation: isolate;
+      }
+
+      .nadi-pomo-t-cls-3, .nadi-pomo-t-cls-5, .nadi-pomo-t-cls-10, .nadi-pomo-t-cls-13, .nadi-pomo-t-cls-14 {
+        fill: #9da0a9;
+      }
+
+      .nadi-pomo-t-cls-3, .nadi-pomo-t-cls-11 {
+        font-family: PlusJakartaSans-Regular, 'Plus Jakarta Sans';
+      }
+
+      .nadi-pomo-t-cls-15 {
+        fill: url(#nadi-pomo-t-linear-gradient-2);
+      }
+
+      .nadi-pomo-t-cls-16 {
+        fill: #fff;
+      }
+
+      .nadi-pomo-t-cls-17 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-4 {
+        font-size: 14px;
+      }
+
+      .nadi-pomo-t-cls-4, .nadi-pomo-t-cls-7 {
+        font-family: PlusJakartaSans-Bold, 'Plus Jakarta Sans';
+        font-weight: 700;
+      }
+
+      .nadi-pomo-t-cls-18 {
+        fill: #ff2c50;
+      }
+
+      .nadi-pomo-t-cls-18, .nadi-pomo-t-cls-19 {
+        letter-spacing: .01em;
+      }
+
+      .nadi-pomo-t-cls-5 {
+        letter-spacing: .01em;
+      }
+
+      .nadi-pomo-t-cls-5, .nadi-pomo-t-cls-10, .nadi-pomo-t-cls-12, .nadi-pomo-t-cls-13, .nadi-pomo-t-cls-14 {
+        font-family: PlusJakartaSans-Medium, 'Plus Jakarta Sans';
+        font-weight: 500;
+      }
+
+      .nadi-pomo-t-cls-5, .nadi-pomo-t-cls-12, .nadi-pomo-t-cls-13 {
+        font-size: 8.27px;
+      }
+
+      .nadi-pomo-t-cls-6 {
+        font-size: 10.02px;
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-6, .nadi-pomo-t-cls-7, .nadi-pomo-t-cls-9, .nadi-pomo-t-cls-12, .nadi-pomo-t-cls-20 {
+        fill: #fdfdff;
+      }
+
+      .nadi-pomo-t-cls-6, .nadi-pomo-t-cls-8, .nadi-pomo-t-cls-9 {
+        font-family: PlusJakartaSans-SemiBold, 'Plus Jakarta Sans';
+        font-weight: 600;
+      }
+
+      .nadi-pomo-t-cls-7 {
+        font-size: 29.19px;
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-21 {
+        fill: #050609;
+      }
+
+      .nadi-pomo-t-cls-22 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-23 {
+        letter-spacing: .01em;
+      }
+
+      .nadi-pomo-t-cls-24, .nadi-pomo-t-cls-25, .nadi-pomo-t-cls-19 {
+        fill: #f7f7fb;
+      }
+
+      .nadi-pomo-t-cls-26 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-27 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-28 {
+        fill: #373a41;
+      }
+
+      .nadi-pomo-t-cls-8 {
+        fill: #ad6ef7;
+        font-size: 9.83px;
+      }
+
+      .nadi-pomo-t-cls-9, .nadi-pomo-t-cls-10 {
+        font-size: 9.73px;
+      }
+
+      .nadi-pomo-t-cls-29 {
+        letter-spacing: -.02em;
+      }
+
+      .nadi-pomo-t-cls-25 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-30 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-11 {
+        fill: #b0b0b9;
+        font-size: 10.5px;
+      }
+
+      .nadi-pomo-t-cls-31 {
+        letter-spacing: .02em;
+      }
+
+      .nadi-pomo-t-cls-12, .nadi-pomo-t-cls-13 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-32 {
+        fill: #2e2f35;
+      }
+
+      .nadi-pomo-t-cls-33 {
+        fill: url(#nadi-pomo-t-linear-gradient-3);
+      }
+
+      .nadi-pomo-t-cls-34 {
+        fill: #34373e;
+      }
+
+      .nadi-pomo-t-cls-35 {
+        fill: url(#nadi-pomo-t-linear-gradient);
+      }
+
+      .nadi-pomo-t-cls-14 {
+        font-size: 9.05px;
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-t-cls-36 {
+        fill: #545761;
+      }
+
+      .nadi-pomo-t-cls-37 {
+        fill: #51ff00;
+      }
+
+      .nadi-pomo-t-cls-38 {
+        letter-spacing: 0em;
+      }
+    </style>
+    <linearGradient id="nadi-pomo-t-linear-gradient" x1="322.96" y1="75.91" x2="299.09" y2="30.91" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6710e2"/>
+      <stop offset="1" stop-color="#ad6ef7"/>
+    </linearGradient>
+    <linearGradient id="nadi-pomo-t-linear-gradient-2" x1="215.51" y1="89.36" x2="241.7" y2="89.36" xlink:href="#nadi-pomo-t-linear-gradient"/>
+    <linearGradient id="nadi-pomo-t-linear-gradient-3" x1="242.75" y1="89.36" x2="247.81" y2="89.36" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0cbc10"/>
+      <stop offset="1" stop-color="#51ff00"/>
+    </linearGradient>
+  </defs>
+  <g id="nadi-pomo-t-Pomodoro_Timeline" data-name="Pomodoro Timeline">
+    <g id="nadi-pomo-t-_01_Notch_Shell_Bezier" data-name="01_Notch_Shell_Bezier">
+      <path id="nadi-pomo-t-Shell_Outline" data-name="Shell Outline" class="nadi-pomo-t-cls-21" d="m0,0h440c-5.54,0-19.8,2.52-19.8,25.15v85.73c0,18.29-14.83,33.12-33.12,33.12H52.92c-18.29,0-33.12-14.83-33.12-33.12V25.15C19.8,2.52,5.54,0,0,0Z"/>
+    </g>
+    <g>
+      <rect data-pomo-eq="1" style="animation-delay:-0.13s;animation-duration:0.68s" class="nadi-pomo-t-cls-16" x="384.17" y="18" width="1.91" height="4" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.26s;animation-duration:0.76s" class="nadi-pomo-t-cls-16" x="380.36" y="15" width="1.91" height="10" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.39s;animation-duration:0.84s" class="nadi-pomo-t-cls-16" x="376.55" y="16" width="1.91" height="8" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.52s;animation-duration:0.92s" class="nadi-pomo-t-cls-16" x="372.74" y="13" width="1.91" height="14" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.65s;animation-duration:1.00s" class="nadi-pomo-t-cls-16" x="368.93" y="14" width="1.91" height="12" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.78s;animation-duration:1.08s" class="nadi-pomo-t-cls-16" x="365.12" y="17" width="1.91" height="6" rx=".95" ry=".95" />
+    </g>
+    <path class="nadi-pomo-t-cls-24" d="m31.8,78.2c-.35,0-.7-.15-.94-.45l-4-5c-.35-.44-.35-1.06,0-1.5l4-5c.41-.52,1.17-.6,1.69-.19.52.41.6,1.17.19,1.69l-3.4,4.25,3.4,4.25c.41.52.33,1.27-.19,1.69-.22.18-.49.26-.75.26Z"/>
+    <path class="nadi-pomo-t-cls-24" d="m408.2,78.2c-.26,0-.53-.09-.75-.26-.52-.41-.6-1.17-.19-1.69l3.4-4.25-3.4-4.25c-.41-.52-.33-1.27.19-1.69.52-.42,1.27-.33,1.69.19l4,5c.35.44.35,1.06,0,1.5l-4,5c-.24.3-.59.45-.94.45Z"/>
+    <g>
+      <path class="nadi-pomo-t-cls-37" d="m192.48,27c-3.86,0-7-3.14-7-7s3.14-7,7-7,7,3.14,7,7-3.14,7-7,7Zm0-12.6c-3.09,0-5.6,2.51-5.6,5.6s2.51,5.6,5.6,5.6,5.6-2.51,5.6-5.6-2.51-5.6-5.6-5.6Z"/>
+      <text id="nadi-pomo-t-header" class="nadi-pomo-t-cls-11" transform="translate(213.48 23.32)"><tspan class="nadi-pomo-t-cls-22" x="0" y="0">Sun 08 N</tspan><tspan class="nadi-pomo-t-cls-30" x="45.15" y="0">o</tspan><tspan class="nadi-pomo-t-cls-22" x="52.02" y="0">v 2026 07:46</tspan></text>
+      <path class="nadi-pomo-t-cls-37" d="m194.22,15.97c.18.13.25.37.17.57l-1.19,2.97h2.19c.2,0,.39.13.46.32.07.19.01.41-.15.54l-4.37,3.64c-.17.14-.42.15-.6.02-.18-.13-.25-.37-.17-.57l1.19-2.97h-2.19c-.2,0-.39-.13-.46-.32-.07-.19-.01-.41.15-.54l4.37-3.64c.17-.14.42-.15.6-.02Z"/>
+    </g>
+    <text class="nadi-pomo-t-cls-4" transform="translate(39.7 24.03)"><tspan class="nadi-pomo-t-cls-25" x="0" y="0">P</tspan><tspan class="nadi-pomo-t-cls-19" x="9" y="0">omodoro </tspan><tspan class="nadi-pomo-t-cls-18" x="77.27" y="0">Timer</tspan></text>
+    <g id="nadi-pomo-t-_05_Footer_Navigation" data-name="05_Footer_Navigation">
+      <circle class="nadi-pomo-t-cls-36" cx="206.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="217.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="195.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="206.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="184.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="195.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="228.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="239.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="250.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="261.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-t-cls-36" cx="195.66" cy="134" r="1.65"/>
+      <path class="nadi-pomo-t-cls-24" d="m193.18,132h17c1.1,0,2,.9,2,2h0c0,1.1-.9,2-2,2h-17c-1.1,0-2-.9-2-2h0c0-1.1.9-2,2-2Z"/>
+    </g>
+    <g id="nadi-pomo-t-_04_Left_Timing" data-name="04_Left_Timing">
+      <text id="nadi-pomo-t-round" class="nadi-pomo-t-cls-10" transform="translate(39.7 47.68)"><tspan class="nadi-pomo-t-cls-1" x="0" y="0">F</tspan><tspan class="nadi-pomo-t-cls-23" x="5.62" y="0">ocus · 1 </tspan><tspan class="nadi-pomo-t-cls-1" x="41.37" y="0">o</tspan><tspan class="nadi-pomo-t-cls-23" x="47.69" y="0">f 4</tspan></text>
+      <text id="nadi-pomo-t-time" class="nadi-pomo-t-cls-7" transform="translate(61.47 75.89)"><tspan x="0" y="0">25:00</tspan></text>
+      <text class="nadi-pomo-t-cls-6" transform="translate(39.7 100.22)"><tspan x="0" y="0">25 min</tspan></text>
+      <text id="nadi-pomo-t-status" class="nadi-pomo-t-cls-8" transform="translate(102.56 100.22)"><tspan class="nadi-pomo-t-cls-29" x="0" y="0">R</tspan><tspan x="6.18" y="0">e</tspan><tspan class="nadi-pomo-t-cls-26" x="12.21" y="0">ady</tspan></text>
+      <rect class="nadi-pomo-t-cls-2" x="39.7" y="108" width="140.38" height="3.21" rx="1.61" ry="1.61"/>
+    </g>
+    <path class="nadi-pomo-t-cls-34" d="m197.31,113.3c-.24,0-.44-.2-.44-.44V38.92c0-.24.2-.44.44-.44s.44.2.44.44v73.95c0,.24-.2.44-.44.44Z"/>
+    <g>
+      <g id="nadi-pomo-t-_05_Right_Control" data-name="05_Right_Control">
+        <text class="nadi-pomo-t-cls-14" transform="translate(215.51 48.65)"><tspan x="0" y="0">This round</tspan></text>
+        <path class="nadi-pomo-t-cls-35" d="m292.62,38.92h34.34c6.72,0,12.16,5.45,12.16,12.16h0c0,6.72-5.45,12.16-12.16,12.16h-34.34c-6.72,0-12.16-5.45-12.16-12.16h0c0-6.72,5.45-12.16,12.16-12.16Z"/>
+        <text id="nadi-pomo-t-start-text" class="nadi-pomo-t-cls-9" transform="translate(297.95 54.73)"><tspan class="nadi-pomo-t-cls-27" x="0" y="0">S</tspan><tspan class="nadi-pomo-t-cls-17" x="6.35" y="0">t</tspan><tspan class="nadi-pomo-t-cls-27" x="10.3" y="0">a</tspan><tspan class="nadi-pomo-t-cls-31" x="15.99" y="0">r</tspan><tspan class="nadi-pomo-t-cls-38" x="19.66" y="0">t</tspan></text>
+        <circle class="nadi-pomo-t-cls-32" cx="357.98" cy="51.08" r="10.51"/>
+        <path class="nadi-pomo-t-cls-20" d="m352.07,50.17h-.24c-.38,0-.68-.31-.68-.68v-3.65c0-.28.17-.53.42-.63s.55-.05.75.15l1.19,1.19c2.5-2.47,6.52-2.46,9,.03,2.49,2.49,2.49,6.54,0,9.03-2.49,2.49-6.54,2.49-9.03,0-.36-.36-.36-.93,0-1.29s.93-.36,1.29,0c1.78,1.78,4.67,1.78,6.45,0,1.78-1.78,1.78-4.67,0-6.45-1.77-1.77-4.64-1.78-6.42-.03l1.17,1.17c.2.2.25.49.15.75s-.36.42-.63.42h-3.41Z"/>
+        <text class="nadi-pomo-t-cls-3" transform="translate(215.51 73.95)"><tspan x="0" y="0">2h 10m · 4 sessions</tspan></text>
+      </g>
+      <g id="nadi-pomo-t-_06_Timeline_Segments" data-name="06_Timeline_Segments">
+        <path class="nadi-pomo-t-cls-28" d="m254.7,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path class="nadi-pomo-t-cls-28" d="m218.04,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path id="nadi-pomo-t-first-fill" class="nadi-pomo-t-cls-15" d="m218.04,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="nadi-pomo-t-cls-12" transform="translate(226.98 111.89)"><tspan x="0" y="0">1</tspan></text>
+        <path class="nadi-pomo-t-cls-28" d="m245.28,86.83h3.32c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-3.32c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="nadi-pomo-t-cls-5" transform="translate(262.75 111.89)"><tspan x="0" y="0">2</tspan></text>
+        <path class="nadi-pomo-t-cls-28" d="m281.94,86.83h3.32c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-3.32c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path class="nadi-pomo-t-cls-28" d="m291.37,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="nadi-pomo-t-cls-5" transform="translate(299.37 111.89)"><tspan x="0" y="0">3</tspan></text>
+        <path class="nadi-pomo-t-cls-28" d="m318.61,86.83h3.32c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-3.32c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <path class="nadi-pomo-t-cls-28" d="m328.04,86.83h21.13c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-21.13c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="nadi-pomo-t-cls-13" transform="translate(335.92 111.89)"><tspan x="0" y="0">4</tspan></text>
+        <path class="nadi-pomo-t-cls-28" d="m357.37,86.83h22.18c1.4,0,2.53,1.13,2.53,2.53h0c0,1.4-1.13,2.53-2.53,2.53h-22.18c-1.4,0-2.53-1.13-2.53-2.53h0c0-1.4,1.13-2.53,2.53-2.53Z"/>
+        <text class="nadi-pomo-t-cls-13" transform="translate(358.25 111.89)"><tspan x="0" y="0">Long</tspan></text>
+        <circle id="nadi-pomo-t-first-dot" class="nadi-pomo-t-cls-33" cx="245.28" cy="89.36" r="2.53"/>
+      </g>
+    </g>
+  </g>
+<g id="nadi-pomo-t-animated-progress">
+ <rect id="nadi-pomo-t-elapsed-fill" x="39.7" y="108" width="0" height="3.21" rx="1.61" fill="#A855F7"/>
+ <rect id="nadi-pomo-t-stage-fill-1" x="218.04" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
+ <rect id="nadi-pomo-t-stage-fill-2" x="254.7" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
+ <rect id="nadi-pomo-t-stage-fill-3" x="291.37" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
+ <rect id="nadi-pomo-t-stage-fill-4" x="328.04" y="86.83" width="0" height="5.06" rx="2.53" fill="#A855F7"/>
+ <circle id="nadi-pomo-t-stage-dot" cx="218.04" cy="89.36" r="2.53" fill="#51FF00"/>
+ </g>
+ <g id="nadi-pomo-t-controls">
+  <rect x="291.5" y="38.5" width="48" height="25" rx="12" fill="transparent" data-pomo-action="toggle" role="button" tabindex="0" aria-label="Start Pomodoro"/>
+  <circle cx="358" cy="51.08" r="11.5" fill="transparent" data-pomo-action="reset" role="button" tabindex="0" aria-label="Reset Pomodoro"/>
+  <rect x="215.1" y="98" width="27" height="19" rx="4" fill="transparent" data-pomo-action="session-1" role="button" tabindex="0" aria-label="Preview focus session 1"/>
+  <rect x="251.8" y="98" width="27" height="19" rx="4" fill="transparent" data-pomo-action="session-2" role="button" tabindex="0" aria-label="Preview focus session 2"/>
+  <rect x="288.4" y="98" width="27" height="19" rx="4" fill="transparent" data-pomo-action="session-3" role="button" tabindex="0" aria-label="Preview focus session 3"/>
+  <rect x="325.1" y="98" width="27" height="19" rx="4" fill="transparent" data-pomo-action="session-4" role="button" tabindex="0" aria-label="Preview focus session 4"/>
+ </g>
+<g id="nadi-pomo-t-hits">
+<rect x="16" y="57" width="26" height="43" rx="6" fill="transparent" role="button" tabindex="0" aria-label="Switch Pomodoro design" data-pomo-action="theme"/>
+<rect x="398" y="57" width="26" height="43" rx="6" fill="transparent" role="button" tabindex="0" aria-label="Switch Pomodoro design" data-pomo-action="theme"/>
+</g>
+</svg>
+                <svg class="nadi-pomo-native nadi-pomo-c-native" id="nadi-pomo-c-live" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 144" width="440" height="144" role="group" aria-label="Nadi Pomodoro classic interactive preview">
+  <defs>
+    <style>
+      .nadi-pomo-c-cls-1 {
+        fill: #fff;
+      }
+
+      .nadi-pomo-c-cls-2 {
+        font-size: 7.6px;
+      }
+
+      .nadi-pomo-c-cls-2, .nadi-pomo-c-cls-3, .nadi-pomo-c-cls-4, .nadi-pomo-c-cls-5, .nadi-pomo-c-cls-6, .nadi-pomo-c-cls-7 {
+        isolation: isolate;
+      }
+
+      .nadi-pomo-c-cls-2, .nadi-pomo-c-cls-8, .nadi-pomo-c-cls-4, .nadi-pomo-c-cls-9, .nadi-pomo-c-cls-7, .nadi-pomo-c-cls-10 {
+        fill: #f7f7fb;
+      }
+
+      .nadi-pomo-c-cls-2, .nadi-pomo-c-cls-7 {
+        font-family: PlusJakartaSans-SemiBold, 'Plus Jakarta Sans';
+        font-weight: 600;
+      }
+
+      .nadi-pomo-c-cls-3 {
+        font-size: 14px;
+      }
+
+      .nadi-pomo-c-cls-3, .nadi-pomo-c-cls-4 {
+        font-family: PlusJakartaSans-Bold, 'Plus Jakarta Sans';
+        font-weight: 700;
+      }
+
+      .nadi-pomo-c-cls-11, .nadi-pomo-c-cls-12 {
+        fill: #ff2c50;
+      }
+
+      .nadi-pomo-c-cls-11, .nadi-pomo-c-cls-10 {
+        letter-spacing: .01em;
+      }
+
+      .nadi-pomo-c-cls-13 {
+        fill: #050609;
+      }
+
+      .nadi-pomo-c-cls-14 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-c-cls-15 {
+        fill: #2b2d34;
+      }
+
+      .nadi-pomo-c-cls-4 {
+        font-size: 40px;
+      }
+
+      .nadi-pomo-c-cls-16 {
+        letter-spacing: -.02em;
+      }
+
+      .nadi-pomo-c-cls-5 {
+        fill: #91929b;
+        font-size: 9.5px;
+      }
+
+      .nadi-pomo-c-cls-5, .nadi-pomo-c-cls-6 {
+        font-family: PlusJakartaSans-Regular, 'Plus Jakarta Sans';
+      }
+
+      .nadi-pomo-c-cls-17 {
+        letter-spacing: -.02em;
+      }
+
+      .nadi-pomo-c-cls-18 {
+        fill: #c2c6d0;
+      }
+
+      .nadi-pomo-c-cls-9 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-c-cls-19 {
+        letter-spacing: 0em;
+      }
+
+      .nadi-pomo-c-cls-20 {
+        fill: #493139;
+      }
+
+      .nadi-pomo-c-cls-6 {
+        fill: #b0b0b9;
+        font-size: 10.5px;
+      }
+
+      .nadi-pomo-c-cls-21 {
+        stroke: url(#nadi-pomo-c-linear-gradient);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4.2px;
+      }
+
+      .nadi-pomo-c-cls-21, .nadi-pomo-c-cls-22 {
+        fill: none;
+      }
+
+      .nadi-pomo-c-cls-23 {
+        fill: #272931;
+      }
+
+      .nadi-pomo-c-cls-22 {
+        stroke: #373943;
+        stroke-width: 4.2px;
+      }
+
+      .nadi-pomo-c-cls-7 {
+        font-size: 7.34px;
+      }
+
+      .nadi-pomo-c-cls-24 {
+        fill: #545761;
+      }
+
+      .nadi-pomo-c-cls-25 {
+        letter-spacing: .01em;
+      }
+
+      .nadi-pomo-c-cls-26 {
+        fill: #51ff00;
+      }
+
+      .nadi-pomo-c-cls-27 {
+        letter-spacing: 0em;
+      }
+    </style>
+    <linearGradient id="nadi-pomo-c-linear-gradient" x1="56.45" y1="74.5" x2="128.64" y2="74.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff2c50"/>
+      <stop offset="1" stop-color="#f94f6d"/>
+    </linearGradient>
+  </defs>
+  <g id="nadi-pomo-c-Pomodoro_Classic" data-name="Pomodoro Classic">
+    <g id="nadi-pomo-c-_01_Notch_Shell_Bezier" data-name="01_Notch_Shell_Bezier">
+      <path id="nadi-pomo-c-Shell_Outline" data-name="Shell Outline" class="nadi-pomo-c-cls-13" d="m0,0h440c-5.54,0-19.8,2.52-19.8,25.15v85.73c0,18.29-14.83,33.12-33.12,33.12H52.92c-18.29,0-33.12-14.83-33.12-33.12V25.15C19.8,2.52,5.54,0,0,0Z"/>
+    </g>
+    <g>
+      <rect data-pomo-eq="1" style="animation-delay:-0.13s;animation-duration:0.68s" class="nadi-pomo-c-cls-1" x="384.17" y="18" width="1.91" height="4" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.26s;animation-duration:0.76s" class="nadi-pomo-c-cls-1" x="380.36" y="15" width="1.91" height="10" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.39s;animation-duration:0.84s" class="nadi-pomo-c-cls-1" x="376.55" y="16" width="1.91" height="8" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.52s;animation-duration:0.92s" class="nadi-pomo-c-cls-1" x="372.74" y="13" width="1.91" height="14" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.65s;animation-duration:1.00s" class="nadi-pomo-c-cls-1" x="368.93" y="14" width="1.91" height="12" rx=".95" ry=".95" />
+      <rect data-pomo-eq="1" style="animation-delay:-0.78s;animation-duration:1.08s" class="nadi-pomo-c-cls-1" x="365.12" y="17" width="1.91" height="6" rx=".95" ry=".95" />
+    </g>
+    <path class="nadi-pomo-c-cls-8" d="m31.8,78.2c-.35,0-.7-.15-.94-.45l-4-5c-.35-.44-.35-1.06,0-1.5l4-5c.41-.52,1.17-.6,1.69-.19.52.41.6,1.17.19,1.69l-3.4,4.25,3.4,4.25c.41.52.33,1.27-.19,1.69-.22.18-.49.26-.75.26Z"/>
+    <path class="nadi-pomo-c-cls-8" d="m408.2,78.2c-.26,0-.53-.09-.75-.26-.52-.41-.6-1.17-.19-1.69l3.4-4.25-3.4-4.25c-.41-.52-.33-1.27.19-1.69.52-.42,1.27-.33,1.69.19l4,5c.35.44.35,1.06,0,1.5l-4,5c-.24.3-.59.45-.94.45Z"/>
+    <g>
+      <path class="nadi-pomo-c-cls-26" d="m192.48,27c-3.86,0-7-3.14-7-7s3.14-7,7-7,7,3.14,7,7-3.14,7-7,7Zm0-12.6c-3.09,0-5.6,2.51-5.6,5.6s2.51,5.6,5.6,5.6,5.6-2.51,5.6-5.6-2.51-5.6-5.6-5.6Z"/>
+      <text id="nadi-pomo-c-header" class="nadi-pomo-c-cls-6" transform="translate(213.48 23.32)"><tspan class="nadi-pomo-c-cls-14" x="0" y="0">Sun 08 N</tspan><tspan class="nadi-pomo-c-cls-19" x="45.15" y="0">o</tspan><tspan class="nadi-pomo-c-cls-14" x="52.02" y="0">v 2026 07:46</tspan></text>
+      <path class="nadi-pomo-c-cls-26" d="m194.22,15.97c.18.13.25.37.17.57l-1.19,2.97h2.19c.2,0,.39.13.46.32.07.19.01.41-.15.54l-4.37,3.64c-.17.14-.42.15-.6.02-.18-.13-.25-.37-.17-.57l1.19-2.97h-2.19c-.2,0-.39-.13-.46-.32-.07-.19-.01-.41.15-.54l4.37-3.64c.17-.14.42-.15.6-.02Z"/>
+    </g>
+    <g>
+      <circle class="nadi-pomo-c-cls-22" cx="92.54" cy="74.5" r="34"/>
+      <path id="nadi-pomo-c-ring-base" class="nadi-pomo-c-cls-21" d="m96.81,40.77c16.99,2.15,29.73,16.61,29.73,33.74,0,18.78-15.23,34-34,34-18.78,0-34-15.23-33.99-34,0-18.78,15.23-34,34-34"/>
+      <g id="nadi-pomo-c-Icon_stopwatch" data-name="Icon stopwatch">
+        <path class="nadi-pomo-c-cls-8" d="m90.03,61.12c-.92,0-1.67.75-1.67,1.67s.75,1.67,1.67,1.67h.84v1.8c-5.21.8-9.2,5.31-9.2,10.74,0,6,4.86,10.87,10.87,10.87s10.87-4.86,10.87-10.87c0-2.18-.64-4.22-1.75-5.92l1.26-1.26c.65-.65.65-1.71,0-2.37s-1.71-.65-2.37,0l-1.13,1.13c-1.47-1.2-3.25-2.03-5.21-2.33v-1.8h.84c.92,0,1.67-.75,1.67-1.67s-.75-1.67-1.67-1.67h-5.02Zm3.76,10.03v6.69c0,.69-.56,1.25-1.25,1.25s-1.25-.56-1.25-1.25v-6.69c0-.69.56-1.25,1.25-1.25s1.25.56,1.25,1.25Z"/>
+      </g>
+    </g>
+    <text class="nadi-pomo-c-cls-3" transform="translate(39.7 24.03)"><tspan class="nadi-pomo-c-cls-9" x="0" y="0">P</tspan><tspan class="nadi-pomo-c-cls-10" x="9" y="0">omodoro </tspan><tspan class="nadi-pomo-c-cls-11" x="77.27" y="0">Timer</tspan></text>
+    <g>
+      <g>
+        <circle class="nadi-pomo-c-cls-15" cx="344.13" cy="48.45" r="8"/>
+        <g id="nadi-pomo-c-Icon_rotate-left" data-name="Icon rotate-left">
+          <path class="nadi-pomo-c-cls-18" d="m340.6,47.91h-.14c-.23,0-.41-.18-.41-.41v-2.18c0-.17.1-.32.25-.38s.33-.03.45.09l.71.71c1.49-1.47,3.9-1.47,5.38.02,1.49,1.49,1.49,3.91,0,5.4s-3.91,1.49-5.4,0c-.21-.21-.21-.56,0-.77s.56-.21.77,0c1.07,1.07,2.79,1.07,3.86,0s1.07-2.79,0-3.86c-1.06-1.06-2.77-1.07-3.84-.02l.7.7c.12.12.15.29.09.45s-.21.25-.38.25h-2.04Z"/>
+        </g>
+      </g>
+      <text id="nadi-pomo-c-time" class="nadi-pomo-c-cls-4" transform="translate(207.94 74.42)"><tspan x="0" y="0">25:00</tspan></text>
+      <text id="nadi-pomo-c-phase" class="nadi-pomo-c-cls-5" transform="translate(243.32 89.57)"><tspan class="nadi-pomo-c-cls-16" x="0" y="0">F</tspan><tspan x="5.33" y="0">ocus time</tspan></text>
+      <path class="nadi-pomo-c-cls-23" d="m170.88,98.05h52.69c5.96,0,10.8,4.83,10.8,10.8h0c0,5.96-4.83,10.8-10.8,10.8h-52.69c-5.96,0-10.8-4.83-10.8-10.8h0c0-5.96,4.83-10.8,10.8-10.8Z"/>
+      <text class="nadi-pomo-c-cls-7" transform="translate(176.72 111.96)"><tspan x="0" y="0">Sho</tspan><tspan class="nadi-pomo-c-cls-25" x="13.85" y="0">r</tspan><tspan x="16.58" y="0">t Br</tspan><tspan class="nadi-pomo-c-cls-27" x="28.58" y="0">e</tspan><tspan x="33.04" y="0">ak</tspan></text>
+      <path class="nadi-pomo-c-cls-12" d="m253.8,98.05h28.51c5.96,0,10.8,4.83,10.8,10.8h0c0,5.96-4.83,10.8-10.8,10.8h-28.51c-5.96,0-10.8-4.83-10.8-10.8h0c0-5.96,4.83-10.8,10.8-10.8Z"/>
+      <path class="nadi-pomo-c-cls-20" d="m311.68,98.05h59.6c5.96,0,10.8,4.83,10.8,10.8h0c0,5.96-4.83,10.8-10.8,10.8h-59.6c-5.96,0-10.8-4.83-10.8-10.8h0c0-5.96,4.83-10.8,10.8-10.8Z"/>
+      <text class="nadi-pomo-c-cls-2" transform="translate(321.06 111.96)"><tspan class="nadi-pomo-c-cls-17" x="0" y="0">F</tspan><tspan x="4.33" y="0">ocus Time</tspan></text>
+      <g id="nadi-pomo-c-Icon_play" data-name="Icon play">
+        <path class="nadi-pomo-c-cls-1" d="m265.24,103.73c-.35-.21-.79-.22-1.15-.02-.36.2-.58.58-.58.99v8.31c0,.41.22.79.58.99.36.2.8.19,1.15-.02l6.8-4.16c.34-.21.54-.57.54-.97s-.21-.76-.54-.97l-6.8-4.16Z"/>
+      </g>
+    </g>
+    <g id="nadi-pomo-c-_05_Footer_Navigation" data-name="05_Footer_Navigation">
+      <circle class="nadi-pomo-c-cls-24" cx="206.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="217.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="195.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="206.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="184.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="195.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="228.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="239.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="250.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="261.66" cy="134" r="1.65"/>
+      <circle class="nadi-pomo-c-cls-24" cx="195.66" cy="134" r="1.65"/>
+      <path class="nadi-pomo-c-cls-8" d="m193.18,132h17c1.1,0,2,.9,2,2h0c0,1.1-.9,2-2,2h-17c-1.1,0-2-.9-2-2h0c0-1.1.9-2,2-2Z"/>
+    </g>
+  </g>
+<g id="nadi-pomo-c-animation">
+ <circle id="nadi-pomo-c-ring-progress" cx="92.54" cy="74.5" r="34" stroke="#FF2C50" stroke-width="4.2" fill="none"
+    stroke-linecap="round" stroke-dasharray="213.6283" stroke-dashoffset="0" transform="rotate(-90 92.54 74.5)"/>
+ </g>
+ <g id="nadi-pomo-c-controls">
+  <circle cx="344.13" cy="48.45" r="12.5" fill="transparent" data-pomo-action="reset" role="button" tabindex="0" aria-label="Reset Pomodoro"/>
+  <rect x="248" y="97" width="48" height="25" rx="12" fill="transparent" data-pomo-action="toggle" role="button" tabindex="0" aria-label="Start or pause Pomodoro"/>
+  <rect x="169" y="96" width="67" height="28" rx="12" fill="transparent" data-pomo-action="short" role="button" tabindex="0" aria-label="Start short break"/>
+  <rect x="307" y="96" width="78" height="28" rx="12" fill="transparent" data-pomo-action="focus" role="button" tabindex="0" aria-label="Start focus session"/>
+ </g>
+<g id="nadi-pomo-c-hits">
+<rect x="16" y="57" width="26" height="43" rx="6" fill="transparent" role="button" tabindex="0" aria-label="Switch Pomodoro design" data-pomo-action="theme"/>
+<rect x="398" y="57" width="26" height="43" rx="6" fill="transparent" role="button" tabindex="0" aria-label="Switch Pomodoro design" data-pomo-action="theme"/>
+</g>
+</svg>
               </div>
               
 
@@ -1552,7 +2105,8 @@ footer a:hover { color: var(--ink); }
         <button type="button" data-s="minimal" aria-pressed="false">Minimal</button>
         <button type="button" data-s="music" aria-pressed="false">Music</button>
         <button type="button" data-s="lyrics" aria-pressed="false">Lyrics Expanded</button>
-        <button type="button" data-s="pomo" aria-pressed="false">Pomodoro New</button>
+        <button type="button" data-s="pomo" aria-pressed="false">Pomodoro Timeline</button>
+        <button type="button" data-s="pomoClassic" aria-pressed="false">Pomodoro Classic</button>
         <button type="button" data-s="notif" aria-pressed="false">Notification</button>
         <button type="button" data-s="prayer" aria-pressed="false">Pray Reminder</button>
         <button type="button" data-s="water" aria-pressed="false">Water Reminder</button>
@@ -2662,7 +3216,8 @@ const captions = {
   minimal: "Minimal mode leaves a quiet 44 × 4 strip at the top edge.",
   music: "Music controls, right at the top of Windows.",
   lyrics: "Expanded lyrics beside the album and media controls.",
-  pomo: "Start a focus timer and watch the minutes go by.",
+  pomo: "Start the Pomodoro timeline and follow four focus sessions.",
+  pomoClassic: "A classic circular Pomodoro timer with focus and short break controls.",
   notif: "Windows notifications need a supported packaged build and your permission.",
   prayer: "Pray Reminder shows today's times for the city you choose.",
   remind: "A short reminder when it's time to pray.",
@@ -2683,7 +3238,7 @@ function waterGrow() {
   bars.forEach(b => { b.style.transition = ""; b.style.height = b.dataset.h; });
   wbar.style.transition = ""; wbar.style.width = "152px";
 }
-const MN_SIZE = { pet: 156 * 30, idle: 156 * 30, minimal: 44 * 4, music: 440 * 144, lyrics: 560 * 144, pomo: 420 * 140, prayer: 420 * 140, remind: 310 * 60,
+const MN_SIZE = { pet: 156 * 30, idle: 156 * 30, minimal: 44 * 4, music: 440 * 144, lyrics: 560 * 144, pomo: 440 * 144, pomoClassic: 440 * 144, prayer: 420 * 140, remind: 310 * 60,
   water: 420 * 140, shelf: 420 * 140, clip: 420 * 140, todo: 420 * 140, notif: 310 * 60, widgets: 420 * 140, bt: 310 * 60, charge: 310 * 60 };
 let remindT = 0;
 function show(s, keepBtn) {
