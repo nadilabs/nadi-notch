@@ -134,8 +134,10 @@ for(const [kind,prefix,source] of pomoAssets){
  assert.ok(original.includes('id="Shell_Outline"'),'uploaded '+kind+' silhouette lost');
  assert.ok(html.includes('id="'+prefix+'-live"'),'native '+kind+' vector missing from preview');
  assert.ok(html.includes('id="'+prefix+'-Shell_Outline"'),'native '+kind+' shell path missing');
- assert.ok(html.includes(prefix+'-Shell_Outline{fill:transparent!important}'),
-   'native '+kind+' must not double-paint shell');
+ assert.ok(html.includes('.'+prefix+'-native #'+prefix+'-Shell_Outline'),
+   'native '+kind+' must participate in transparent single-shell CSS');
+ assert.ok(html.includes('#nadi-pomo-c-Shell_Outline{fill:transparent!important}'),
+   'the original native shell must be transparent in the shared preview');
  assert.ok(html.includes('id="'+prefix+'-time"'),'native '+kind+' countdown text missing');
  assert.ok(html.includes('id="'+prefix+'-header"'),'native '+kind+' header clock missing');
  assert.ok(html.includes('class="nadi-pomo-native '+prefix+'-native"'),
