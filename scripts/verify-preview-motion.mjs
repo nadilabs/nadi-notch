@@ -20,6 +20,13 @@ assert.ok(html.includes('.mn.nadi-curve-shell.nadi-morphing > .ly'),'legacy feat
 assert.ok(html.includes('get("notchMotion")==="off"'),'diagnostic no-motion URL switch missing');
 assert.ok(html.includes('if(dw<.001&&dh<.001||nadiNoMorph||'),'no-motion switch must bypass geometry animation');
 assert.ok(html.includes('mn.classList.remove("nadi-morphing")'),'content must be revealed when geometry settles');
+const stableSvgCss=html.match(/\.mn\.nadi-curve-shell \.nadi-compact-live,\s*\.mn\.nadi-curve-shell \.nadi-music-live \{([^}]*)\}/)?.[1];
+assert.ok(stableSvgCss,'native content stabilization CSS missing');
+assert.match(stableSvgCss,/left:\s*0\s*;/,'native SVG origins must stay fixed');
+assert.match(stableSvgCss,/transform:\s*none\s*;/,'native SVG must have no second centering transform');
+assert.match(stableSvgCss,/transition:\s*none\s*!important/,'only the viewport should crossfade');
+assert.ok(html.includes('#nadi-closed-clock, #nadi-music-header-clock,'));
+assert.ok(html.includes('font-variant-numeric:tabular-nums;'),'time labels require tabular digits');
 const anchor=html.match(/\.mn-holder\s*\{([^}]*)\}/)?.[1];
 const shell=html.match(/\.mn\s*\{([^}]*)\}/)?.[1];
 assert.ok(anchor&&shell,'notch anchor/shell CSS missing');

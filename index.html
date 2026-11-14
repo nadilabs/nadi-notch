@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="nadi-site-revision" content="2026-11-14-preview-reveal-after-morph-v5">
+<meta name="nadi-site-revision" content="2026-11-14-preview-svg-text-stability-v6">
 <title>Nadi — The adaptive notch for Windows</title>
 <meta name="description" content="Music, lyrics, timers and files at the top of Windows. Nadi opens when you need it and makes itself small when your desktop gets busy.">
 <meta property="og:title" content="Nadi — The adaptive notch for Windows">
@@ -651,6 +651,30 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
 .mn.nadi-curve-shell.nadi-morphing > .ly {
   opacity:0 !important;
   pointer-events:none !important;
+}
+/* The native SVGs have the exact final dimensions of Closed and Music.
+   Avoid centering each SVG a SECOND time using a dynamic-percent position
+   and a transform matrix inside the resizing, clip-pathed shell. During
+   morph they stay hidden by the rule above; after settling, each SVG
+   occupies the stable 0,0 origin of its correctly sized viewport. */
+.mn.nadi-curve-shell .nadi-compact-live,
+.mn.nadi-curve-shell .nadi-music-live {
+  left:0;
+  transform:none;
+  /* The viewport already owns the single content crossfade. Nested SVG
+     opacity transitions caused independent compositor/raster timelines. */
+  transition:none !important;
+}
+.mn.nadi-curve-shell #nadi-compact-closed-content,
+.mn.nadi-curve-shell #nadi-resting-art {
+  transition:none !important;
+}
+/* Clocks and counters change their glyphs on a fixed cadence. Force
+   tabular numeral advances to avoid width-dependent perceived shifting. */
+#nadi-closed-clock, #nadi-music-header-clock,
+#nadi-music-time-elapsed, #nadi-music-time-remaining {
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
 }
 .nadi-no-morph .mn,.nadi-no-morph .mn.shrink {transition:none !important}
 
