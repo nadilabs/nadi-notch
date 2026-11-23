@@ -2561,6 +2561,7 @@ footer a:hover { color: var(--ink); }
   </div>
 </footer>
 
+<script src="./js/motion-lab.js" defer></script>
 <script>
 // ---- Donasi: isi tautanmu; tombol yang kosong otomatis disembunyikan ------------------------
 const DONATE = {
@@ -2887,8 +2888,9 @@ function nadiShellTick(now){
  if(!nadiShell.startTime)nadiShell.startTime=now;
  const t=Math.min(1,(now-nadiShell.startTime)/nadiShell.duration);
  // Quintic smootherstep has zero speed at BOTH ends and no bounce.
- const progress=window.NadiMotionLab?.ease(t) ??
-    t*t*t*(t*(t*6-15)+10);
+ const progress=(typeof window !== "undefined" && window.NadiMotionLab)
+    ? window.NadiMotionLab.ease(t)
+    : t*t*t*(t*(t*6-15)+10);
  nadiShell.width=nadiShell.startWidth+
    (nadiShell.targetWidth-nadiShell.startWidth)*progress;
  nadiShell.height=nadiShell.startHeight+
@@ -4098,6 +4100,5 @@ fit(); addEventListener("resize", fit);
   set(start);
 })();
 </script>
-<script src="./js/motion-lab.js" defer></script>
 </body>
 </html>
