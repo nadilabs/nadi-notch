@@ -969,10 +969,10 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
  transform:none!important;
 }
 .mn.nadi-native-crossfade .nadi-native-exit{
- animation:nadi-native-out calc(.19s * var(--nadi-motion-factor,1)) cubic-bezier(.42,0,.95,.5) both!important;
+ animation:nadi-native-out .19s cubic-bezier(.42,0,.95,.5) both!important;
 }
 .mn.nadi-native-crossfade .nadi-native-enter{
- animation:nadi-native-in calc(.31s * var(--nadi-motion-factor,1)) cubic-bezier(.16,.72,.22,1) calc(.115s * var(--nadi-motion-factor,1)) both!important;
+ animation:nadi-native-in .31s cubic-bezier(.16,.72,.22,1) .115s both!important;
 }
 @keyframes nadi-native-out{from{opacity:var(--nadi-exit-opacity,1)}to{opacity:0}}
 @keyframes nadi-native-in{from{opacity:var(--nadi-enter-opacity,0)}to{opacity:1}}
@@ -1192,7 +1192,6 @@ footer a:hover { color: var(--ink); }
 #download .dl-count{margin-top:24px;text-align:center;min-height:0}
 #download .dl-count:empty{display:none}
 </style>
-<link rel="stylesheet" href="./css/motion-lab.css">
 </head>
 <body>
 
@@ -2561,7 +2560,6 @@ footer a:hover { color: var(--ink); }
   </div>
 </footer>
 
-<script src="./js/motion-lab.js" defer></script>
 <script>
 // ---- Donasi: isi tautanmu; tombol yang kosong otomatis disembunyikan ------------------------
 const DONATE = {
@@ -2888,15 +2886,11 @@ function nadiShellTick(now){
  if(!nadiShell.startTime)nadiShell.startTime=now;
  const t=Math.min(1,(now-nadiShell.startTime)/nadiShell.duration);
  // Quintic smootherstep has zero speed at BOTH ends and no bounce.
- const progress=(typeof window !== "undefined" && window.NadiMotionLab)
-    ? window.NadiMotionLab.ease(t)
-    : t*t*t*(t*(t*6-15)+10);
- // Spring may briefly go beyond the destination; never let the shell
- // collapse below Nadi's smallest valid 44×4px native silhouette.
- nadiShell.width=Math.max(44,nadiShell.startWidth+
-   (nadiShell.targetWidth-nadiShell.startWidth)*progress);
- nadiShell.height=Math.max(4,nadiShell.startHeight+
-   (nadiShell.targetHeight-nadiShell.startHeight)*progress);
+ const progress=t*t*t*(t*(t*6-15)+10);
+ nadiShell.width=nadiShell.startWidth+
+   (nadiShell.targetWidth-nadiShell.startWidth)*progress;
+ nadiShell.height=nadiShell.startHeight+
+   (nadiShell.targetHeight-nadiShell.startHeight)*progress;
  nadiPaintShell();
  if(t>=1){nadiFinishShellMorph();return;}
  nadiShell.frame=requestAnimationFrame(nadiShellTick);
@@ -2918,8 +2912,7 @@ function nadiStartShellMorph(){
     window.matchMedia("(prefers-reduced-motion: reduce)").matches||
     document.hidden){nadiFinishShellMorph();return;}
  // Long moves retain the full motion; neighboring expanded modes switch faster.
- nadiShell.duration=(280+Math.min(260,Math.max(dw/284,dh/114)*260)) *
-    (window.NadiMotionLab?.durationMultiplier ?? 1);
+ nadiShell.duration=280+Math.min(260,Math.max(dw/284,dh/114)*260);
  mn.classList.add("nadi-morphing");
  nadiShell.frame=requestAnimationFrame(nadiShellTick);
 }
@@ -3646,7 +3639,7 @@ function nadiBeginNativeCrossfade(previous,next){
   }
   mn.classList.remove("nadi-native-crossfade");
   nadiNativeClear=0;
- },470*(window.NadiMotionLab?.durationMultiplier ?? 1));
+ },470);
 }
 let remindT = 0;
 function show(s, keepBtn) {
