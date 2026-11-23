@@ -37,10 +37,13 @@
     ['notification','Closed → Notification',['idle','notif']],
     ['tiny','Minimal → Resting',['minimal','pet']]
   ];
+  // Deliberately distinct profiles: the original 18%-difference was imperceptible.
+  // These are opt-in design experiments, never the default Windows animation.
   const profiles = {
-    native: {label:'Native baseline',factor:1,easing:'quintic-smootherstep'},
-    fluid: {label:'Fluid',factor:1.18,easing:'sine-in-out'},
-    quick: {label:'Responsive',factor:.78,easing:'cubic-out'}
+    native: {label:'Native · familiar',short:'Native',factor:1,easing:'quintic-smootherstep',character:'Balanced · no bounce'},
+    fluid: {label:'Liquid · flowing',short:'Liquid',factor:1.95,easing:'sine-in-out',character:'Slow, continuous morph'},
+    spring: {label:'Spring · elastic',short:'Spring',factor:1.48,easing:'ease-out-back',character:'Soft overshoot & settle'},
+    quick: {label:'Snappy · fast',short:'Snappy',factor:.53,easing:'exponential-out',character:'Immediate response'}
   };
   const clamp = x => Math.max(0, Math.min(1, Number.isFinite(x) ? x : 0));
   let profile = 'native', tempo = 1, scenario = 'compact', sequenceId = 0;
@@ -52,7 +55,12 @@
     ease(t) {
       const x = clamp(t);
       if (profile === 'fluid') return (1 - Math.cos(Math.PI * x)) / 2;
-      if (profile === 'quick') return 1 - (1 - x) ** 3;
+      if (profile === 'spring') {
+        // Controlled back-ease: visible but modest elastic response (about 7%).
+        const p = x - 1;
+        return 1 + 2.35*p*p*p + 1.35*p*p;
+      }
+      if (profile === 'quick') return x === 1 ? 1 : 1 - 2 ** (-10*x);
       return x*x*x*(x*(x*6-15)+10);
     }
   };
@@ -97,6 +105,35 @@
   `;
   holder.append(section);
   const $ = id => section.querySelector('#' + id);
+
+  // Keep the tester next to the actual animated notch. In v1 the entire
+  // control panel was below the laptop, so the user couldn't see the movement.
+  const screen = preview.querySelector('.screen');
+  const dock = document.createElement('div');
+  dock.className = 'ml-hud';
+  dock.setAttribute('role', 'group');
+  dock.setAttribute('aria-label', 'Nadi Motion Lab live controls');
+  dock.innerHTML = `
+    <div class="ml-hud-heading"><span class="ml-hud-light"></span>
+      <span>MOTION LAB <strong>LIVE</strong></span>
+      <span class="ml-hud-hint">Watch the notch above</span>
+    </div>
+    <div class="ml-hud-profiles" id="ml-hud-profiles"></div>
+    <div class="ml-hud-bottom">
+      <select id="ml-hud-scenario" aria-label="Choose notch transition">
+        ${demos.map(([id,label])=>`<option value="${id}">${label}</option>`).join('')}
+      </select>
+      <button type="button" id="ml-hud-replay" class="ml-hud-primary">▶ Replay</button>
+      <button type="button" id="ml-hud-compare">A/B</button>
+    </div>
+    <div class="ml-hud-feedback"><span id="ml-hud-status">Choose a character and press Replay.</span>
+      <span id="ml-hud-duration">0.54s</span></div>
+  `;
+  if (screen) screen.append(dock);
+  dock.querySelector('#ml-hud-profiles').innerHTML =
+    Object.entries(profiles).map(([key,item]) =>
+      `<button type="button" data-hud-profile="${key}" aria-pressed="${key===profile}">${item.short}</button>`).join('');
+  // Reparent only the visible controls, not Nadi's native screen content.
   const profileButtons = Object.entries(profiles).map(([key, data]) =>
     `<button type="button" data-profile="${key}" aria-pressed="${key === profile}">${data.label}</button>`).join('');
   $('ml-profiles').innerHTML = profileButtons;
@@ -111,9 +148,15 @@
   const wait = duration => new Promise(resolve => setTimeout(resolve, duration));
   const activeScenario = () => demos.find(x => x[0] === scenario)[2];
   const modeButton = name => preview.querySelector('.try button[data-s="' + name + '"]');
-  const output = (message) => { $('ml-status').textContent = message; };
+  const output = (message) => {
+    $('ml-status').textContent = message;
+    const label = dock.querySelector('#ml-hud-status');
+    if(label) label.textContent = message;
+  };
   const spec = () => ({
-    version: 1, target: 'Nadi native Rust/Win32', profile,
+    version: 2, target: 'Nadi native Rust/Win32', profile,
+    character: profiles[profile].character,
+    max_progress_overshoot: profile==='spring' ? 'about 5%' : 'none',
     easing: profiles[profile].easing,
     duration: {
       base_ms: 280, extra_max_ms: 260,
@@ -121,7 +164,9 @@
       multiplier: Number(lab.durationMultiplier.toFixed(3)),
       speed: tempo
     },
-    geometry: 'native SVG silhouette; monotonic width/height; same origin',
+    geometry: profile==='spring'
+      ? 'native SVG silhouette; controlled overshoot then settle; fixed center'
+      : 'native SVG silhouette; monotonic width/height; fixed center',
     interruption: 'retarget from currently rendered dimensions',
     visibility: 'finish immediately when tab/window becomes hidden',
     reduced_motion: 'instant when prefers-reduced-motion is enabled',
@@ -133,6 +178,12 @@
     $('ml-spec').textContent = JSON.stringify(spec(), null, 2);
     $('ml-profiles').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.profile === profile)));
     $('ml-scenarios').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.scenario === scenario)));
+    dock.querySelectorAll('[data-hud-profile]').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.hudProfile === profile)));
+    dock.querySelector('#ml-hud-scenario').value=scenario;
+    dock.querySelector('#ml-hud-duration').textContent =
+      (0.54 * lab.durationMultiplier).toFixed(2)+'s';
+    document.documentElement.dataset.nadiMotionProfile = profile;
     section.style.setProperty('--ml-tempo', (1 / tempo).toFixed(3));
     document.getElementById('mn')?.style.setProperty('--nadi-motion-factor', String(lab.durationMultiplier));
   }
@@ -189,6 +240,15 @@
     output('Speed set to ' + tempo.toFixed(1) + '×. Press Replay to test.');
   });
   $('ml-replay').addEventListener('click', replay);
+  dock.querySelector('#ml-hud-profiles').addEventListener('click', e => {
+    const button=e.target.closest('[data-hud-profile]');
+    if(button) $('ml-profiles').querySelector('[data-profile="'+button.dataset.hudProfile+'"]').click();
+  });
+  dock.querySelector('#ml-hud-scenario').addEventListener('change', e => {
+    $('ml-scenarios').querySelector('[data-scenario="'+e.target.value+'"]').click();
+  });
+  dock.querySelector('#ml-hud-replay').addEventListener('click', () => $('ml-replay').click());
+  dock.querySelector('#ml-hud-compare').addEventListener('click', () => $('ml-compare').click());
   $('ml-compare').addEventListener('click', compare);
   $('ml-tiles').addEventListener('click', e => {
     const card = e.target.closest('button[data-principle]');
@@ -203,7 +263,10 @@
     // Demonstrate the related native Nadi transition; the tile itself is only
     // a conceptual illustration for principles not yet implemented in Rust.
     const ticket = ++sequenceId;
-    runModes([item[3],item[4]], item[1], ticket);
+    preview.querySelector('.laptop')?.scrollIntoView({block:'center',behavior:'smooth'});
+    setTimeout(() => {
+      if(ticket === sequenceId) runModes([item[3],item[4]], item[1], ticket);
+    }, 370);
   });
   $('ml-copy').addEventListener('click', async () => {
     const data = $('ml-spec').textContent;
@@ -222,4 +285,9 @@
   });
   document.addEventListener('visibilitychange', () => { if(document.hidden) sequenceId++; });
   renderSpec();
+  // Make the contrast discoverable immediately: the floating panel appears
+  // inside the laptop display, without scrolling to a separate playground.
+  dock.querySelector('#ml-hud-profiles [data-hud-profile="fluid"]')?.setAttribute('title','Slow, organic movement');
+  dock.querySelector('#ml-hud-profiles [data-hud-profile="spring"]')?.setAttribute('title','Visible elastic settle');
+  dock.querySelector('#ml-hud-profiles [data-hud-profile="quick"]')?.setAttribute('title','Fast and decisive');
 })();
