@@ -969,10 +969,10 @@ svg.ctl { width: 17px; height: 17px; fill: #fff; } /* tombol prev / play / next 
  transform:none!important;
 }
 .mn.nadi-native-crossfade .nadi-native-exit{
- animation:nadi-native-out .19s cubic-bezier(.42,0,.95,.5) both!important;
+ animation:nadi-native-out calc(.19s * var(--nadi-motion-factor,1)) cubic-bezier(.42,0,.95,.5) both!important;
 }
 .mn.nadi-native-crossfade .nadi-native-enter{
- animation:nadi-native-in .31s cubic-bezier(.16,.72,.22,1) .115s both!important;
+ animation:nadi-native-in calc(.31s * var(--nadi-motion-factor,1)) cubic-bezier(.16,.72,.22,1) calc(.115s * var(--nadi-motion-factor,1)) both!important;
 }
 @keyframes nadi-native-out{from{opacity:var(--nadi-exit-opacity,1)}to{opacity:0}}
 @keyframes nadi-native-in{from{opacity:var(--nadi-enter-opacity,0)}to{opacity:1}}
@@ -1192,6 +1192,7 @@ footer a:hover { color: var(--ink); }
 #download .dl-count{margin-top:24px;text-align:center;min-height:0}
 #download .dl-count:empty{display:none}
 </style>
+<link rel="stylesheet" href="./css/motion-lab.css">
 </head>
 <body>
 
@@ -2886,7 +2887,8 @@ function nadiShellTick(now){
  if(!nadiShell.startTime)nadiShell.startTime=now;
  const t=Math.min(1,(now-nadiShell.startTime)/nadiShell.duration);
  // Quintic smootherstep has zero speed at BOTH ends and no bounce.
- const progress=t*t*t*(t*(t*6-15)+10);
+ const progress=window.NadiMotionLab?.ease(t) ??
+    t*t*t*(t*(t*6-15)+10);
  nadiShell.width=nadiShell.startWidth+
    (nadiShell.targetWidth-nadiShell.startWidth)*progress;
  nadiShell.height=nadiShell.startHeight+
@@ -2912,7 +2914,8 @@ function nadiStartShellMorph(){
     window.matchMedia("(prefers-reduced-motion: reduce)").matches||
     document.hidden){nadiFinishShellMorph();return;}
  // Long moves retain the full motion; neighboring expanded modes switch faster.
- nadiShell.duration=280+Math.min(260,Math.max(dw/284,dh/114)*260);
+ nadiShell.duration=(280+Math.min(260,Math.max(dw/284,dh/114)*260)) *
+    (window.NadiMotionLab?.durationMultiplier ?? 1);
  mn.classList.add("nadi-morphing");
  nadiShell.frame=requestAnimationFrame(nadiShellTick);
 }
@@ -3639,7 +3642,7 @@ function nadiBeginNativeCrossfade(previous,next){
   }
   mn.classList.remove("nadi-native-crossfade");
   nadiNativeClear=0;
- },470);
+ },470*(window.NadiMotionLab?.durationMultiplier ?? 1));
 }
 let remindT = 0;
 function show(s, keepBtn) {
@@ -4095,5 +4098,6 @@ fit(); addEventListener("resize", fit);
   set(start);
 })();
 </script>
+<script src="./js/motion-lab.js" defer></script>
 </body>
 </html>
