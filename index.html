@@ -2891,10 +2891,12 @@ function nadiShellTick(now){
  const progress=(typeof window !== "undefined" && window.NadiMotionLab)
     ? window.NadiMotionLab.ease(t)
     : t*t*t*(t*(t*6-15)+10);
- nadiShell.width=nadiShell.startWidth+
-   (nadiShell.targetWidth-nadiShell.startWidth)*progress;
- nadiShell.height=nadiShell.startHeight+
-   (nadiShell.targetHeight-nadiShell.startHeight)*progress;
+ // Spring may briefly go beyond the destination; never let the shell
+ // collapse below Nadi's smallest valid 44×4px native silhouette.
+ nadiShell.width=Math.max(44,nadiShell.startWidth+
+   (nadiShell.targetWidth-nadiShell.startWidth)*progress);
+ nadiShell.height=Math.max(4,nadiShell.startHeight+
+   (nadiShell.targetHeight-nadiShell.startHeight)*progress);
  nadiPaintShell();
  if(t>=1){nadiFinishShellMorph();return;}
  nadiShell.frame=requestAnimationFrame(nadiShellTick);
