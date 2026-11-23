@@ -230,7 +230,8 @@ try{
   baseFactor:window.NadiMotionLab.durationMultiplier,
   originalSvg:!!document.getElementById("nadi-music-live"),
   shape:typeof nadiShellGeometry==="function",
-  stylesheet:[...document.styleSheets].some(x=>x.href?.includes("motion-lab.css"))
+  stylesheet:[...document.styleSheets].some(x=>x.href?.includes("motion-lab.css")),
+  dockInScreen:!!document.querySelector(".screen > .ml-hud")
  }))()`);
  assert.equal(labDetails.tiles,12);
  assert.equal(labDetails.baseline,"native");
@@ -238,8 +239,23 @@ try{
  assert.equal(labDetails.originalSvg,true);
  assert.equal(labDetails.shape,true);
  assert.equal(labDetails.stylesheet,true);
- await evaluate('document.querySelector("[data-profile=fluid]").click()');
- assert.ok(Math.abs(await evaluate("window.NadiMotionLab.durationMultiplier")-1.18)<.001);
+ assert.equal(labDetails.dockInScreen,true,"controls should be beside the animated notch, not below it");
+ // Profile selection within the laptop must affect live shell physics.
+ await evaluate('document.querySelector("[data-hud-profile=spring]").click()');
+ const spring=await evaluate('window.NadiMotionLab.ease(.65)');
+ assert.ok(spring>1.02&&spring<1.09,"Spring profile should visibly overshoot before settling");
+ await evaluate('document.querySelector("[data-hud-profile=quick]").click()');
+ const snap=await evaluate('window.NadiMotionLab.ease(.20)');
+ assert.ok(snap>.70,"Snappy must cover most of its distance early");
+ await evaluate('document.querySelector("[data-hud-profile=fluid]").click()');
+ assert.ok(Math.abs(await evaluate("window.NadiMotionLab.durationMultiplier")-1.95)<.001);
+ const stage=await evaluate(`(()=>({
+  dock:document.querySelector(".ml-hud").getBoundingClientRect().toJSON(),
+  screen:document.querySelector(".screen").getBoundingClientRect().toJSON(),
+  notch:document.getElementById("mn").getBoundingClientRect().toJSON()
+ }))()`);
+ assert.ok(stage.dock.top>stage.notch.bottom+8,"the overlay must not cover the notch");
+ assert.ok(stage.dock.left>=stage.screen.left-1,"the dock must remain inside the laptop");
  await evaluate('show("music")');
  await sleep(800);
  await evaluate('show("lyrics")');
@@ -250,9 +266,9 @@ try{
   factor:parseFloat(mn.style.getPropertyValue("--nadi-motion-factor"))
  }))()`);
  assert.equal(liveLab.mode,"lyrics");
- assert.ok(liveLab.duration>440&&liveLab.duration<500,"Fluid must slow large morphs");
- assert.ok(liveLab.fade>.34&&liveLab.fade<.39,"SVG crossfade follows Fluid multiplier");
- assert.ok(Math.abs(liveLab.factor-1.18)<.001);
+ assert.ok(liveLab.duration>550&&liveLab.duration<1100,"Liquid should be much slower than native");
+ assert.ok(liveLab.fade>.59&&liveLab.fade<.62,"SVG crossfade follows Liquid multiplier");
+ assert.ok(Math.abs(liveLab.factor-1.95)<.001);
  await evaluate('document.querySelector("[data-principle=easing]").click()');
  const tile=await evaluate(`(()=>({
   selected:document.querySelector("[data-principle=easing]").getAttribute("aria-pressed"),
@@ -274,10 +290,12 @@ try{
  const mobile=await evaluate(`(()=>({
   viewport:document.documentElement.clientWidth,
   panel:document.getElementById("motion-lab").getBoundingClientRect().width,
-  overflow:document.getElementById("motion-lab").scrollWidth-document.getElementById("motion-lab").clientWidth
+  overflow:document.getElementById("motion-lab").scrollWidth-document.getElementById("motion-lab").clientWidth,
+  screenOverflow:document.querySelector(".ml-hud").scrollWidth-document.querySelector(".ml-hud").clientWidth
  }))()`);
  assert.ok(mobile.panel<=mobile.viewport+1,"lab must fit mobile viewport");
  assert.ok(mobile.overflow<3,"lab must not clip or overflow on mobile");
+ assert.ok(mobile.screenOverflow<3,"live controls must not overflow the mobile screen");
  console.log("PASS motion lab: opt-in, 12 principles, real SVG, pacing, reduced motion, mobile layout");
 
 }finally{
