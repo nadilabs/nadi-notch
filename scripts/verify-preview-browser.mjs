@@ -214,6 +214,72 @@ try{
  await sleep(515);
  assert.equal(await evaluate('mn.dataset.s'),"pomoClassic");
  console.log("PASS browser: Pomodoro EQ genuinely moves in Chrome while Ready, Classic orbit runs, Timeline entry animation plays, Lyrics/Music/Pomodoro crossfade without viewport blackout");
+ // Opt-in lab: ensure experimental UI uses actual Nadi SVG content.
+ await send("Page.navigate",{url:pathToFileURL(join(process.cwd(),"index.html")).href+"?motionLab=1#preview"});
+ let labReady=false;
+ for(let n=0;n<120;n++){
+  try{labReady=await evaluate('Boolean(window.NadiMotionLab&&document.getElementById("motion-lab"))');}
+  catch{}
+  if(labReady)break;
+  await sleep(80);
+ }
+ assert.ok(labReady,"Motion Lab failed to initialize");
+ const labDetails=await evaluate(`(()=>({
+  tiles:document.querySelectorAll(".ml-tile").length,
+  baseline:window.NadiMotionLab.profile,
+  baseFactor:window.NadiMotionLab.durationMultiplier,
+  originalSvg:!!document.getElementById("nadi-music-live"),
+  shape:typeof nadiShellGeometry==="function",
+  stylesheet:[...document.styleSheets].some(x=>x.href?.includes("motion-lab.css"))
+ }))()`);
+ assert.equal(labDetails.tiles,12);
+ assert.equal(labDetails.baseline,"native");
+ assert.equal(labDetails.baseFactor,1);
+ assert.equal(labDetails.originalSvg,true);
+ assert.equal(labDetails.shape,true);
+ assert.equal(labDetails.stylesheet,true);
+ await evaluate('document.querySelector("[data-profile=fluid]").click()');
+ assert.ok(Math.abs(await evaluate("window.NadiMotionLab.durationMultiplier")-1.18)<.001);
+ await evaluate('show("music")');
+ await sleep(800);
+ await evaluate('show("lyrics")');
+ const liveLab=await evaluate(`(()=>({
+  mode:mn.dataset.s,
+  duration:nadiShell.duration,
+  fade:parseFloat(getComputedStyle(document.getElementById("nadi-lyrics-live")).animationDuration),
+  factor:parseFloat(mn.style.getPropertyValue("--nadi-motion-factor"))
+ }))()`);
+ assert.equal(liveLab.mode,"lyrics");
+ assert.ok(liveLab.duration>440&&liveLab.duration<500,"Fluid must slow large morphs");
+ assert.ok(liveLab.fade>.34&&liveLab.fade<.39,"SVG crossfade follows Fluid multiplier");
+ assert.ok(Math.abs(liveLab.factor-1.18)<.001);
+ await evaluate('document.querySelector("[data-principle=easing]").click()');
+ const tile=await evaluate(`(()=>({
+  selected:document.querySelector("[data-principle=easing]").getAttribute("aria-pressed"),
+  active:document.querySelectorAll(".ml-tile.is-active").length,
+  animation:getComputedStyle(document.querySelector("[data-principle=easing] .ml-a")).animationName
+ }))()`);
+ assert.equal(tile.selected,"true");
+ assert.equal(tile.active,1);
+ assert.equal(tile.animation,"ml-slide");
+ await send("Emulation.setEmulatedMedia",{
+  features:[{name:"prefers-reduced-motion",value:"reduce"}]
+ });
+ assert.equal(await evaluate('getComputedStyle(document.querySelector("[data-principle=easing] .ml-a")).animationName'),
+  "none","reduced motion stops concept animations");
+ await send("Emulation.setDeviceMetricsOverride",{
+  width:390,height:844,deviceScaleFactor:1,mobile:true
+ });
+ await sleep(130);
+ const mobile=await evaluate(`(()=>({
+  viewport:document.documentElement.clientWidth,
+  panel:document.getElementById("motion-lab").getBoundingClientRect().width,
+  overflow:document.getElementById("motion-lab").scrollWidth-document.getElementById("motion-lab").clientWidth
+ }))()`);
+ assert.ok(mobile.panel<=mobile.viewport+1,"lab must fit mobile viewport");
+ assert.ok(mobile.overflow<3,"lab must not clip or overflow on mobile");
+ console.log("PASS motion lab: opt-in, 12 principles, real SVG, pacing, reduced motion, mobile layout");
+
 }finally{
  if(socket)try{socket.close()}catch{}
  chrome.kill("SIGTERM");

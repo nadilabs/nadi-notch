@@ -1,0 +1,97 @@
+/* The opt-in lab never overrides the website preview's native SVG layers. */
+.ml-entry { display:table; margin:10px auto 0; color:#91dbff; border:1px solid rgba(145,219,255,.3);
+ border-radius:999px; padding:6px 14px; text-decoration:none; font:600 12px/1.5 var(--ui,system-ui);
+ background:rgba(145,219,255,.055); transition:background .2s,border-color .2s; }
+.ml-entry:hover,.ml-entry:focus-visible{background:rgba(145,219,255,.14);border-color:rgba(145,219,255,.7)}
+.nadi-motion-lab{--ml-tempo:1;max-width:1020px; margin:30px auto 80px; padding:23px;
+ border:1px solid rgba(145,219,255,.17); border-radius:24px; background:linear-gradient(150deg,#111827,#090d17 67%);
+ box-shadow:0 20px 60px rgba(0,0,0,.22);font:400 14px/1.5 var(--ui,system-ui);color:#eff3fc; }
+.nadi-motion-lab *{box-sizing:border-box}
+.ml-heading{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}
+.ml-heading h3{margin:3px 0 2px;font:700 27px/1.2 var(--font,system-ui)}
+.ml-heading p,.ml-export p{color:#9ea9bd;font-size:12px;margin:6px 0 0;max-width:610px}
+.ml-kicker{font-size:10px;font-weight:700;letter-spacing:.14em;color:#91dbff}
+.ml-version{white-space:nowrap;color:#8290a5;font-size:10px}
+.ml-control-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ml-fieldset{min-width:0;margin:0;padding:15px;border:1px solid rgba(236,239,247,.12);border-radius:15px;background:rgba(255,255,255,.025)}
+.ml-fieldset legend{padding:0 7px;color:#c8d1e3;font-weight:600;font-size:12px}
+.ml-options,.ml-scenarios{display:flex;gap:7px;flex-wrap:wrap}
+.nadi-motion-lab button{font:600 12px/1.35 var(--ui,system-ui);color:#c8d1e3;cursor:pointer;border-radius:10px;
+ background:rgba(255,255,255,.045);border:1px solid rgba(236,239,247,.16);padding:9px 11px;
+ transition:background .18s,border-color .18s,color .18s; }
+.nadi-motion-lab button:hover{border-color:rgba(145,219,255,.55);background:rgba(145,219,255,.08)}
+.nadi-motion-lab button:focus-visible{outline:2px solid #91dbff;outline-offset:3px}
+.ml-options button[aria-pressed=true],.ml-scenarios button[aria-pressed=true]{
+ background:rgba(145,219,255,.15);border-color:#91dbff;color:#f8fbff }
+.ml-tempo{display:flex;justify-content:space-between;gap:12px;margin:19px 0 7px;color:#c4cddd;font-size:12px}
+.ml-tempo output{font-variant-numeric:tabular-nums;color:#91dbff}
+#ml-tempo{width:100%;accent-color:#91dbff;cursor:pointer;margin:0 0 4px}
+.ml-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.nadi-motion-lab .ml-actions button:first-child,#ml-copy{background:#d9f2ff;border-color:#d9f2ff;color:#111825}
+.nadi-motion-lab .ml-actions button:first-child:hover,#ml-copy:hover{background:#fff}
+.ml-status{margin:14px 0 0;padding:10px 13px;color:#d2eaff;background:rgba(145,219,255,.065);
+ border-left:2px solid #91dbff;font-size:12px;min-height:39px}
+.ml-gallery{border-top:1px solid rgba(236,239,247,.12);margin-top:19px;padding-top:19px}
+.ml-gallery summary{cursor:pointer;color:#eff3fc;font-weight:700;line-height:1.3}
+.ml-gallery summary span{display:inline;color:#8b9db6;font-size:11px;font-weight:400;margin-left:10px}
+.ml-note{font-size:12px;color:#9ca9bb;line-height:1.55;margin:13px 0}
+.ml-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.nadi-motion-lab .ml-tile{padding:12px 10px;display:flex;flex-direction:column;align-items:stretch;gap:12px;text-align:left;
+ min-width:0;overflow:hidden;border-radius:13px;background:#0d1421}
+.ml-tile.is-active{border-color:#91dbff;background:#142131}
+.ml-visual{height:62px;width:100%;display:block;position:relative;border-radius:8px;background:#0a111d;
+ overflow:hidden;perspective:140px}
+.ml-visual i{display:block;position:absolute;top:23px;left:calc(50% - 15px);width:30px;height:17px;
+ background:#40d6bb;border-radius:5px;transform-origin:center;will-change:auto}
+.ml-visual .ml-b{background:#568dff;opacity:.9;transform:translate(6px,8px)}
+.ml-visual .ml-c{background:#fdad52;opacity:0;transform:translate(-6px,-8px)}
+.ml-tile-caption{display:flex;gap:7px;align-items:center;font-size:11px;white-space:normal}
+.ml-tile-caption small{font-size:9px;font-variant-numeric:tabular-nums;color:#87a0b9}
+.ml-tile.is-active .ml-a{will-change:transform,opacity}
+.ml-tile.is-active .ml-b,.ml-tile.is-active .ml-c{will-change:transform,opacity}
+.ml-tile[data-principle=easing].is-active .ml-a{animation:ml-slide 1.25s cubic-bezier(.22,1,.36,1) infinite alternate}
+.ml-tile[data-principle=offset].is-active .ml-a{animation:ml-side 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=offset].is-active .ml-b{animation:ml-side 1.4s ease-in-out .18s infinite alternate}
+.ml-tile[data-principle=offset].is-active .ml-c{opacity:1;animation:ml-side 1.4s ease-in-out .36s infinite alternate}
+.ml-tile[data-principle=parenting].is-active .ml-a{animation:ml-slide 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=parenting].is-active .ml-b{animation:ml-parent 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=transformation].is-active .ml-a{animation:ml-transform 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=value].is-active .ml-a{animation:ml-grow 1.4s ease-in-out infinite alternate;transform-origin:left}
+.ml-tile[data-principle=masking].is-active .ml-a{animation:ml-mask 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=overlay].is-active .ml-b{animation:ml-overlay 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=cloning].is-active .ml-b{animation:ml-clone 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=obscuration].is-active .ml-b{width:45px;height:30px;left:calc(50% - 23px);top:17px;animation:ml-obscure 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=parallax].is-active .ml-a{animation:ml-side 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=parallax].is-active .ml-b{animation:ml-parallax 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=dimensionality].is-active .ml-a{animation:ml-tilt 1.4s ease-in-out infinite alternate}
+.ml-tile[data-principle=dolly].is-active .ml-a{animation:ml-zoom 1.4s ease-in-out infinite alternate}
+@keyframes ml-slide{to{transform:translateX(19px)}}
+@keyframes ml-side{to{transform:translateX(19px)}}
+@keyframes ml-parent{to{transform:translate(25px,8px)}}
+@keyframes ml-transform{to{width:45px;border-radius:24px;transform:translateX(-8px)}}
+@keyframes ml-grow{to{transform:scaleX(2.1)}}
+@keyframes ml-mask{from{clip-path:inset(0 85% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes ml-overlay{to{opacity:1;transform:translate(0,-10px)}}
+@keyframes ml-clone{to{opacity:1;transform:translate(33px,-5px)}}
+@keyframes ml-obscure{to{opacity:.98;transform:translate(-2px,-4px)}}
+@keyframes ml-parallax{to{transform:translateX(33px) scale(.92)}}
+@keyframes ml-tilt{to{transform:rotateY(50deg) rotateX(12deg)}}
+@keyframes ml-zoom{to{transform:scale(1.55)}}
+.ml-export{display:flex;justify-content:space-between;align-items:center;gap:18px;
+ padding-top:20px;margin-top:22px;border-top:1px solid rgba(236,239,247,.12)}
+.ml-export h4{font:700 15px/1.3 var(--font,system-ui);margin:0}
+.ml-spec{font:11px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;color:#b9d7ef;
+ background:rgba(0,0,0,.27);border:1px solid rgba(236,239,247,.09);
+ border-radius:12px;padding:14px;max-height:245px;overflow:auto;white-space:pre-wrap;word-break:break-word;margin:15px 0 0}
+@media(max-width:740px){
+ .nadi-motion-lab{padding:16px;margin-top:22px;border-radius:17px}
+ .ml-heading{align-items:flex-start;flex-direction:column;gap:9px}
+ .ml-version{white-space:normal}
+ .ml-control-layout{grid-template-columns:1fr}
+ .ml-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ml-export{align-items:flex-start;flex-direction:column}
+ .ml-gallery summary span{display:block;margin:4px 0 0}
+}
+@media(prefers-reduced-motion:reduce){
+ .nadi-motion-lab *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
