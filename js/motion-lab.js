@@ -56,7 +56,7 @@
       const x = clamp(t);
       if (profile === 'fluid') return (1 - Math.cos(Math.PI * x)) / 2;
       if (profile === 'spring') {
-        // Controlled back-ease: visible but modest elastic response (about 5%).
+        // Controlled back-ease: visible but modest elastic response (about 7%).
         const p = x - 1;
         return 1 + 2.35*p*p*p + 1.35*p*p;
       }
@@ -183,6 +183,7 @@
     dock.querySelector('#ml-hud-scenario').value=scenario;
     dock.querySelector('#ml-hud-duration').textContent =
       (0.54 * lab.durationMultiplier).toFixed(2)+'s';
+    document.documentElement.dataset.nadiMotionProfile = profile;
     section.style.setProperty('--ml-tempo', (1 / tempo).toFixed(3));
     document.getElementById('mn')?.style.setProperty('--nadi-motion-factor', String(lab.durationMultiplier));
   }
