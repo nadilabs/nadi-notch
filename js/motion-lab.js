@@ -134,6 +134,7 @@
     $('ml-profiles').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.profile === profile)));
     $('ml-scenarios').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.scenario === scenario)));
     section.style.setProperty('--ml-tempo', (1 / tempo).toFixed(3));
+    document.getElementById('mn')?.style.setProperty('--nadi-motion-factor', String(lab.durationMultiplier));
   }
   const allNativeButtons = preview.querySelectorAll('.try button[data-s]');
   allNativeButtons.forEach(button => button.addEventListener('click', () => {
